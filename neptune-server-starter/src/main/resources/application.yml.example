@@ -1,6 +1,6 @@
 spring:
   dubbo:
-    appname: sirius-server-dubbo
+    appname:  neptune-server-dubbo
     registry: zookeeper://${ZOOKEEPER_HOST:127.0.0.1}:${ZOOKEEPER_PORT:2181}
   datasource:
     url: jdbc:mysql://localhost:3306/${DATABASE_NAME:sirius}?useUnicode=true&characterEncoding=utf8
@@ -11,7 +11,7 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   typeAliasesPackage: >
-    com.qtu404.sirius.domain.model
+    com.qtu404.neptune.domain.model
 
 qtu404:
   util:

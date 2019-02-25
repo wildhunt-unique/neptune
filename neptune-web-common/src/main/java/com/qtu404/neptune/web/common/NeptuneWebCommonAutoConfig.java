@@ -1,5 +1,6 @@
 package com.qtu404.neptune.web.common;
 
+import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @ComponentScan
 @EnableWebMvc
+@EnableDubboConfiguration
 @Configuration
 public class NeptuneWebCommonAutoConfig {
 }

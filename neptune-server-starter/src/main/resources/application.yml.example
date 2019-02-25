@@ -1,0 +1,27 @@
+spring:
+  dubbo:
+    appname: sirius-server-dubbo
+    registry: zookeeper://${ZOOKEEPER_HOST:127.0.0.1}:${ZOOKEEPER_PORT:2181}
+  datasource:
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME:sirius}?useUnicode=true&characterEncoding=utf8
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:123456}
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  typeAliasesPackage: >
+    com.qtu404.sirius.domain.model
+
+qtu404:
+  util:
+    oss:
+      accessKeyId: YOUR_ID
+      accessKeySecret: YOUR_SECRET
+      endpoint: http://oss-cn-qingdao.aliyuncs.com
+      bucketName: YOUR_BUCKET_NAME
+      website: http://www.demo.com/
+      fileFolder: qh/qh-img/
+    sms:
+      accessKeyId: accessKeyId
+      accessKeySecret: accessKeySecret

@@ -1,0 +1,7 @@
+spring:
+  dubbo:
+    appname: neptune-web-dubbo
+    registry: zookeeper://${ZOOKEEPER_HOST:127.0.0.1}:${ZOOKEEPER_PORT:2181}
+
+server:
+  port: 8080

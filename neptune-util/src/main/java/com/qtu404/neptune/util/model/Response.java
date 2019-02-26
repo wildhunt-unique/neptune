@@ -27,7 +27,8 @@ public class Response<T> implements Serializable {
     private Integer code;
 
     private static final Integer SUCCESS_CODE = 200;
-    private static final Integer FAILED_CODE = 500;
+    public static final Integer SERVICE_ERROR = 500;
+    public static final Integer ARGUMENT_ERROR = 400;
 
     public static <T> Response<T> success(T t) {
         Response<T> response = new Response<>();
@@ -40,7 +41,7 @@ public class Response<T> implements Serializable {
     public static <T> Response<T> fail(String error) {
         Response<T> resp = new Response<>();
         resp.setError(error);
-        resp.setCode(FAILED_CODE);
+        resp.setCode(SERVICE_ERROR);
         return resp;
     }
 

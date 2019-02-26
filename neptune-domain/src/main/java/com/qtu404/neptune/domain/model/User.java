@@ -1,4 +1,4 @@
-package com.qtu404.neptune.domain.model.user;
+package com.qtu404.neptune.domain.model;
 
 import com.qtu404.neptune.util.model.BaseModel;
 import lombok.Data;

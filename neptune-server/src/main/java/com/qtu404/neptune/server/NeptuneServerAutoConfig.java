@@ -1,8 +1,10 @@
 package com.qtu404.neptune.server;
 
 import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import com.qtu404.neptune.util.NeptuneUtilAutoConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -11,5 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan
 @EnableDubboConfiguration
+@Import(NeptuneUtilAutoConfig.class)
 public class NeptuneServerAutoConfig {
 }

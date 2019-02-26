@@ -6,6 +6,6 @@ public class ParamUtil {
     }
 
     public static void nonNull(Object o, String error) throws IllegalArgumentException {
-        if (o == null) throw new IllegalArgumentException(error + ".can.not.be.null");
+        if (o == null) throw new IllegalArgumentException(error + ".not.be.null");
     }
 }

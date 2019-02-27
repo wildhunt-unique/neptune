@@ -14,7 +14,7 @@ import java.io.Serializable;
 @ApiModel("请求参数")
 public class ExistEmailRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = 2265401641823574985L;
-    @ApiModelProperty("要判断的邮箱地址")
+    @ApiModelProperty(value = "要判断的邮箱地址",required = true)
     private String email;
 
     @Override

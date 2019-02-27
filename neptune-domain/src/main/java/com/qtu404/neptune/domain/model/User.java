@@ -20,6 +20,11 @@ public class User extends BaseModel implements Serializable {
     private String nickname;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * 邮箱
      */
     private String email;

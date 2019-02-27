@@ -6,8 +6,9 @@ import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.common.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.model.User;
+import com.qtu404.neptune.domain.service.UserReadService;
+import com.qtu404.neptune.domain.service.UserWriteService;
 import com.qtu404.neptune.server.converter.UserConverter;
-import com.qtu404.neptune.server.dao.UserDao;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
@@ -31,24 +32,27 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Slf4j
 @Component
 public class UserFacadeImpl implements UserReadFacade {
-    private final UserDao userDao;
-
     private final SMSsender smsSender;
 
     private final UserConverter userConverter;
 
+    private final UserReadService userReadService;
+
+    private final UserWriteService userWriteService;
+
     @Autowired
-    public UserFacadeImpl(UserDao userDao, SMSsender smsSender, UserConverter userConverter) {
-        this.userDao = userDao;
+    public UserFacadeImpl(SMSsender smsSender, UserConverter userConverter, UserReadService userReadService, UserWriteService userWriteService) {
         this.smsSender = smsSender;
         this.userConverter = userConverter;
+        this.userReadService = userReadService;
+        this.userWriteService = userWriteService;
     }
 
     @Override
     public Response<Long> login(UserLoginRequest request) {
         return execute(request, param -> {
             request.checkParam();
-            User user = this.userDao.list(request.toMap()).stream()
+            User user = this.userReadService.list(request.toMap()).stream()
                     .findFirst()
                     .orElse(null);
             if (Objects.isNull(user)) {
@@ -61,17 +65,17 @@ public class UserFacadeImpl implements UserReadFacade {
 
     @Override
     public Response<Boolean> existPhone(ExistPhoneRequest request) {
-        return execute(request, param -> this.userDao.count(request.toMap()) == 1);
+        return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
     @Override
     public Response<Boolean> existUsername(ExistUsernameRequest request) {
-        return execute(request, param -> this.userDao.count(request.toMap()) == 1);
+        return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
     @Override
     public Response<Boolean> existEmail(ExistEmailRequest request) {
-        return execute(request, param -> this.userDao.count(request.toMap()) == 1);
+        return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
     @Override
@@ -90,7 +94,7 @@ public class UserFacadeImpl implements UserReadFacade {
     @Override
     public Response<UserInfoResponse> findSingleUserInfoById(FindSingleUserInfoRequest request) {
         return execute(request, param -> {
-            User existUser = this.userDao.fetch(request.getUserId());
+            User existUser = this.userReadService.fetchById(request.getUserId());
             if (Objects.isNull(existUser)) {
                 throw new ServiceException("user.not.exist");
             } else {
@@ -102,13 +106,11 @@ public class UserFacadeImpl implements UserReadFacade {
     @Override
     public Response<UserInfoResponse> modifyUserInfo(UserModifyInfoRequest request) {
         return execute(request, param -> {
-            User user = this.userDao.fetch(request.getId());
+            User user = this.userReadService.fetchById(request.getId());
             user.setAvatar(request.getAvatar());
             user.setName(request.getName());
-            this.userDao.update(user);
-            FindSingleUserInfoRequest singleUserInfoRequest = new FindSingleUserInfoRequest();
-            singleUserInfoRequest.setUserId(request.getId());
-            return this.findSingleUserInfoById(singleUserInfoRequest).getResult();
+            this.userWriteService.update(user);
+            return userConverter.model2Response(user);
         });
     }
 
@@ -144,7 +146,7 @@ public class UserFacadeImpl implements UserReadFacade {
             user.setStatus(DataStatusEnum.NORMAL.getCode());
             user.setType(UserTypeEnum.CUSTOMER.getCode());
             user.setAvatar(ConstantValues.DEFAULT_AVATAR);
-            if (this.userDao.save(user)) {
+            if (this.userWriteService.addUser(user)) {
                 return user.getId();
             } else {
                 throw new ServiceException("user.register.fail");

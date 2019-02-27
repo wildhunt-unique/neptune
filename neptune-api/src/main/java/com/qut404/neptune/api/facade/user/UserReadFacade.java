@@ -13,7 +13,7 @@ public interface UserReadFacade {
 
     Response<Boolean> existPhone(ExistPhoneRequest request);
 
-    Response<Boolean> existNickname(ExistNicknameRequest request);
+    Response<Boolean> existUsername(ExistUsernameRequest request);
 
     Response<Boolean> existEmail(ExistEmailRequest request);
 

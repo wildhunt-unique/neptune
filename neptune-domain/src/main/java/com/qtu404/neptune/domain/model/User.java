@@ -42,7 +42,7 @@ public class User extends BaseModel implements Serializable {
     /**
      * 用户类型
      */
-    private String type;
+    private Integer type;
 
     /**
      * 头像地址

@@ -4,15 +4,16 @@ import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
-@ApiModel("修改信息请求参数")
+
+@ApiModel("请求参数")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserModifyInfoRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -5500255935613531806L;

@@ -47,8 +47,8 @@ public class UserCommonController {
 
     @ApiOperation("昵称是否已存在")
     @GetMapping("exist/nickname")
-    public Response<Boolean> existNickname(ExistNicknameRequest request) {
-        return this.userReadFacade.existNickname(request);
+    public Response<Boolean> existNickname(ExistUsernameRequest request) {
+        return this.userReadFacade.existUsername(request);
     }
 
     @ApiOperation("邮箱是否已存在")

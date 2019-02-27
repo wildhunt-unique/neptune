@@ -3,8 +3,7 @@ package com.qut404.neptune.api.request;
 import com.qtu404.neptune.util.model.AbstractRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,9 +12,12 @@ import java.util.Objects;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/25 下午2:17
  */
-@EqualsAndHashCode(callSuper = true)
-@ApiModel("dubbo检查")
-@Data
+ @ApiModel("请求参数")
+ @Data
+ @Builder
+ @NoArgsConstructor
+ @AllArgsConstructor
+ @EqualsAndHashCode(callSuper = true)
 public class DubboCheckRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -2654584783355545802L;
 

@@ -4,14 +4,17 @@ import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+
+@ApiModel("请求参数")
 @Data
-@ApiModel("登录请求")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class UserLoginRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = 6488434159625540269L;
     @ApiModelProperty("手机号")

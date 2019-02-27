@@ -4,9 +4,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.aliyuncs.exceptions.ClientException;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
+import com.qtu404.neptune.common.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.server.converter.UserConverter;
 import com.qtu404.neptune.server.dao.UserDao;
+import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
 import com.qtu404.neptune.util.sms.SMSsender;
@@ -63,7 +65,7 @@ public class UserFacadeImpl implements UserReadFacade {
     }
 
     @Override
-    public Response<Boolean> existNickname(ExistNicknameRequest request) {
+    public Response<Boolean> existUsername(ExistUsernameRequest request) {
         return execute(request, param -> this.userDao.count(request.toMap()) == 1);
     }
 
@@ -113,9 +115,34 @@ public class UserFacadeImpl implements UserReadFacade {
     @Override
     public Response<Long> register(UserRegistryRequest request) {
         return execute(request, param -> {
-            request.checkParam();
             User user = this.userConverter.request2model(request);
+
+            // 检查手机号唯一
+            if (Objects.nonNull(user.getMobile())) {
+                Boolean mobileExist = AssertUtil.assertResponse(this.existPhone(ExistPhoneRequest.builder().mobile(user.getMobile()).build()));
+                if (mobileExist) {
+                    throw new IllegalArgumentException("mobile.already.exist");
+                }
+            }
+
+            // 检查用户名唯一
+            if (Objects.nonNull(user.getUsername())) {
+                Boolean usernameExist = AssertUtil.assertResponse(this.existUsername(ExistUsernameRequest.builder().username(user.getUsername()).build()));
+                if (usernameExist) {
+                    throw new IllegalArgumentException("username.already.exist");
+                }
+            }
+
+            // 检查邮箱唯一
+            if (Objects.nonNull(user.getEmail())) {
+                Boolean emailExist = AssertUtil.assertResponse(this.existEmail(ExistEmailRequest.builder().email(user.getEmail()).build()));
+                if (emailExist) {
+                    throw new IllegalArgumentException("email.already.exist");
+                }
+            }
+
             user.setStatus(DataStatusEnum.NORMAL.getCode());
+            user.setType(UserTypeEnum.CUSTOMER.getCode());
             user.setAvatar(ConstantValues.DEFAULT_AVATAR);
             if (this.userDao.save(user)) {
                 return user.getId();

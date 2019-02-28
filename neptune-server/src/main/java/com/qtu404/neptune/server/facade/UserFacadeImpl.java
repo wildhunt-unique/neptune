@@ -143,9 +143,13 @@ public class UserFacadeImpl implements UserReadFacade {
                 }
             }
 
+            // 设置默认头像
+            if (Objects.isNull(user.getAvatar())) {
+                user.setAvatar(ConstantValues.DEFAULT_AVATAR);
+            }
+
             user.setStatus(DataStatusEnum.NORMAL.getCode());
             user.setType(UserTypeEnum.CUSTOMER.getCode());
-            user.setAvatar(ConstantValues.DEFAULT_AVATAR);
             if (this.userWriteService.addUser(user)) {
                 return user.getId();
             } else {

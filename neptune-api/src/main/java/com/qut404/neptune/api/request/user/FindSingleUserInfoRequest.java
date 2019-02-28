@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClientException;
 import java.io.Serializable;
 
 
-@ApiModel("请求参数")
+@ApiModel("用户信息")
 @Data
 @Builder
 @NoArgsConstructor

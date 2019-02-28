@@ -9,7 +9,7 @@ import lombok.*;
 import java.io.Serializable;
 
 
-@ApiModel("请求参数")
+@ApiModel("用户名查重")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

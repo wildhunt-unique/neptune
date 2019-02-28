@@ -16,6 +16,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+// TODO: 2019/2/28 add cache 
 public class UserReadServiceImpl implements UserReadService {
     private final UserDao userDao;
 
@@ -30,7 +31,7 @@ public class UserReadServiceImpl implements UserReadService {
     }
 
     @Override
-    public List<User> list(Map<String,Object> condition){
+    public List<User> list(Map<String, Object> condition){
         return this.userDao.list(condition);
     }
 

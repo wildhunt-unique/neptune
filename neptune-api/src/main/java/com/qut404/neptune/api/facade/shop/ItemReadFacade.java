@@ -1,4 +1,4 @@
-package com.qut404.neptune.api.facade.item;
+package com.qut404.neptune.api.facade.shop;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com

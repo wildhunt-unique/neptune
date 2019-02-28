@@ -1,5 +1,7 @@
 package com.qtu404.neptune.common.enums;
 
+import java.util.Objects;
+
 public enum DataStatusEnum {
     NORMAL(1, "正常"),
     DELETE(-2, "删除"),
@@ -12,6 +14,19 @@ public enum DataStatusEnum {
     DataStatusEnum(int code, String desc) {
         this.code = code;
         this.desc = desc;
+    }
+
+    public static void validate(Integer code) {
+        if (Objects.isNull(code)) throw new IllegalArgumentException("illegal.status");
+
+        boolean pass = false;
+        for (DataStatusEnum typeEnum : DataStatusEnum.values()) {
+            if (code.equals(typeEnum.getCode())) {
+                pass = true;
+            }
+        }
+
+        if (!pass) throw new IllegalArgumentException("illegal.status");
     }
 
     @Override

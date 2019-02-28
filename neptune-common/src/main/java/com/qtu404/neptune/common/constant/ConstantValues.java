@@ -7,7 +7,7 @@ public class ConstantValues {
     /**
      * 当前用户key
      */
-    public static final String SESSION_CURRENT_USER_KEY = "current_user_key";
+    public static final String SESSION_CURRENT_USER_KEY = "CURRENT_USER";
 
     /**
      * 默认用户头像

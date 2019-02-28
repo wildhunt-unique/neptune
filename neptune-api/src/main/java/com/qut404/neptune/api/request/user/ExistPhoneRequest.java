@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@ApiModel("请求参数")
+@ApiModel("手机号查重")
 @Data
 @Builder
 @NoArgsConstructor

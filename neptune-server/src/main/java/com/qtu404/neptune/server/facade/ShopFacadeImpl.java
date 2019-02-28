@@ -86,7 +86,9 @@ public class ShopFacadeImpl implements ShopFacade {
             ParamUtil.nonExist(user, "user");
 
             // 校验状态是否合法
-            DataStatusEnum.validate(request.getStatus());
+            if (Objects.nonNull(request.getStatus())) {
+                DataStatusEnum.validate(request.getStatus());
+            }
 
             // 不是店主
             if (!user.getId().equals(existShop.getUserId())) {

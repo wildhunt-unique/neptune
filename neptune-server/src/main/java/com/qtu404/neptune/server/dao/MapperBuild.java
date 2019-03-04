@@ -14,6 +14,6 @@ public class MapperBuild {
                 .password("anywhere")
                 .path("/Users/admin/Desktop/")
                 .build();
-        builder.build("shop","Shop");
+        builder.build("shop_category","ShopCategory");
     }
 }

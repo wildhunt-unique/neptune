@@ -12,9 +12,9 @@ import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.server.converter.ShopConverter;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.sms.ParamUtil;
-import com.qut404.neptune.api.facade.shop.ShopFacade;
-import com.qut404.neptune.api.request.shop.ShopCreateRequest;
-import com.qut404.neptune.api.request.shop.ShopUpdateRequest;
+import com.qtu404.neptune.api.facade.ShopFacade;
+import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,7 +67,7 @@ public class ShopFacadeImpl implements ShopFacade {
                 toCreate.setUserName(seller.getName());
             }
 
-            toCreate.setStatus(DataStatusEnum.LOCK.getCode());
+            toCreate.setStatus(DataStatusEnum.FREEZE.getCode());
             toCreate.setType(ShopTypeEnum.SHOP.getCode());
 
             return this.shopWriteService.createShop(toCreate) ? toCreate.getId() : null;

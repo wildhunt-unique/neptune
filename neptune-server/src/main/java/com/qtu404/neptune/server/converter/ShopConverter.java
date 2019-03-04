@@ -1,8 +1,8 @@
 package com.qtu404.neptune.server.converter;
 
 import com.qtu404.neptune.domain.model.Shop;
-import com.qut404.neptune.api.request.shop.ShopCreateRequest;
-import com.qut404.neptune.api.request.shop.ShopUpdateRequest;
+import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

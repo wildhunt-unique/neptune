@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public enum DataStatusEnum {
     NORMAL(1, "正常"),
-    DELETE(-2, "删除"),
     LOCK(-1, "锁定"),
-    FREEZE(-3, "冻结");
+    FREEZE(-2, "冻结"),
+    DELETE(-3, "删除");
 
     private final int code;
     private final String desc;

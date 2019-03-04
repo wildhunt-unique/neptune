@@ -4,13 +4,17 @@ import com.qtu404.neptune.util.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 上午9:45
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Shop extends BaseModel {
+public class Shop extends BaseModel implements Serializable {
+    private static final long serialVersionUID = -2274425969788722037L;
+
     /**
      * 卖家id
      */

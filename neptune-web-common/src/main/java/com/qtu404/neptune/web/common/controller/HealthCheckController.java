@@ -1,8 +1,8 @@
 package com.qtu404.neptune.web.common.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.qut404.neptune.api.facade.HealthCheckFacade;
-import com.qut404.neptune.api.request.DubboCheckRequest;
+import com.qtu404.neptune.api.facade.HealthCheckFacade;
+import com.qtu404.neptune.api.request.DubboCheckRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;

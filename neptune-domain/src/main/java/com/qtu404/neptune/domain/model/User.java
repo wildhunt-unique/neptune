@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 public class User extends BaseModel implements Serializable {
     private static final long serialVersionUID = 2805681990419021328L;
+
     /**
      * 昵称
      */

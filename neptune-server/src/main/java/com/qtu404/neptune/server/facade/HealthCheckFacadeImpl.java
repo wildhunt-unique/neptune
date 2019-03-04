@@ -3,8 +3,8 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.base.Throwables;
 import com.qtu404.neptune.util.model.Response;
-import com.qut404.neptune.api.facade.HealthCheckFacade;
-import com.qut404.neptune.api.request.DubboCheckRequest;
+import com.qtu404.neptune.api.facade.HealthCheckFacade;
+import com.qtu404.neptune.api.request.DubboCheckRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

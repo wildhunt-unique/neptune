@@ -8,7 +8,8 @@ import java.util.Objects;
  */
 public enum UserTypeEnum {
     CUSTOMER(1, "消费者"),
-    SELLER(2, "商家");
+    SELLER(2, "商家"),
+    ADMIN(3, "后台管理员");
 
     private final int code;
     private final String desc;
@@ -22,7 +23,7 @@ public enum UserTypeEnum {
         return this.code;
     }
 
-    public Boolean verify(Integer code) {
+    public static Boolean validate(Integer code) {
         if (Objects.isNull(code)) return Boolean.FALSE;
         for (UserTypeEnum typeEnum : UserTypeEnum.values()) {
             if (code.equals(typeEnum.getCode())) {

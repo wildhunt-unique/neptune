@@ -16,4 +16,8 @@ public abstract class AssertUtil {
     public static <T> T sortResponse(Response<T> response) {
         return response.isSuccess() ? response.getResult() : null;
     }
+
+    public static void isExist(Object o, String error) throws ServiceException {
+        if (o == null) throw new ServiceException(error + ".not.exist");
+    }
 }

@@ -29,6 +29,7 @@ public class Response<T> implements Serializable {
     private static final Integer SUCCESS_CODE = 200;
     public static final Integer SERVICE_ERROR = 500;
     public static final Integer ARGUMENT_ERROR = 400;
+    public static final Integer NOT_LOGIN = 401;
 
     public static <T> Response<T> success(T t) {
         Response<T> response = new Response<>();

@@ -1,8 +1,8 @@
 package com.qtu404.neptune.server.converter;
 
 import com.qtu404.neptune.domain.model.User;
-import com.qut404.neptune.api.request.user.UserRegistryRequest;
-import com.qut404.neptune.api.response.user.UserInfoResponse;
+import com.qtu404.neptune.api.request.user.UserRegistryRequest;
+import com.qtu404.neptune.api.response.user.UserInfoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

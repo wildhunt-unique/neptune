@@ -1,23 +1,26 @@
 package com.qtu404.neptune.util.mapper;
 
 
-import lombok.Data;
+import lombok.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 @Data
 public class MapperBuilder {
-    private static String username = "root";
-    private static String password = "123456";
-    private static String db = "qh";
-    private static String path = "/Users/admin/Desktop/";
+    private  String username = "root";
+    private  String password = "123456";
+    private  String db = "qh";
+    private  String path = "/Users/admin/Desktop/";
 
     /**
      * @param tableName 表名
      * @param clazzName 对应的do的name
      */
-    public static void build(String tableName, String clazzName) {
+    public  void build(String tableName, String clazzName) {
         try {
             TableInfo tableInfo = new DBHelper(username, password, db)
                     .getTableInfo(tableName);
@@ -28,7 +31,7 @@ public class MapperBuilder {
         }
     }
 
-    public static void refactorBuild(String tableName, String clazzName) {
+    public  void refactorBuild(String tableName, String clazzName) {
         try {
             File file = new File(path + clazzName + "Mapper.xml");
             if (!file.exists()) file.createNewFile();
@@ -40,42 +43,6 @@ public class MapperBuilder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        MapperBuilder.build("item","item");
-    }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static void setUsername(String username) {
-        MapperBuilder.username = username;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        MapperBuilder.password = password;
-    }
-
-    public static String getDb() {
-        return db;
-    }
-
-    public static void setDb(String db) {
-        MapperBuilder.db = db;
-    }
-
-    public static String getPath() {
-        return path;
-    }
-
-    public static void setPath(String path) {
-        MapperBuilder.path = path;
     }
 }
 

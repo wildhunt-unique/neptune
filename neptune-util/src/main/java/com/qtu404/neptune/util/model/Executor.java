@@ -23,15 +23,13 @@ public abstract class Executor {
 
     private static <R, P> Response<R> logAndResponseFail(Throwable e, P param, Function<P, R> function) {
         log.error("failed to {} by {}, cause:{}", "", param, Throwables.getStackTraceAsString(e));
-        String message = "error";
         if (e instanceof IllegalArgumentException) {
-            message = e.getMessage();
-            return Response.fail(message, Response.ARGUMENT_ERROR);
+            return Response.fail(e.getMessage(), Response.ARGUMENT_ERROR);
         } else if (e instanceof ServiceException) {
-            message = e.getMessage();
-            return Response.fail(message, Response.SERVICE_ERROR);
+            return Response.fail(e.getMessage(), Response.SERVICE_ERROR);
+        } else {
+            return Response.fail("error");
         }
-        return Response.fail(message);
     }
 
     private static <P> void checkParam(P param) {

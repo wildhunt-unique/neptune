@@ -3,6 +3,7 @@ package com.qtu404.neptune.util.model;
 import com.google.common.collect.Lists;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import java.util.List;
  */
 
 @Data
-public class Paging<T> {
+public class Paging<T> implements Serializable {
+    private static final long serialVersionUID = -7236584153535008879L;
+
     private Integer total;
     private List<T> data;
 

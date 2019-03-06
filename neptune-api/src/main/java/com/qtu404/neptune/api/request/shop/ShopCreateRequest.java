@@ -21,13 +21,13 @@ import java.io.Serializable;
 public class ShopCreateRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -5179881697726592981L;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "卖家id", required = true)
     private Long userId;
 
     @ApiModelProperty(hidden = true)
     private String userName;
 
-    @ApiModelProperty(value = "店铺名",required = true)
+    @ApiModelProperty(value = "店铺名", required = true)
     private String name;
 
     @ApiModelProperty(hidden = true)
@@ -48,7 +48,7 @@ public class ShopCreateRequest extends AbstractRequest implements Serializable {
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(name,"shop.name");
-        ParamUtil.nonNull(userId,"user.id");
+        ParamUtil.nonNull(name, "shop.name");
+        ParamUtil.nonNull(userId, "user.id");
     }
 }

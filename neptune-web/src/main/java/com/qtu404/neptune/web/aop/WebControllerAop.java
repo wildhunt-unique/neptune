@@ -32,7 +32,7 @@ public class WebControllerAop {
         this.translateHandler = translateHandler;
     }
 
-    @Pointcut("execution(* com.qtu404.neptune.web.common.controller.*.*(..))")
+    @Pointcut("execution(* com.qtu404.neptune.web.common.controller.*.*(..)) || execution(* com.qtu404.neptune.web.controller.*.*(..))")
     public void pointcut() {
     }
 

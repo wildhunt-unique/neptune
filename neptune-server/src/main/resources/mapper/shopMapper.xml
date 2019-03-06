@@ -34,8 +34,8 @@
     <sql id="criteria">
         <if test="outerId != null">AND outer_id = #{outerId}</if>
         <if test="userId != null">AND user_id = #{userId}</if>
-        <if test="userName != null">AND user_name = #{userName}</if>
-        <if test="name != null">AND name = #{name}</if>
+        <if test="userName != null">AND user_name LIKE CONCAT(#{userName},'%')</if>
+        <if test="name != null">AND name LIKE CONCAT(#{name},'%')</if>
         <if test="type != null">AND type = #{type}</if>
         <if test="mobile != null">AND mobile = #{mobile}</if>
         <if test="email != null">AND email = #{email}</if>

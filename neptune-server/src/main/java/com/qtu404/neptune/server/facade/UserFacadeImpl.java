@@ -5,7 +5,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.qtu404.neptune.api.request.user.*;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
-import com.qtu404.neptune.common.enums.UserTypeEnum;
+import com.qtu404.neptune.domain.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.domain.service.UserWriteService;

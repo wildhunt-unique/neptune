@@ -1,5 +1,7 @@
 package com.qtu404.neptune.server.converter;
 
+import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
+import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
 import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
@@ -12,8 +14,14 @@ import org.mapstruct.Mapping;
  */
 @Mapper(componentModel = "spring")
 public interface ShopConverter {
-    public Shop createRequest2Model(ShopCreateRequest request);
+    Shop createRequest2Model(ShopCreateRequest request);
 
     @Mapping(source = "shopId", target = "id")
-    public Shop updateRequest2Model(ShopUpdateRequest request);
+    Shop updateRequest2Model(ShopUpdateRequest request);
+
+    @Mapping(source = "id", target = "shopId")
+    ShopDetailResponse model2DetailResponse(Shop shop);
+
+    @Mapping(source = "id", target = "shopId")
+    ShopThinResponse model2ThinResponse(Shop shop);
 }

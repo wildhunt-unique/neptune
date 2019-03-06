@@ -1,5 +1,10 @@
 package com.qtu404.neptune.api.facade;
 
+import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
+import com.qtu404.neptune.api.request.shop.ShopPageRequest;
+import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
+import com.qtu404.neptune.api.response.shop.ShopThinResponse;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
 import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
@@ -12,4 +17,8 @@ public interface ShopFacade {
     Response<Long> createShop(ShopCreateRequest request);
 
     Response<Boolean> updateShopInfo(ShopUpdateRequest request);
+
+    Response<ShopDetailResponse> getShopDetail(ShopDetailRequest request);
+
+    Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request);
 }

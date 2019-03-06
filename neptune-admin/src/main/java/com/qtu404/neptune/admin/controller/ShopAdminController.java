@@ -1,6 +1,9 @@
 package com.qtu404.neptune.admin.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.qtu404.neptune.api.request.shop.ShopPageRequest;
+import com.qtu404.neptune.api.response.shop.ShopThinResponse;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.util.UserUtils;
 import com.qtu404.neptune.api.facade.ShopFacade;
@@ -28,10 +31,7 @@ public class ShopAdminController {
 
     @PutMapping("create")
     @ApiOperation("创建店铺")
-    public Response<Long> createShop(@RequestBody ShopCreateRequest request, HttpSession httpSession) {
-        Long userId = UserUtils.getId(httpSession);
-        if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
-        request.setUserId(userId);
+    public Response<Long> createShop(@RequestBody ShopCreateRequest request) {
         return this.shopFacade.createShop(request);
     }
 
@@ -42,5 +42,11 @@ public class ShopAdminController {
         if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
         request.setUserId(userId);
         return this.shopFacade.updateShopInfo(request);
+    }
+
+    @GetMapping("paging")
+    @ApiOperation("店铺分页查询")
+    public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request){
+        return this.shopFacade.shopPaging(request);
     }
 }

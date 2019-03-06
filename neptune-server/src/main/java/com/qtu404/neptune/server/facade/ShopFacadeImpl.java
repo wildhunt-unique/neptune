@@ -1,16 +1,24 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
+import com.qtu404.neptune.api.request.shop.ShopPageRequest;
+import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
+import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
+import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
-import com.qtu404.neptune.common.enums.UserTypeEnum;
+import com.qtu404.neptune.domain.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.domain.model.User;
-import com.qtu404.neptune.domain.service.ShopReadService;
-import com.qtu404.neptune.domain.service.ShopWriteService;
-import com.qtu404.neptune.domain.service.UserReadService;
+import com.qtu404.neptune.domain.service.*;
+import com.qtu404.neptune.server.converter.ItemConverter;
+import com.qtu404.neptune.server.converter.ShopCategoryConverter;
 import com.qtu404.neptune.server.converter.ShopConverter;
+import com.qtu404.neptune.util.model.AssertUtil;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.util.model.ServiceException;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
@@ -20,7 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
 
@@ -36,40 +46,59 @@ public class ShopFacadeImpl implements ShopFacade {
 
     private final ShopWriteService shopWriteService;
 
-    private UserReadService userReadService;
+    private final UserReadService userReadService;
+
+    private final UserWriteService userWriteService;
 
     private final ShopConverter shopConverter;
 
+    private final ItemReadService itemReadService;
+
+    private final ShopCategoryReadService shopCategoryReadService;
+
+    private final ShopCategoryConverter shopCategoryConverter;
+
+    private final ItemConverter itemConverter;
+
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
         this.shopConverter = shopConverter;
+        this.itemReadService = itemReadService;
+        this.shopCategoryReadService = shopCategoryReadService;
+        this.shopCategoryConverter = shopCategoryConverter;
+        this.itemConverter = itemConverter;
+        this.userWriteService = userWriteService;
     }
 
     @Override
     public Response<Long> createShop(ShopCreateRequest request) {
         return execute(request, param -> {
+            // 卖家校验
             User seller = this.userReadService.fetchById(request.getUserId());
             if (Objects.isNull(seller)) throw new IllegalArgumentException("user.not.exist");
-
-            if (Objects.isNull(seller.getType()) || !ObjectUtils.nullSafeEquals(seller.getType(), UserTypeEnum.SELLER.getCode())) {
-                throw new IllegalArgumentException("user.not.seller");
+            if (!ObjectUtils.nullSafeEquals(seller.getStatus(), DataStatusEnum.NORMAL.getCode())) {
+                throw new IllegalArgumentException("user.status.error");
             }
+            if (ObjectUtils.nullSafeEquals(seller.getType(), UserTypeEnum.SELLER.getCode())) {
+                throw new IllegalArgumentException("user.have.multiple.shop");
+            }
+            seller.setType(UserTypeEnum.SELLER.getCode());
 
+            // 店铺创建初始化
             Shop toCreate = this.shopConverter.createRequest2Model(request);
             if (Objects.isNull(toCreate.getMobile()) && Objects.nonNull(seller.getMobile())) {
                 toCreate.setMobile(seller.getMobile());
             }
-
             if (Objects.isNull(toCreate.getUserName()) && Objects.nonNull(seller.getName())) {
                 toCreate.setUserName(seller.getName());
             }
-
             toCreate.setStatus(DataStatusEnum.FREEZE.getCode());
             toCreate.setType(ShopTypeEnum.SHOP.getCode());
 
+            this.userWriteService.update(seller);
             return this.shopWriteService.createShop(toCreate) ? toCreate.getId() : null;
         });
     }
@@ -100,6 +129,51 @@ public class ShopFacadeImpl implements ShopFacade {
 
             // 进行更新
             return this.shopWriteService.updateShop(toUpdate);
+        });
+    }
+
+    /**
+     * web端获得店铺详情
+     *
+     * @param request 店铺id
+     * @return 店铺详情
+     */
+    @Override
+    public Response<ShopDetailResponse> getShopDetail(ShopDetailRequest request) {
+        return execute(request, param -> {
+            Shop shop = this.shopReadService.fetchById(request.getShopId());
+            AssertUtil.isExist(shop, "shop");
+            if (!shop.getStatus().equals(DataStatusEnum.NORMAL.getCode())) {
+                throw new ServiceException("shop.not.open");
+            }
+
+            ShopDetailResponse response = this.shopConverter.model2DetailResponse(shop);
+            response.setShopCategoryDetailResponseList(this.shopCategoryReadService.findByShopId(request.getShopId()).stream()
+                    .filter(e -> e.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
+                    .map(e -> {
+                        ShopCategoryDetailResponse shopCategoryDetailResponse = this.shopCategoryConverter.model2DetailResponse(e);
+                        shopCategoryDetailResponse.setItemThinResponseList(this.itemReadService.findByCategoryId(e.getId()).stream()
+                                .filter(item -> item.getStatus().equals(DataStatusEnum.NORMAL.getCode()) || item.getStatus().equals(DataStatusEnum.LOCK.getCode()))
+                                .map(this.itemConverter::model2ThinResponse)
+                                .collect(Collectors.toList())
+                        );
+                        return shopCategoryDetailResponse;
+                    })
+                    .collect(Collectors.toList())
+            );
+            return response;
+        });
+    }
+
+    @Override
+    public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request) {
+        return execute(request, param -> {
+            Paging<Shop> shopPaging = this.shopReadService.paging(request.toMap());
+            if (shopPaging.getTotal().equals(0)) {
+                return Paging.empty();
+            } else {
+                return new Paging<>(shopPaging.getTotal(), shopPaging.getData().stream().map(this.shopConverter::model2ThinResponse).collect(Collectors.toList()));
+            }
         });
     }
 }

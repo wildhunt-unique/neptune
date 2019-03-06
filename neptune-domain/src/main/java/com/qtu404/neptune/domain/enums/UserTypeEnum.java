@@ -1,4 +1,4 @@
-package com.qtu404.neptune.common.enums;
+package com.qtu404.neptune.domain.enums;
 
 import java.util.Objects;
 

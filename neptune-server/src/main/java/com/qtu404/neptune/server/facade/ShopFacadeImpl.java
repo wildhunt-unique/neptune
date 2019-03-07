@@ -7,9 +7,11 @@ import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
+import com.qtu404.neptune.domain.enums.TagTypeEnum;
 import com.qtu404.neptune.domain.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.model.Shop;
+import com.qtu404.neptune.domain.model.TagBinding;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.ItemConverter;
@@ -26,6 +28,7 @@ import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -60,8 +63,14 @@ public class ShopFacadeImpl implements ShopFacade {
 
     private final ItemConverter itemConverter;
 
+    private final TagReadService tagReadService;
+
+    private final TagWriteService tagWriteService;
+
+    private final TagBindingWriteService tagBindingWriteService;
+
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagWriteService tagWriteService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -71,8 +80,17 @@ public class ShopFacadeImpl implements ShopFacade {
         this.shopCategoryConverter = shopCategoryConverter;
         this.itemConverter = itemConverter;
         this.userWriteService = userWriteService;
+        this.tagReadService = tagReadService;
+        this.tagBindingWriteService = tagBindingWriteService;
+        this.tagWriteService = tagWriteService;
     }
 
+    /**
+     * 创建店铺
+     *
+     * @param request 请求参数
+     * @return 店铺id
+     */
     @Override
     public Response<Long> createShop(ShopCreateRequest request) {
         return execute(request, param -> {
@@ -98,11 +116,35 @@ public class ShopFacadeImpl implements ShopFacade {
             toCreate.setStatus(DataStatusEnum.FREEZE.getCode());
             toCreate.setType(ShopTypeEnum.SHOP.getCode());
 
+            // TODO: 2019/3/7  transaction manager
             this.userWriteService.update(seller);
-            return this.shopWriteService.createShop(toCreate) ? toCreate.getId() : null;
+            this.shopWriteService.createShop(toCreate);
+
+            // 绑定标签
+            if (!CollectionUtils.isEmpty(request.getTagIds())) {
+                List<TagBinding> toCreateTagBinding = this.tagReadService.findByIds(request.getTagIds()).stream()
+                        .filter(tag -> tag.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
+                        .map(tag -> {
+                            TagBinding toCreateTag = new TagBinding();
+                            toCreateTag.setTagId(tag.getId());
+                            toCreateTag.setTargetId(toCreate.getId());
+                            toCreateTag.setType(TagTypeEnum.SHOP.getCode());
+                            toCreateTag.setStatus(DataStatusEnum.NORMAL.getCode());
+                            return toCreateTag;
+                        }).collect(Collectors.toList());
+                this.tagBindingWriteService.batchCreate(toCreateTagBinding);
+            }
+
+            return toCreate.getId();
         });
     }
 
+    /**
+     * 更新店铺信息
+     *
+     * @param request 请求参数
+     * @return 是否成功
+     */
     @Override
     public Response<Boolean> updateShopInfo(ShopUpdateRequest request) {
         return execute(request, param -> {
@@ -165,6 +207,12 @@ public class ShopFacadeImpl implements ShopFacade {
         });
     }
 
+    /**
+     * 店铺分页
+     *
+     * @param request 查询条件
+     * @return 分页信息
+     */
     @Override
     public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request) {
         return execute(request, param -> {
@@ -172,7 +220,11 @@ public class ShopFacadeImpl implements ShopFacade {
             if (shopPaging.getTotal().equals(0)) {
                 return Paging.empty();
             } else {
-                return new Paging<>(shopPaging.getTotal(), shopPaging.getData().stream().map(this.shopConverter::model2ThinResponse).collect(Collectors.toList()));
+                return new Paging<>(
+                        shopPaging.getTotal(), shopPaging.getData().stream()
+                        .map(this.shopConverter::model2ThinResponse)
+                        .collect(Collectors.toList())
+                );
             }
         });
     }

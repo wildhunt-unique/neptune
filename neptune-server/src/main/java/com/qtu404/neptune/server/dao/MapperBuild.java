@@ -12,16 +12,13 @@ import java.util.stream.Collectors;
  */
 public class MapperBuild {
     public static void main(String[] args) {
-//        MapperBuilder builder = MapperBuilder.builder()
-//                .db("neptune")
-//                .username("root")
-//                .password("anywhere")
-//                .path("/Users/admin/Desktop/")
-//                .build();
-//        builder.build("shop_category","ShopCategory");
+        MapperBuilder builder = MapperBuilder.builder()
+                .db("neptune")
+                .username("root")
+                .password("anywhere")
+                .path("/Users/admin/Desktop/")
+                .build();
+        builder.build("tag","Tag");
 
-        List<Long> longs = new ArrayList<>();
-        List<String> strings = longs.stream().map(String::valueOf).collect(Collectors.toList());
-        System.out.println(strings.size());
     }
 }

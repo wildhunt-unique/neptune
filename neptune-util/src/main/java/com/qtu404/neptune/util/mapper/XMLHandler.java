@@ -206,7 +206,8 @@ class XMLHandler {
         batchInsert.setAttribute("keyProperty", "id");
         batchInsert.setAttribute("useGeneratedKeys", "true");
         batchInsert.setTextContent("\nINSERT INTO " + " <include refid=\"tb\"/> " + " (<include refid=\"cols_exclude_id\"/>) " +
-                "VALUES <foreach collection=\"list\" item=\"item\" sortIndex=\"sortIndex\" separator=\",\">\n" +
+                "VALUES <foreach collection=\"list\" item=\"item\" index=\"index" +
+                "\" separator=\",\">\n" +
                 " (<include refid=\"listVals\"/>)\n" +
                 "</foreach>");
         mapper.appendChild(batchInsert);

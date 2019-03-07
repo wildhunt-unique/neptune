@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -19,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ShopCreateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = 7581385310057208589L;
+    private static final long serialVersionUID = -5587918097893493964L;
 
     @ApiModelProperty(value = "卖家id", required = true)
     private Long userId;
@@ -32,6 +33,9 @@ public class ShopCreateRequest extends AbstractRequest implements Serializable {
 
     @ApiModelProperty(hidden = true)
     private Integer type;
+
+    @ApiModelProperty("店铺标签id列表")
+    private List<Long> tagIds;
 
     @ApiModelProperty("店铺联系电话")
     private String mobile;

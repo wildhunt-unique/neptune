@@ -19,22 +19,22 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ShopCreateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = -5179881697726592981L;
+    private static final long serialVersionUID = 7581385310057208589L;
 
     @ApiModelProperty(value = "卖家id", required = true)
     private Long userId;
-
-    @ApiModelProperty(hidden = true)
-    private String userName;
 
     @ApiModelProperty(value = "店铺名", required = true)
     private String name;
 
     @ApiModelProperty(hidden = true)
+    private String userName;
+
+    @ApiModelProperty(hidden = true)
     private Integer type;
 
     @ApiModelProperty("店铺联系电话")
-    private Integer mobile;
+    private String mobile;
 
     @ApiModelProperty("店铺联系邮箱")
     private String email;

@@ -27,16 +27,15 @@ public class AbstractPagingRequest extends AbstractRequest {
     @Override
     public void checkParam() {
         super.checkParam();
+        if (Objects.isNull(pageSize) || pageSize < 0) {
+            pageSize = 20;
+        }
+        limit = pageSize;
+
         if (Objects.isNull(pageNo) || pageNo <= 0) {
             offset = 0;
         } else {
             offset = (pageNo - 1) * pageSize;
-        }
-
-        if (Objects.isNull(pageSize) || pageSize < 0) {
-            limit = 20;
-        } else {
-            limit = pageSize;
         }
     }
 }

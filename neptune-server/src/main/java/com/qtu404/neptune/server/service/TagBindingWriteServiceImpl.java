@@ -5,6 +5,7 @@ import com.qtu404.neptune.domain.service.TagBindingWriteService;
 import com.qtu404.neptune.server.dao.TagBindingDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -23,11 +24,19 @@ public class TagBindingWriteServiceImpl implements TagBindingWriteService {
 
     @Override
     public Integer batchCreate(List<TagBinding> toCreateTagBinding) {
+        if (CollectionUtils.isEmpty(toCreateTagBinding)) {
+            return 0;
+        }
         return tagBindingDao.save(toCreateTagBinding);
     }
 
     @Override
+    public Integer batchSetStatusByTargetIdAndType(Long targetId, Integer type, Integer status) {
+        return this.tagBindingDao.batchSetStatusByTargetIdAndType(targetId, type, status);
+    }
+
+    @Override
     public Integer batchSetStatusByTagIdAndType(Long tagId, Integer type, Integer status) {
-        return this.tagBindingDao.batchSetStatusByTagIdAndType(tagId, type, status) ;
+        return this.tagBindingDao.batchSetStatusByTagIdAndType(tagId, type, status);
     }
 }

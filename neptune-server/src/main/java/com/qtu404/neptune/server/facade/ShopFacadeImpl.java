@@ -11,6 +11,7 @@ import com.qtu404.neptune.domain.enums.TagTypeEnum;
 import com.qtu404.neptune.domain.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.model.Shop;
+import com.qtu404.neptune.domain.model.Tag;
 import com.qtu404.neptune.domain.model.TagBinding;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.*;
@@ -139,7 +140,6 @@ public class ShopFacadeImpl implements ShopFacade {
                         }).collect(Collectors.toList());
                 this.tagBindingWriteService.batchCreate(toCreateTagBinding);
             }
-
             return toCreate.getId();
         });
     }
@@ -161,11 +161,6 @@ public class ShopFacadeImpl implements ShopFacade {
             User user = this.userReadService.fetchById(request.getUserId());
             ParamUtil.nonExist(user, "user");
 
-            // 校验状态是否合法
-            if (Objects.nonNull(request.getStatus())) {
-                DataStatusEnum.validate(request.getStatus());
-            }
-
             // 不是店主
             if (!user.getId().equals(existShop.getUserId())) {
                 // 也不是管理员
@@ -173,6 +168,33 @@ public class ShopFacadeImpl implements ShopFacade {
                     throw new IllegalArgumentException("illegal.op");
                 }
             }
+
+            if (!CollectionUtils.isEmpty(request.getTagIds())) {
+                this.tagBindingWriteService.batchSetStatusByTargetIdAndType(toUpdate.getId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.DELETE.getCode());
+                List<Tag> tagList = this.tagReadService.findByIds(request.getTagIds()).stream()
+                        .filter(tag -> tag.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
+                        .collect(Collectors.toList());
+
+                List<TagBinding> toCreateBindingList = tagList.stream()
+                        .map(tag -> {
+                            TagBinding tagBinding = new TagBinding();
+                            tagBinding.setStatus(DataStatusEnum.NORMAL.getCode());
+                            tagBinding.setType(TagTypeEnum.SHOP.getCode());
+                            tagBinding.setTagId(tag.getId());
+                            tagBinding.setTargetId(toUpdate.getId());
+                            return tagBinding;
+                        }).collect(Collectors.toList());
+                this.tagBindingWriteService.batchCreate(toCreateBindingList);
+            }
+
+            // 校验状态是否合法
+            if (Objects.nonNull(toUpdate.getStatus())) {
+                DataStatusEnum.validate(toUpdate.getStatus());
+                if (toUpdate.getStatus().equals(DataStatusEnum.DELETE.getCode())) {
+                    this.tagBindingWriteService.batchSetStatusByTargetIdAndType(toUpdate.getId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.DELETE.getCode());
+                }
+            }
+
 
             // 进行更新
             return this.shopWriteService.updateShop(toUpdate);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/7 下午1:56
  */
-@Api(value = "店铺标签通用接口", tags = "标签通用接口")
+@Api(value = "店铺标签通用接口", tags = "店铺标签通用接口")
 @RestController
 @RequestMapping("api/common/tag/")
 public class ShopTagCommonController {

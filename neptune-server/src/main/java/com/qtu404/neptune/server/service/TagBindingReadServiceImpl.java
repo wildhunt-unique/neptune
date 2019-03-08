@@ -31,4 +31,13 @@ public class TagBindingReadServiceImpl implements TagBindingReadService {
         params.put("status",status);
         return this.tagBindingDao.list(params);
     }
+
+    @Override
+    public List<TagBinding> findByTargetIdAndTypeCheckStatus(Long targetId, Integer type, Integer status) {
+        Map<String,Object> params = Maps.newHashMap();
+        params.put("targetId",targetId);
+        params.put("type",type);
+        params.put("status",status);
+        return this.tagBindingDao.list(params);
+    }
 }

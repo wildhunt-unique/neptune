@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface TagBindingReadService {
     List<TagBinding> findByTagIdAndTypeCheckStatus(Long tagId, Integer type, Integer status);
+
+    List<TagBinding> findByTargetIdAndTypeCheckStatus(Long targetId, Integer type, Integer status);
 }

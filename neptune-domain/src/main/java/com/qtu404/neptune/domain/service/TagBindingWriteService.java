@@ -12,4 +12,6 @@ public interface TagBindingWriteService {
     Integer batchCreate(List<TagBinding> toCreateTagBinding);
 
     Integer batchSetStatusByTagIdAndType(Long tagId, Integer type, Integer status);
+
+    Integer batchSetStatusByTargetIdAndType(Long targetId, Integer type, Integer status);
 }

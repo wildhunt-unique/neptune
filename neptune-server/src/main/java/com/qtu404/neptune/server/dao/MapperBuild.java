@@ -18,7 +18,7 @@ public class MapperBuild {
                 .password("anywhere")
                 .path("/Users/admin/Desktop/")
                 .build();
-        builder.build("tag","Tag");
+        builder.build("tag_binding","TagBinding");
 
     }
 }

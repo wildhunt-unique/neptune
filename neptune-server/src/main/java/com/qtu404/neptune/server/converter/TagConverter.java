@@ -1,6 +1,7 @@
 package com.qtu404.neptune.server.converter;
 
 import com.qtu404.neptune.api.request.tag.TagCreateRequest;
+import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.api.response.tag.TagThinResponse;
 import com.qtu404.neptune.domain.model.Tag;
 import org.mapstruct.Mapper;
@@ -19,4 +20,9 @@ public interface TagConverter {
             @Mapping(source = "id", target = "tagId")
     )
     TagThinResponse model2ThinResponse(Tag tag);
+
+    @Mappings(
+            @Mapping(source = "tagId", target = "id")
+    )
+    Tag request2Model(TagUpdateRequest request);
 }

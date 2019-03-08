@@ -32,7 +32,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
@@ -67,10 +69,12 @@ public class ShopFacadeImpl implements ShopFacade {
 
     private final TagWriteService tagWriteService;
 
+    private final TagBindingReadService tagBindingReadService;
+
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagWriteService tagWriteService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagWriteService tagWriteService, TagBindingReadService tagBindingReadService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -83,6 +87,7 @@ public class ShopFacadeImpl implements ShopFacade {
         this.tagReadService = tagReadService;
         this.tagBindingWriteService = tagBindingWriteService;
         this.tagWriteService = tagWriteService;
+        this.tagBindingReadService = tagBindingReadService;
     }
 
     /**
@@ -216,16 +221,29 @@ public class ShopFacadeImpl implements ShopFacade {
     @Override
     public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request) {
         return execute(request, param -> {
-            Paging<Shop> shopPaging = this.shopReadService.paging(request.toMap());
-            if (shopPaging.getTotal().equals(0)) {
-                return Paging.empty();
-            } else {
-                return new Paging<>(
-                        shopPaging.getTotal(), shopPaging.getData().stream()
-                        .map(this.shopConverter::model2ThinResponse)
-                        .collect(Collectors.toList())
-                );
+            Map<String, Object> params = request.toMap();
+
+            if (Objects.nonNull(request.getTagId())) {
+                Set<Long> shopIds = this.tagBindingReadService
+                        .findByTagIdAndTypeCheckStatus(request.getTagId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.NORMAL.getCode())
+                        .stream()
+                        .map(TagBinding::getTargetId)
+                        .collect(Collectors.toSet());
+
+                if (CollectionUtils.isEmpty(shopIds)) {
+                    return Paging.empty();
+                } else {
+                    params.put("ids", shopIds);
+                }
             }
+
+            Paging<Shop> shopPaging = this.shopReadService.paging(params);
+            return new Paging<>(
+                    shopPaging.getTotal(),
+                    shopPaging.getData().stream()
+                            .map(this.shopConverter::model2ThinResponse)
+                            .collect(Collectors.toList())
+            );
         });
     }
 }

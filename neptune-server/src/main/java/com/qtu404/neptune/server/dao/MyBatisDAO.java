@@ -101,7 +101,7 @@ public abstract class MyBatisDAO<T> {
         return this.sqlSession.selectOne(sqlId(COUNT), null);
     }
 
-    private String sqlId(String id) {
+    protected String sqlId(String id) {
         return namespaces + "." + id;
     }
 }

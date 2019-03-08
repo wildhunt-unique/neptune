@@ -25,4 +25,9 @@ public class TagBindingWriteServiceImpl implements TagBindingWriteService {
     public Integer batchCreate(List<TagBinding> toCreateTagBinding) {
         return tagBindingDao.save(toCreateTagBinding);
     }
+
+    @Override
+    public Integer batchSetStatusByTagIdAndType(Long tagId, Integer type, Integer status) {
+        return this.tagBindingDao.batchSetStatusByTagIdAndType(tagId, type, status) ;
+    }
 }

@@ -43,10 +43,4 @@ public class ShopAdminController {
         request.setUserId(userId);
         return this.shopFacade.updateShopInfo(request);
     }
-
-    @GetMapping("paging")
-    @ApiOperation("店铺分页查询")
-    public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request){
-        return this.shopFacade.shopPaging(request);
-    }
 }

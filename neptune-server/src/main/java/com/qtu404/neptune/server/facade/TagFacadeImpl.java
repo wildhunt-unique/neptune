@@ -4,10 +4,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.qtu404.neptune.api.facade.ShopTagFacade;
 import com.qtu404.neptune.api.request.tag.TagCreateRequest;
 import com.qtu404.neptune.api.request.tag.TagThinListRequest;
+import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.enums.TagTypeEnum;
 import com.qtu404.neptune.domain.model.Tag;
+import com.qtu404.neptune.domain.service.TagBindingWriteService;
 import com.qtu404.neptune.domain.service.TagReadService;
 import com.qtu404.neptune.domain.service.TagWriteService;
 import com.qtu404.neptune.server.converter.TagConverter;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
@@ -34,11 +37,14 @@ public class TagFacadeImpl implements ShopTagFacade {
 
     private final TagWriteService tagWriteService;
 
+    private final TagBindingWriteService tagBindingWriteService;
+
     @Autowired
-    public TagFacadeImpl(TagConverter tagConverter, TagReadService tagReadService, TagWriteService tagWriteService) {
+    public TagFacadeImpl(TagConverter tagConverter, TagReadService tagReadService, TagWriteService tagWriteService, TagBindingWriteService tagBindingWriteService) {
         this.tagConverter = tagConverter;
         this.tagReadService = tagReadService;
         this.tagWriteService = tagWriteService;
+        this.tagBindingWriteService = tagBindingWriteService;
     }
 
     @Override
@@ -64,6 +70,27 @@ public class TagFacadeImpl implements ShopTagFacade {
                     .collect(Collectors.toList())
             );
             return response;
+        });
+    }
+
+    @Override
+    public Response<Boolean> update(TagUpdateRequest request) {
+        return execute(request, param -> {
+            Tag toUpdateTag = this.tagConverter.request2Model(request);
+
+            // 设置状态
+            if (Objects.nonNull(toUpdateTag.getStatus())) {
+                DataStatusEnum.validate(toUpdateTag.getStatus());
+                if (toUpdateTag.getStatus().equals(DataStatusEnum.DELETE.getCode())) {
+                    this.tagBindingWriteService.batchSetStatusByTagIdAndType(
+                            toUpdateTag.getId(),
+                            TagTypeEnum.SHOP.getCode(),
+                            DataStatusEnum.DELETE.getCode());
+                }
+            }
+
+            // 进行更新
+            return this.tagWriteService.update(toUpdateTag);
         });
     }
 }

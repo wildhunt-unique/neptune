@@ -109,4 +109,5 @@
         WHERE TRUE
         <include refid="criteria"/>
     </select>
+
 </mapper>

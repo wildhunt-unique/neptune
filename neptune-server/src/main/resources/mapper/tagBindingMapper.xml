@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Tag">
-    <resultMap id="FullMap" type="Tag">
+<mapper namespace="TagBinding">
+    <resultMap id="FullMap" type="TagBinding">
         <id column="id" property="id"/>
-        <result column="name" property="name"/>
+        <result column="tag_id" property="tagId"/>
         <result column="type" property="type"/>
-        <result column="content" property="content"/>
+        <result column="target_id" property="targetId"/>
         <result column="extra_json" property="extraJson"/>
         <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
-    <sql id="tb">tag</sql>
+    <sql id="tb">tag_binding</sql>
     <sql id="cols_all">id,
         <include refid="cols_exclude_id"/>
     </sql>
-    <sql id="cols_exclude_id">name,type,content,extra_json,status,created_at,updated_at</sql>
-    <sql id="vals">#{name},#{type},#{content},#{extraJson},#{status},now(),now()</sql>
-    <sql id="listVals">#{item.name},#{item.type},#{item.content},#{item.extraJson},#{item.status},now(),now()</sql>
+    <sql id="cols_exclude_id">tag_id,type,target_id,extra_json,status,created_at,updated_at</sql>
+    <sql id="vals">#{tagId},#{type},#{targetId},#{extraJson},#{status},now(),now()</sql>
+    <sql id="listVals">#{item.tagId},#{item.type},#{item.targetId},#{item.extraJson},#{item.status},now(),now()</sql>
     <sql id="criteria">
-        <if test="name != null">AND name = #{name}</if>
+        <if test="tagId != null">AND tag_id = #{tagId}</if>
         <if test="type != null">AND type = #{type}</if>
-        <if test="content != null">AND content = #{content}</if>
+        <if test="targetId != null">AND target_id = #{targetId}</if>
         <if test="extraJson != null">AND extra_json = #{extraJson}</if>
         <if test="status != null">AND status = #{status}</if>
         <if test="createdAt != null">AND created_at = #{createdAt}</if>
@@ -30,7 +30,7 @@
     <sql id="paging">
         <if test="offset != null">LIMIT #{offset},#{limit}</if>
     </sql>
-    <insert id="save" keyProperty="id" parameterType="Tag" useGeneratedKeys="true">
+    <insert id="save" keyProperty="id" parameterType="TagBinding" useGeneratedKeys="true">
         INSERT INTO
         <include refid="tb"/>
         (<include refid="cols_exclude_id"/>) VALUES (<include refid="vals"/>)
@@ -56,13 +56,23 @@
             id = #{ids}
         </foreach>
     </delete>
-    <update id="update" parameterType="Tag">
+    <update id="batchSetStatus" parameterType="java.util.Map">
         UPDATE
         <include refid="tb"/>
         <set>
-            <if test="name != null">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE `type` = #{type}
+        <if test="tagId != null">AND tag_id = #{tagId}</if>
+        <if test="targetId != null">AND target_id = #{targetId}</if>
+    </update>
+    <update id="update" parameterType="TagBinding">
+        UPDATE
+        <include refid="tb"/>
+        <set>
+            <if test="tagId != null">tag_id = #{tagId},</if>
             <if test="type != null">type = #{type},</if>
-            <if test="content != null">content = #{content},</if>
+            <if test="targetId != null">target_id = #{targetId},</if>
             <if test="extraJson != null">extra_json = #{extraJson},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>

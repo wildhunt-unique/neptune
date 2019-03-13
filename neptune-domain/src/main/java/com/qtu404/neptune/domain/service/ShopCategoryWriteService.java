@@ -8,4 +8,6 @@ import com.qtu404.neptune.domain.model.ShopCategory;
  */
 public interface ShopCategoryWriteService {
     Boolean create(ShopCategory toCreate);
+
+    Boolean update(ShopCategory toUpdate);
 }

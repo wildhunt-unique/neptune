@@ -1,6 +1,7 @@
 package com.qtu404.neptune.api.request.shop;
 
 import com.qtu404.neptune.util.model.AbstractPagingRequest;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -17,8 +18,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ShopPageRequest extends AbstractPagingRequest implements Serializable {
-    private static final long serialVersionUID = -1921660714393074428L;
+public class ShopPagingRequest extends AbstractPagingRequest implements Serializable {
+    private static final long serialVersionUID = -3007249300428693632L;
+
+    @ApiModelProperty("店铺id")
+    private String shopId;
 
     @ApiModelProperty("店铺名")
     private String name;
@@ -35,9 +39,12 @@ public class ShopPageRequest extends AbstractPagingRequest implements Serializab
     @ApiModelProperty("店铺状态 1:营业 -1:歇业 -2:冻结")
     private Integer status;
 
+    @ApiModelProperty("标签id")
+    private Long tagId;
+
+
     @Override
     public void checkParam() {
         super.checkParam();
-
     }
 }

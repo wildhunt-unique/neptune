@@ -1,14 +1,11 @@
 package com.qtu404.neptune.admin.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.qtu404.neptune.api.request.shop.ShopPageRequest;
-import com.qtu404.neptune.api.response.shop.ShopThinResponse;
-import com.qtu404.neptune.util.model.Paging;
-import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.web.common.util.UserUtils;
 import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
 import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
+import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.util.UserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +19,7 @@ import static com.qtu404.neptune.util.model.Response.NOT_LOGIN;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 上午10:03
  */
-@Api(value = "店铺管理接口", tags = "店铺管理接口")
+@Api(value = "店铺-管理接口", tags = "店铺-管理接口")
 @RestController
 @RequestMapping("api/admin/shop/")
 public class ShopAdminController {
@@ -42,11 +39,5 @@ public class ShopAdminController {
         if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
         request.setUserId(userId);
         return this.shopFacade.updateShopInfo(request);
-    }
-
-    @GetMapping("paging")
-    @ApiOperation("店铺分页查询")
-    public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request){
-        return this.shopFacade.shopPaging(request);
     }
 }

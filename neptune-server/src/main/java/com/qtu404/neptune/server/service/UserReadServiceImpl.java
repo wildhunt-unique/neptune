@@ -3,6 +3,7 @@ package com.qtu404.neptune.server.service;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.server.dao.UserDao;
+import com.qtu404.neptune.util.model.Paging;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,10 @@ public class UserReadServiceImpl implements UserReadService {
     @Override
     public User fetchById(Long userId) {
         return this.userDao.fetch(userId);
+    }
+
+    @Override
+    public Paging<User> paging(Map<String, Object> condition) {
+        return this.userDao.paging(condition);
     }
 }

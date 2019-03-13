@@ -1,6 +1,7 @@
 package com.qtu404.neptune.api.facade;
 
 import com.qtu404.neptune.api.request.shop.ShopCategoryCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopCategoryUpdateRequest;
 import com.qtu404.neptune.util.model.Response;
 
 /**
@@ -9,4 +10,6 @@ import com.qtu404.neptune.util.model.Response;
  */
 public interface ShopCategoryFacade {
     Response<Long> create(ShopCategoryCreateRequest request);
+
+    Response<Boolean> update(ShopCategoryUpdateRequest request);
 }

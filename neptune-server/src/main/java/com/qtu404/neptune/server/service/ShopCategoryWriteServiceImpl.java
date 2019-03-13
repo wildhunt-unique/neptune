@@ -23,4 +23,9 @@ public class ShopCategoryWriteServiceImpl implements ShopCategoryWriteService {
     public Boolean create(ShopCategory toCreate) {
         return shopCategoryDao.save(toCreate);
     }
+
+    @Override
+    public Boolean update(ShopCategory toUpdate) {
+        return shopCategoryDao.update(toUpdate);
+    }
 }

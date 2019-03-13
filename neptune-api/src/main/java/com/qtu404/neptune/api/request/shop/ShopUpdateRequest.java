@@ -8,7 +8,9 @@ import lombok.*;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -21,7 +23,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ShopUpdateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = -6982350349469021741L;
+    private static final long serialVersionUID = -5344686480504023539L;
 
     @ApiModelProperty(value = "店铺id", required = true)
     private Long shopId;
@@ -49,6 +51,9 @@ public class ShopUpdateRequest extends AbstractRequest implements Serializable {
 
     @ApiModelProperty("店铺状态 营业:1 暂停营业:-2")
     private Integer status;
+
+    @ApiModelProperty("店铺标签id")
+    private List<Long> tagIds;
 
     @Override
     public void checkParam() {

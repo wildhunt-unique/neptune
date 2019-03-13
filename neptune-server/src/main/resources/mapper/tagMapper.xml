@@ -1,72 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Shop">
-    <resultMap id="FullMap" type="Shop">
+<mapper namespace="Tag">
+    <resultMap id="FullMap" type="Tag">
         <id column="id" property="id"/>
-        <result column="outer_id" property="outerId"/>
-        <result column="user_id" property="userId"/>
-        <result column="user_name" property="userName"/>
         <result column="name" property="name"/>
         <result column="type" property="type"/>
-        <result column="mobile" property="mobile"/>
-        <result column="email" property="email"/>
-        <result column="image_url" property="imageUrl"/>
-        <result column="address" property="address"/>
-        <result column="tags" property="tags"/>
-        <result column="status" property="status"/>
+        <result column="content" property="content"/>
         <result column="extra_json" property="extraJson"/>
+        <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
-    <sql id="tb">shop</sql>
+    <sql id="tb">tag</sql>
     <sql id="cols_all">id,
         <include refid="cols_exclude_id"/>
     </sql>
-    <sql id="cols_exclude_id">
-        outer_id,user_id,user_name,name,type,mobile,email,image_url,address,tags,status,extra_json,created_at,updated_at
-    </sql>
-    <sql id="vals">
-        #{outerId},#{userId},#{userName},#{name},#{type},#{mobile},#{email},#{imageUrl},#{address},#{tags},#{status},#{extraJson},now(),now()
-    </sql>
-    <sql id="listVals">
-        #{item.outerId},#{item.userId},#{item.userName},#{item.name},#{item.type},#{item.mobile},#{item.email},#{item.imageUrl},#{item.address},#{item.tags},#{item.status},#{item.extraJson},now(),now()
-    </sql>
+    <sql id="cols_exclude_id">name,type,content,extra_json,status,created_at,updated_at</sql>
+    <sql id="vals">#{name},#{type},#{content},#{extraJson},#{status},now(),now()</sql>
+    <sql id="listVals">#{item.name},#{item.type},#{item.content},#{item.extraJson},#{item.status},now(),now()</sql>
     <sql id="criteria">
-        <if test="outerId != null">AND outer_id = #{outerId}</if>
-        <if test="userId != null">AND user_id = #{userId}</if>
-        <if test="userName != null">AND user_name LIKE CONCAT(#{userName},'%')</if>
-        <if test="name != null">AND name LIKE CONCAT(#{name},'%')</if>
+        <if test="name != null">AND name = #{name}</if>
         <if test="type != null">AND type = #{type}</if>
-        <if test="mobile != null">AND mobile = #{mobile}</if>
-        <if test="email != null">AND email = #{email}</if>
-        <if test="imageUrl != null">AND image_url = #{imageUrl}</if>
-        <if test="address != null">AND address = #{address}</if>
-        <if test="tags != null">AND tags = #{tags}</if>
-        <if test="status != null">AND status = #{status}</if>
-        <if test="ids != null">AND `id` IN
-            <foreach collection="ids" item="id" open="(" separator="," close=")">
-                #{id}
-            </foreach>
-        </if>
+        <if test="content != null">AND content = #{content}</if>
         <if test="extraJson != null">AND extra_json = #{extraJson}</if>
+        <if test="status != null">AND status = #{status}</if>
         <if test="createdAt != null">AND created_at = #{createdAt}</if>
         <if test="updatedAt != null">AND updated_at = #{updatedAt}</if>
     </sql>
     <sql id="paging">
         <if test="offset != null">LIMIT #{offset},#{limit}</if>
     </sql>
-    <insert id="save" keyProperty="id" parameterType="Shop" useGeneratedKeys="true">
+    <insert id="save" keyProperty="id" parameterType="Tag" useGeneratedKeys="true">
         INSERT INTO
         <include refid="tb"/>
-        (<include refid="cols_exclude_id"/>) VALUES (<include
-            refid="vals"/>)
+        (<include refid="cols_exclude_id"/>) VALUES (<include refid="vals"/>)
     </insert>
     <insert id="saves" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
         INSERT INTO
         <include refid="tb"/>
         (<include refid="cols_exclude_id"/>) VALUES
-        <foreach
-                collection="list" item="item" index="index" separator=",">
+        <foreach collection="list" item="item" index="index" separator=",">
             (<include refid="listVals"/>)
         </foreach>
     </insert>
@@ -83,22 +56,15 @@
             id = #{ids}
         </foreach>
     </delete>
-    <update id="update" parameterType="Shop">
+    <update id="update" parameterType="Tag">
         UPDATE
         <include refid="tb"/>
         <set>
-            <if test="outerId != null">outer_id = #{outerId},</if>
-            <if test="userId != null">user_id = #{userId},</if>
-            <if test="userName != null">user_name = #{userName},</if>
             <if test="name != null">name = #{name},</if>
             <if test="type != null">type = #{type},</if>
-            <if test="mobile != null">mobile = #{mobile},</if>
-            <if test="email != null">email = #{email},</if>
-            <if test="imageUrl != null">image_url = #{imageUrl},</if>
-            <if test="address != null">address = #{address},</if>
-            <if test="tags != null">tags = #{tags},</if>
-            <if test="status != null">status = #{status},</if>
+            <if test="content != null">content = #{content},</if>
             <if test="extraJson != null">extra_json = #{extraJson},</if>
+            <if test="status != null">status = #{status},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>updated_at=now()
         </set>
@@ -143,4 +109,5 @@
         WHERE TRUE
         <include refid="criteria"/>
     </select>
+
 </mapper>

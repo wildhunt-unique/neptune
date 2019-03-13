@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.converter;
 
+import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.api.request.user.UserRegistryRequest;
 import com.qtu404.neptune.api.response.user.UserInfoResponse;
@@ -22,4 +23,9 @@ public interface UserConverter {
             @Mapping(source = "request.password", target = "password"),
     })
     User request2model(UserRegistryRequest request);
+
+    @Mappings({
+            @Mapping(source = "user.id", target = "userId"),
+    })
+    UserThinResponse model2ThinResponse(User user);
 }

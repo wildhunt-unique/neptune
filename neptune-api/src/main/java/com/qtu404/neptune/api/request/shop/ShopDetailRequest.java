@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/4 下午5:03
  */
-@ApiModel("请求参数")
+@ApiModel("店铺详情查看")
 @Data
 @Builder
 @NoArgsConstructor

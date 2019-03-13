@@ -2,6 +2,7 @@ package com.qtu404.neptune.util.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
@@ -9,8 +10,9 @@ import java.util.Objects;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/6 下午2:35
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AbstractPagingRequest extends AbstractRequest {
+public abstract class AbstractPagingRequest extends AbstractRequest {
 
     @ApiModelProperty("分页请求: 页数")
     private Integer pageNo;

@@ -2,7 +2,6 @@ package com.qtu404.neptune.api.request.shop;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -23,7 +22,7 @@ public class ShopCategoryCreateRequest extends AbstractRequest implements Serial
     private static final long serialVersionUID = -1251480275325070604L;
 
     @ApiModelProperty(value = "店铺id", required = true)
-    private Long ShopId;
+    private Long shopId;
 
     @ApiModelProperty(value = "类目名", required = true)
     private String name;
@@ -31,7 +30,7 @@ public class ShopCategoryCreateRequest extends AbstractRequest implements Serial
     @ApiModelProperty("备注")
     private String remark;
 
-    @ApiModelProperty("父节点")
+    @ApiModelProperty(value = "父节点", hidden = true)
     private Long pid;
 
     @ApiModelProperty("logo")
@@ -43,7 +42,7 @@ public class ShopCategoryCreateRequest extends AbstractRequest implements Serial
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(ShopId, "shop.id");
+        ParamUtil.nonNull(shopId, "shop.id");
         ParamUtil.nonNull(name, "category.name");
     }
 }

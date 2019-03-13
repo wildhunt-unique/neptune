@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/7 下午1:49
  */
-@Api(value = "店铺标签管理接口", tags = "店铺标签管理接口")
+@Api(value = "店铺标签-管理接口", tags = "店铺标签-管理接口")
 @RestController
 @RequestMapping("api/admin/tag/")
 public class ShopTagAdminController {

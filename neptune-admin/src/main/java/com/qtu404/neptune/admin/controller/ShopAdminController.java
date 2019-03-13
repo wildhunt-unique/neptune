@@ -19,7 +19,7 @@ import static com.qtu404.neptune.util.model.Response.NOT_LOGIN;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 上午10:03
  */
-@Api(value = "店铺管理接口", tags = "店铺管理接口")
+@Api(value = "店铺-管理接口", tags = "店铺-管理接口")
 @RestController
 @RequestMapping("api/admin/shop/")
 public class ShopAdminController {

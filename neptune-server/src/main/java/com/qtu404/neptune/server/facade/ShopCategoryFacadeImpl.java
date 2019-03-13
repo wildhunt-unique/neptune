@@ -3,6 +3,7 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.qtu404.neptune.api.facade.ShopCategoryFacade;
 import com.qtu404.neptune.api.request.shop.ShopCategoryCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopCategoryUpdateRequest;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.model.Shop;
@@ -14,6 +15,7 @@ import com.qtu404.neptune.server.converter.ShopCategoryConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -63,16 +65,26 @@ public class ShopCategoryFacadeImpl implements ShopCategoryFacade {
                 toCreate.setLevel(parent.getLevel() + 1);
             }
 
-            if (Objects.isNull(toCreate.getSortIndex())){
+            if (Objects.isNull(toCreate.getSortIndex())) {
                 toCreate.setSortIndex(ConstantValues.DEFAULT_INDEX);
             }
 
             toCreate.setStatus(DataStatusEnum.NORMAL.getCode());
-            if (this.shopCategoryWriteService.create(toCreate)){
+            if (this.shopCategoryWriteService.create(toCreate)) {
                 return toCreate.getId();
-            }else {
+            } else {
                 throw new ServiceException("shop.category.create.fail");
             }
+        });
+    }
+
+    @Override
+    public Response<Boolean> update(ShopCategoryUpdateRequest request) {
+        return execute(request, param -> {
+            ShopCategory toUpdate = this.shopCategoryConverter.request2Model(request);
+            DataStatusEnum.validate(toUpdate.getStatus());
+            this.shopCategoryWriteService.update(toUpdate);
+            return Boolean.TRUE;
         });
     }
 }

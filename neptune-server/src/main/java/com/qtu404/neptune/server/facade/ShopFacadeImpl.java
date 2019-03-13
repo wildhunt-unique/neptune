@@ -2,7 +2,7 @@ package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
-import com.qtu404.neptune.api.request.shop.ShopPageRequest;
+import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
 import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
@@ -195,7 +195,6 @@ public class ShopFacadeImpl implements ShopFacade {
                 }
             }
 
-
             // 进行更新
             return this.shopWriteService.updateShop(toUpdate);
         });
@@ -216,6 +215,7 @@ public class ShopFacadeImpl implements ShopFacade {
                 throw new ServiceException("shop.not.open");
             }
 
+            // TODO: 2019/3/13 batch query item by category ids 
             ShopDetailResponse response = this.shopConverter.model2DetailResponse(shop);
             response.setShopCategoryDetailResponseList(this.shopCategoryReadService.findByShopId(request.getShopId()).stream()
                     .filter(e -> e.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
@@ -241,7 +241,7 @@ public class ShopFacadeImpl implements ShopFacade {
      * @return 分页信息
      */
     @Override
-    public Response<Paging<ShopThinResponse>> shopPaging(ShopPageRequest request) {
+    public Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request) {
         return execute(request, param -> {
             Map<String, Object> params = request.toMap();
 
@@ -257,6 +257,10 @@ public class ShopFacadeImpl implements ShopFacade {
                 } else {
                     params.put("ids", shopIds);
                 }
+            }
+
+            if (Objects.nonNull(request.getShopId())) {
+                params.put("id", request.getShopId());
             }
 
             Paging<Shop> shopPaging = this.shopReadService.paging(params);

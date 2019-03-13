@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class MapperBuild {
     public static void main(String[] args) {
         MapperBuilder builder = MapperBuilder.builder()
-                .db("neptune")
+                .db("parana_inventory")
                 .username("root")
                 .password("anywhere")
                 .path("/Users/admin/Desktop/")
                 .build();
-        builder.build("tag_binding","TagBinding");
+        builder.build("inventory_import_task","InventoryImportTask");
 
     }
 }

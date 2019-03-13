@@ -18,8 +18,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ShopPageRequest extends AbstractPagingRequest implements Serializable {
+public class ShopPagingRequest extends AbstractPagingRequest implements Serializable {
     private static final long serialVersionUID = -3007249300428693632L;
+
+    @ApiModelProperty("店铺id")
+    private String shopId;
 
     @ApiModelProperty("店铺名")
     private String name;

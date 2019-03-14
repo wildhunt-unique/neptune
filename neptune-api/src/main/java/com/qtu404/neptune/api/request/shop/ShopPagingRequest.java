@@ -22,7 +22,7 @@ public class ShopPagingRequest extends AbstractPagingRequest implements Serializ
     private static final long serialVersionUID = -3007249300428693632L;
 
     @ApiModelProperty("店铺id")
-    private String shopId;
+    private Long shopId;
 
     @ApiModelProperty("店铺名")
     private String name;

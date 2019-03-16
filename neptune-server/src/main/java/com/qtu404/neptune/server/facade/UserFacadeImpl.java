@@ -179,9 +179,25 @@ public class UserFacadeImpl implements UserFacade {
             return new Paging<>(
                     userPaging.getTotal(),
                     userPaging.getData().stream()
+                            .filter(user -> !user.getType().equals(UserTypeEnum.ADMIN.getCode()))
                             .map(this.userConverter::model2ThinResponse)
                             .collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 用户禁用启用
+     *
+     * @param request 请求参数
+     * @return 是否操作成功
+     */
+    @Override
+    public Response<Boolean> updateStatus(UserStatusUpdateRequest request) {
+        return execute(request, param -> {
+            User toUpdate = this.userConverter.request2model(request);
+            DataStatusEnum.validate(toUpdate.getStatus());
+            return this.userWriteService.update(toUpdate);
         });
     }
 }

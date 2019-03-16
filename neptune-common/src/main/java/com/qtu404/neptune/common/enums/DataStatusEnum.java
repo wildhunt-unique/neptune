@@ -18,15 +18,12 @@ public enum DataStatusEnum {
 
     public static void validate(Integer code) {
         if (Objects.isNull(code)) throw new IllegalArgumentException("illegal.status");
-
-        boolean pass = false;
         for (DataStatusEnum typeEnum : DataStatusEnum.values()) {
             if (code.equals(typeEnum.getCode())) {
-                pass = true;
+                return;
             }
         }
-
-        if (!pass) throw new IllegalArgumentException("illegal.status");
+        throw new IllegalArgumentException("illegal.status");
     }
 
     @Override

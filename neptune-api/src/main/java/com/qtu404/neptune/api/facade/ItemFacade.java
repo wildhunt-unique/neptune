@@ -1,8 +1,11 @@
 package com.qtu404.neptune.api.facade;
 
 import com.qtu404.neptune.api.request.item.ItemAdjustRequest;
+import com.qtu404.neptune.api.request.item.ItemPagingRequest;
 import com.qtu404.neptune.api.request.item.ItemUpdateRequest;
 import com.qtu404.neptune.api.request.item.ItemCreateRequest;
+import com.qtu404.neptune.api.response.item.ItemThinResponse;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 
 /**
@@ -15,4 +18,6 @@ public interface ItemFacade {
     Response<Boolean> update(ItemUpdateRequest request);
 
     Response<Boolean> adjust(ItemAdjustRequest request);
+
+    Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request);
 }

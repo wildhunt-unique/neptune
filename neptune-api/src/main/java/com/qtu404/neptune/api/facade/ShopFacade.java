@@ -1,13 +1,11 @@
 package com.qtu404.neptune.api.facade;
 
-import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
-import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
+import com.qtu404.neptune.api.request.shop.*;
+import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
-import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -21,4 +19,6 @@ public interface ShopFacade {
     Response<ShopDetailResponse> getShopDetail(ShopDetailRequest request);
 
     Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request);
+
+    Response<ShopCategoryListResponse> queryCategoryList(ShopCategoryQueryRequest request);
 }

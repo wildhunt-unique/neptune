@@ -1,8 +1,10 @@
 package com.qtu404.neptune.domain.service;
 
 import com.qtu404.neptune.domain.model.Item;
+import com.qtu404.neptune.util.model.Paging;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -12,4 +14,6 @@ public interface ItemReadService {
     Item fetchById(Long itemId);
 
     List<Item> findByCategoryId(Long id);
+
+    Paging<Item> paging(Map<String, Object> criteria);
 }

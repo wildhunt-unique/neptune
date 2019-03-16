@@ -3,10 +3,14 @@ package com.qtu404.neptune.admin.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ItemFacade;
 import com.qtu404.neptune.api.request.item.ItemAdjustRequest;
+import com.qtu404.neptune.api.request.item.ItemPagingRequest;
 import com.qtu404.neptune.api.request.item.ItemUpdateRequest;
 import com.qtu404.neptune.api.request.item.ItemCreateRequest;
+import com.qtu404.neptune.api.response.item.ItemThinResponse;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +41,11 @@ public class ItemAdminController {
     @PostMapping("adjust")
     public Response<Boolean> adjust(@RequestBody ItemAdjustRequest request){
         return this.itemFacade.adjust(request);
+    }
+
+    @ApiModelProperty("商品分页")
+    @GetMapping("paging")
+    public Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request){
+        return this.itemFacade.paging(request);
     }
 }

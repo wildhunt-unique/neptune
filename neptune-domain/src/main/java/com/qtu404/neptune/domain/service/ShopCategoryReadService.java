@@ -3,6 +3,7 @@ package com.qtu404.neptune.domain.service;
 import com.qtu404.neptune.domain.model.ShopCategory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -12,4 +13,6 @@ public interface ShopCategoryReadService {
     ShopCategory fetchById(Long id);
 
     List<ShopCategory> findByShopId(Long shopId);
+
+    List<ShopCategory> list(Map<String, Object> toMap);
 }

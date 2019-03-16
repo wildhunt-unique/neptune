@@ -28,4 +28,6 @@ public interface UserFacade {
     Response<Long> register(UserRegistryRequest request);
 
     Response<Paging<UserThinResponse>> paging(UserPagingRequest request);
+
+    Response<Boolean> updateStatus(UserStatusUpdateRequest request);
 }

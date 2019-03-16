@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/25 下午2:17
  */
- @ApiModel("请求参数")
+ @ApiModel("检查参数")
  @Data
  @Builder
  @NoArgsConstructor

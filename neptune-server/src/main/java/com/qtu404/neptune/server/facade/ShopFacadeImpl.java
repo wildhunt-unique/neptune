@@ -1,19 +1,16 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
-import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
+import com.qtu404.neptune.api.request.shop.*;
 import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
+import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.enums.TagTypeEnum;
 import com.qtu404.neptune.domain.enums.UserTypeEnum;
 import com.qtu404.neptune.domain.enums.ShopTypeEnum;
-import com.qtu404.neptune.domain.model.Shop;
-import com.qtu404.neptune.domain.model.Tag;
-import com.qtu404.neptune.domain.model.TagBinding;
-import com.qtu404.neptune.domain.model.User;
+import com.qtu404.neptune.domain.model.*;
 import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.ItemConverter;
 import com.qtu404.neptune.server.converter.ShopCategoryConverter;
@@ -24,8 +21,6 @@ import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import com.qtu404.neptune.api.facade.ShopFacade;
-import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
-import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -270,6 +265,36 @@ public class ShopFacadeImpl implements ShopFacade {
                             .map(this.shopConverter::model2ThinResponse)
                             .collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 查询店铺类目列表
+     *
+     * @param request 请求参数
+     * @return 店铺类目列表
+     */
+    @Override
+    public Response<ShopCategoryListResponse> queryCategoryList(ShopCategoryQueryRequest request) {
+        return execute(request, param -> {
+            Map<String, Object> condition = request.toMap();
+            condition.put("id", request.getCategoryId());
+            List<ShopCategory> categoryList = this.shopCategoryReadService.list(condition);
+            return ShopCategoryListResponse.builder().categoryList(categoryList.stream()
+                    .filter(e -> e.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
+                    .map(e -> {
+                        ShopCategoryDetailResponse response = this.shopCategoryConverter.model2DetailResponse(e);
+                        if (request.getWithItemInfo()) {
+                            response.setItemThinResponseList(this.itemReadService.findByCategoryId(e.getId()).stream()
+                                    .filter(item -> item.getStatus().equals(DataStatusEnum.NORMAL.getCode()) || item.getStatus().equals(DataStatusEnum.LOCK.getCode()))
+                                    .map(this.itemConverter::model2ThinResponse)
+                                    .collect(Collectors.toList())
+                            );
+                        }
+                        return response;
+                    })
+                    .collect(Collectors.toList())
+            ).build();
         });
     }
 }

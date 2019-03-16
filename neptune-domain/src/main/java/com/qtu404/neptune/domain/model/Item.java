@@ -1,6 +1,7 @@
 package com.qtu404.neptune.domain.model;
 
 import com.qtu404.neptune.util.model.BaseModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,26 +19,31 @@ public class Item extends BaseModel implements Serializable {
     /**
      * 类目id
      */
+    @ApiModelProperty("类目id")
     private Long categoryId;
 
     /**
      * 商品编码
      */
+    @ApiModelProperty("商品编码")
     private String itemCode;
 
     /**
      * 店铺id
      */
+    @ApiModelProperty("店铺id")
     private Long shopId;
 
     /**
      * 店铺名
      */
+    @ApiModelProperty("店铺名")
     private String shopName;
 
     /**
      * 商品名
      */
+    @ApiModelProperty("商品名")
     private String name;
 
     /**

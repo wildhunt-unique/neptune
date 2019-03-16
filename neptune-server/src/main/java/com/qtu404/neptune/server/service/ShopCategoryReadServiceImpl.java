@@ -35,4 +35,9 @@ public class ShopCategoryReadServiceImpl implements ShopCategoryReadService {
         param.put("shopId", shopId);
         return this.shopCategoryDao.list(param);
     }
+
+    @Override
+    public List<ShopCategory> list(Map<String, Object> toMap) {
+        return this.shopCategoryDao.list(toMap);
+    }
 }

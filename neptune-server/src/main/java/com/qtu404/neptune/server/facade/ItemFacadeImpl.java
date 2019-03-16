@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.qtu404.neptune.api.facade.ItemFacade;
 import com.qtu404.neptune.api.request.item.ItemAdjustRequest;
 import com.qtu404.neptune.api.request.item.ItemCreateRequest;
+import com.qtu404.neptune.api.request.item.ItemPagingRequest;
 import com.qtu404.neptune.api.request.item.ItemUpdateRequest;
+import com.qtu404.neptune.api.response.item.ItemThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.model.Item;
@@ -14,11 +16,15 @@ import com.qtu404.neptune.domain.service.ItemWriteService;
 import com.qtu404.neptune.domain.service.ShopReadService;
 import com.qtu404.neptune.server.converter.ItemConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
 
@@ -47,6 +53,12 @@ public class ItemFacadeImpl implements ItemFacade {
         this.itemReadService = itemReadService;
     }
 
+    /**
+     * 创建商品
+     *
+     * @param request 创建请求参数
+     * @return 是否操作成功
+     */
     @Override
     public Response<Long> createItem(ItemCreateRequest request) {
         return execute(request, param -> {
@@ -63,6 +75,12 @@ public class ItemFacadeImpl implements ItemFacade {
         });
     }
 
+    /**
+     * 商品信息修改
+     *
+     * @param request 修改请求
+     * @return 是否操作成功
+     */
     @Override
     public Response<Boolean> update(ItemUpdateRequest request) {
         return execute(request, param -> {
@@ -85,6 +103,12 @@ public class ItemFacadeImpl implements ItemFacade {
         });
     }
 
+    /**
+     * 库存调整请求参数
+     *
+     * @param request 商品id，库存值
+     * @return 是否操作成功
+     */
     @Override
     public Response<Boolean> adjust(ItemAdjustRequest request) {
         return execute(request, param -> {
@@ -101,6 +125,27 @@ public class ItemFacadeImpl implements ItemFacade {
             }
 
             return this.itemWriteService.update(toAdjustItem);
+        });
+    }
+
+    /**
+     * 商品分页查询
+     *
+     * @param request 查询条件
+     * @return 分页信息
+     */
+    @Override
+    public Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request) {
+        return execute(request, param -> {
+            Map<String, Object> criteria = request.toMap();
+            criteria.put("id", request.getItemId());
+            Paging<Item> itemPaging = this.itemReadService.paging(criteria);
+            return new Paging<>(
+                    itemPaging.getTotal(),
+                    itemPaging.getData().stream()
+                            .map(itemConverter::model2ThinResponse)
+                            .collect(Collectors.toList())
+            );
         });
     }
 }

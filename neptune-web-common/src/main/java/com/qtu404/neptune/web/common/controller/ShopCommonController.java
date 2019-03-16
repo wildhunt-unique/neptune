@@ -2,7 +2,10 @@ package com.qtu404.neptune.web.common.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopFacade;
+import com.qtu404.neptune.api.request.shop.ShopCategoryCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopCategoryQueryRequest;
 import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
+import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
@@ -27,5 +30,11 @@ public class ShopCommonController {
     @ApiOperation("店铺分页查询")
     public Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request){
         return this.shopFacade.shopPaging(request);
+    }
+
+    @GetMapping("category/list")
+    @ApiOperation("店铺类目列表")
+    public Response<ShopCategoryListResponse> shopCategoryList(ShopCategoryQueryRequest request){
+        return this.shopFacade.queryCategoryList(request);
     }
 }

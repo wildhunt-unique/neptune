@@ -1,3 +1,7 @@
+# maven打包
+mvn clean install package
+
+# 结束原有进程
 processname='neptune'
 PROCESS=`ps -ef|grep $processname|grep -v grep|grep -v PPID|awk '{ print $2}'`
 for i in $PROCESS
@@ -6,8 +10,13 @@ for i in $PROCESS
    kill -9 $i
  done
 
-mvn clean install package
-nohup java -jar neptune-server-starter/target/neptune-server-starter-0.0.1-SNAPSHOT.jar & >> /log/starter.out
-nohup java -jar neptune-admin-starter/target/neptune-admin-starter-0.0.1-SNAPSHOT.jar & >> /log/admin.out
-nohup java -jar neptune-web-starter/target/neptune-web-starter-0.0.1-SNAPSHOT.jar & >> /log/web.out
+# 检查日志目录是否存在
+if [ ! -d /tmp/log ];then
+  mkdir /tmp/log
+fi
+
+# 启动服务
+nohup java -jar neptune-server-starter/target/neptune-server-starter-0.0.1-SNAPSHOT.jar  > /tmp/log/starter.out  2>&1 &
+nohup java -jar neptune-admin-starter/target/neptune-admin-starter-0.0.1-SNAPSHOT.jar > /tmp/log/admin.out 2>&1 &
+nohup java -jar neptune-web-starter/target/neptune-web-starter-0.0.1-SNAPSHOT.jar  > /tmp/log/web.out 2>&1 &
 exit 0

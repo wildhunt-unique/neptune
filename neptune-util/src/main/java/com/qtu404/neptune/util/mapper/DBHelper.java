@@ -27,7 +27,7 @@ class DBHelper {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, username, password);
             stmt = connection.createStatement();
-            rst = stmt.executeQuery("show full columns from " + tableName);
+            rst = stmt.executeQuery("show full columns from `" + tableName + "`");
         } catch (SQLException e) {
             e.printStackTrace();
         }

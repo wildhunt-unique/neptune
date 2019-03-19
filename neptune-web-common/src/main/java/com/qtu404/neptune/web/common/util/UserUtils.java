@@ -21,7 +21,7 @@ public class UserUtils {
             return (Long) value;
         } else {
             // TODO: 2019/2/28 测试用
-            return 100L;
+            return 8L;
 //            return null;
         }
     }

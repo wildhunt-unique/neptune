@@ -39,6 +39,18 @@ public class UserCommonController {
         }
     }
 
+    @ApiOperation("短信登录-发送短信验证码")
+    @PostMapping("login/sms/send")
+    public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request, HttpSession session) {
+        return Response.fail("error");
+    }
+
+    @ApiOperation("短信登录-登录验证")
+    @PostMapping("login/sms/verify")
+    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request, HttpSession session) {
+        return Response.fail("error");
+    }
+
     @ApiOperation("手机号是否已存在")
     @GetMapping("exist/mobile")
     public Response<Boolean> existMobile(ExistPhoneRequest request) {

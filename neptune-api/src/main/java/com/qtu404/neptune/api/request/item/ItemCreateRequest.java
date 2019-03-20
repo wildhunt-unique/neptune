@@ -54,7 +54,6 @@ public class ItemCreateRequest extends AbstractRequest implements Serializable {
 
     @Override
     public void checkParam() {
-        // TODO: 2019/2/28 check image and price
         super.checkParam();
         ParamUtil.nonNull(this.name, "item.name");
         ParamUtil.nonNull(this.shopId, "shop.id");

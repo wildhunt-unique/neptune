@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.qtu404.neptune.domain.model.Item;
 import com.qtu404.neptune.domain.service.ItemReadService;
@@ -7,6 +8,7 @@ import com.qtu404.neptune.server.dao.ItemDao;
 import com.qtu404.neptune.util.model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -39,5 +41,14 @@ public class ItemReadServiceImpl implements ItemReadService {
     @Override
     public Paging<Item> paging(Map<String, Object> criteria) {
         return this.itemDao.paging(criteria);
+    }
+
+    @Override
+    public List<Item> findByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Lists.newArrayList();
+        } else {
+            return this.itemDao.fetch(ids);
+        }
     }
 }

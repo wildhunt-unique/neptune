@@ -139,3 +139,28 @@ CREATE TABLE `user` (
   UNIQUE KEY `idx_users_email` (`email`),
   UNIQUE KEY `idx_users_mobile` (`mobile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+CREATE TABLE `order_line` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `out_id` varchar(32) DEFAULT NULL COMMENT '外部订单号',
+  `order_id` bigint(20) NOT NULL COMMENT '店铺订单id',
+  `buyer_id` bigint(20) NOT NULL COMMENT '买家id',
+  `buyer_name` varchar(64) NOT NULL DEFAULT '' COMMENT '买家姓名',
+  `shop_id` bigint(20) NOT NULL COMMENT '店铺id',
+  `shop_name` varchar(128) DEFAULT '' COMMENT '店铺名称',
+  `item_id` bigint(19) DEFAULT NULL COMMENT 'sku id',
+  `item_code` varchar(64) DEFAULT NULL COMMENT 'sku code',
+  `item_name` varchar(512) NOT NULL DEFAULT '' COMMENT 'sku 名称',
+  `item_image` varchar(512) DEFAULT '' COMMENT 'sku 缩率图',
+  `item_attr` varchar(512) DEFAULT NULL COMMENT 'sku 销售属性',
+  `quantity` int(10) NOT NULL COMMENT '数量',
+  `paid_amount` bigint(20) NOT NULL COMMENT '实际支付金额',
+  `confirm_at` datetime DEFAULT NULL COMMENT '确认时间',
+  `receive_status` tinyint(4) COMMENT '接受状态',
+  `extra_json` varchar(512) DEFAULT NULL COMMENT '拓展字段',
+  `status` tinyint(4) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_order_line_order_id` (`order_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8mb4 COMMENT='订单行';

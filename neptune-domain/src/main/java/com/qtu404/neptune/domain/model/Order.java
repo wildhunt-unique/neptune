@@ -54,7 +54,7 @@ public class Order extends BaseModel implements Serializable {
     private Date confirmAt;
 
     @ApiModelProperty("实际支付金额")
-    private Long paidAmount;
+    private Integer paidAmount;
 
     @ApiModelProperty("'订单完成时间'")
     private Date accomplishAt;

@@ -1,10 +1,6 @@
 package com.qtu404.neptune.web.common.util;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.common.constant.ConstantValues;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
@@ -21,7 +17,7 @@ public class UserUtils {
             return (Long) value;
         } else {
             // TODO: 2019/2/28 测试用
-            return 8L;
+            return 100L;
 //            return null;
         }
     }

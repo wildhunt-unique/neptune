@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -19,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class OrderCreateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = 2352946670469664554L;
+    private static final long serialVersionUID = -759568499080104245L;
 
     @ApiModelProperty("外部编码")
     private String outId;
@@ -30,23 +31,21 @@ public class OrderCreateRequest extends AbstractRequest implements Serializable 
     @ApiModelProperty("店铺id")
     private Long shopId;
 
-    @ApiModelProperty("实际支付金额")
-    private Long paidAmount;
-
-    @ApiModelProperty("收货地址")
-    private String deliveryAddress;
-
     @ApiModelProperty("买家留言")
     private String buyerNotes;
 
     @ApiModelProperty("卖家留言")
     private String shopNotes;
 
+    @ApiModelProperty("订单中的商品信息")
+    private List<ItemOrderLineCreateRequest> orderLine;
+
     @Override
     public void checkParam() {
         super.checkParam();
         ParamUtil.nonNull(buyerId, "buyer.id");
         ParamUtil.nonNull(shopId, "shop.id");
+        ParamUtil.nonEmpty(orderLine,"item.list");
     }
 }
 

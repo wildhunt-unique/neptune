@@ -269,6 +269,7 @@ public class ShopFacadeImpl implements ShopFacade {
     }
 
     /**
+     * // TODO: 2019/3/20 move to ShopCategoryFacade
      * 查询店铺类目列表
      *
      * @param request 请求参数

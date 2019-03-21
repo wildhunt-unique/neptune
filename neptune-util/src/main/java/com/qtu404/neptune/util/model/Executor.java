@@ -2,7 +2,6 @@ package com.qtu404.neptune.util.model;
 
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 
 import java.util.function.Function;
 

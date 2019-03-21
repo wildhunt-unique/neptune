@@ -38,15 +38,28 @@ public class TranslateHandler {
         Object result = joinPoint.proceed(joinPoint.getArgs());
         if (result instanceof Response) {
             Response response = (Response) result;
+            // 如果失败了，对error进行翻译
             if (!response.isSuccess()) {
-                if (Objects.nonNull(prop)) {
-                    String error = prop.getProperty(response.getError());
-                    if (!StringUtils.isEmpty(error)) {
-                        ((Response) result).setError(error);
-                    }
-                }
+                translateError(response);
             }
         }
         return result;
     }
+
+    /**
+     * 翻译错误
+     *
+     * @param response 结果信息
+     */
+    private void translateError(Response response) {
+        if (Objects.nonNull(prop)) {
+            // 去翻译文件里找
+            String error = prop.getProperty(response.getError());
+            if (!StringUtils.isEmpty(error)) {
+                response.setError(error);
+            }
+        }
+    }
+
+
 }

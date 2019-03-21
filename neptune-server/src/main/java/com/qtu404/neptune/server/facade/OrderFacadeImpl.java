@@ -143,21 +143,6 @@ public class OrderFacadeImpl implements OrderFacade {
         });
     }
 
-    private void itemOrderLineCheck(Item existItem, ItemOrderLineCreateRequest item, Shop shop) {
-        if (Objects.isNull(existItem) || existItem.getStatus().equals(DataStatusEnum.DELETE.getCode())) {
-            throw new ServiceException("item.not.exist");
-        }
-        if (!ObjectUtils.nullSafeEquals(existItem.getShopId(), shop.getId())) {
-            throw new ServiceException("item.not.belong.to.shop");
-        }
-        if (existItem.getStatus().equals(DataStatusEnum.FREEZE.getCode())) {
-            throw new ServiceException("item.not.put.away");
-        }
-        if (item.getQuantity() > existItem.getInventory()) {
-            throw new ServiceException("item.low.stocks");
-        }
-    }
-
     /**
      * 订单更新
      *
@@ -174,5 +159,20 @@ public class OrderFacadeImpl implements OrderFacade {
             // TODO: 2019/3/21 to impl 
             return Boolean.FALSE;
         });
+    }
+
+    private void itemOrderLineCheck(Item existItem, ItemOrderLineCreateRequest item, Shop shop) {
+        if (Objects.isNull(existItem) || existItem.getStatus().equals(DataStatusEnum.DELETE.getCode())) {
+            throw new ServiceException("item.not.exist");
+        }
+        if (!ObjectUtils.nullSafeEquals(existItem.getShopId(), shop.getId())) {
+            throw new ServiceException("item.not.belong.to.shop");
+        }
+        if (existItem.getStatus().equals(DataStatusEnum.FREEZE.getCode())) {
+            throw new ServiceException("item.not.put.away");
+        }
+        if (item.getQuantity() > existItem.getInventory()) {
+            throw new ServiceException("item.low.stocks");
+        }
     }
 }

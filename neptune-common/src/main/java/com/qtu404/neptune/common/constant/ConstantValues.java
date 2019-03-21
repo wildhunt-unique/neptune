@@ -23,4 +23,7 @@ public class ConstantValues {
     public static final Long NO_PARENT = -1L;
     public static final Integer ROOT_LEVEL = 1;
     public static final Integer DEFAULT_INDEX = 1;
+
+    // 最大留言长度
+    public static final Integer MAX_NOTE_LENGTH = 127;
 }

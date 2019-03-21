@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class SendRegisterVerificationSmsRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = 1651194469071585519L;
 
-    @ApiModelProperty("发到哪个手机号")
+    @ApiModelProperty(value = "发到哪个手机号", required = true)
     private String mobile;
 
     @ApiModelProperty(hidden = true)

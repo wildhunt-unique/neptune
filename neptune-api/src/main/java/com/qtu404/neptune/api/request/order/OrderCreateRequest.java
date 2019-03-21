@@ -1,5 +1,6 @@
 package com.qtu404.neptune.api.request.order;
 
+import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
@@ -8,6 +9,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -34,9 +36,6 @@ public class OrderCreateRequest extends AbstractRequest implements Serializable 
     @ApiModelProperty("买家留言")
     private String buyerNotes;
 
-    @ApiModelProperty("卖家留言")
-    private String shopNotes;
-
     @ApiModelProperty("订单中的商品信息")
     private List<ItemOrderLineCreateRequest> orderLine;
 
@@ -45,7 +44,10 @@ public class OrderCreateRequest extends AbstractRequest implements Serializable 
         super.checkParam();
         ParamUtil.nonNull(buyerId, "buyer.id");
         ParamUtil.nonNull(shopId, "shop.id");
-        ParamUtil.nonEmpty(orderLine,"item.list");
+        ParamUtil.nonEmpty(orderLine, "item.list");
+        if (Objects.nonNull(buyerNotes) && buyerNotes.length() > ConstantValues.MAX_NOTE_LENGTH) {
+            throw new IllegalArgumentException("note.too.long");
+        }
     }
 }
 

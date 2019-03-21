@@ -1,5 +1,6 @@
 package com.qtu404.neptune.api.facade;
 
+import com.qtu404.neptune.api.request.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.util.model.Response;
 
@@ -9,4 +10,6 @@ import com.qtu404.neptune.util.model.Response;
  */
 public interface OrderFacade {
     Response<Long> createOrder(OrderCreateRequest request);
+
+    Response<Boolean> updateOrder(OrderUpdateRequest request);
 }

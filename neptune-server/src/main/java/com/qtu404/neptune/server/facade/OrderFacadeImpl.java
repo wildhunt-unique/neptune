@@ -3,6 +3,7 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
 import com.qtu404.neptune.api.facade.OrderFacade;
+import com.qtu404.neptune.api.request.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.ItemOrderLineCreateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
@@ -98,7 +99,7 @@ public class OrderFacadeImpl implements OrderFacade {
                 toCreateOrderLine.setOutId(request.getOutId());
                 // 订单行状态
                 toCreateOrderLine.setStatus(DataStatusEnum.NORMAL.getCode());
-                toCreateOrderLine.setReceiveStatus(SwitchStatusEnum.INACTIVE.getCode());
+                toCreateOrderLine.setReceiveStatus(SwitchStatusEnum.INIT.getCode());
                 // 买家信息
                 toCreateOrderLine.setBuyerId(buyer.getId());
                 toCreateOrderLine.setBuyerName(buyer.getNickname());
@@ -125,10 +126,10 @@ public class OrderFacadeImpl implements OrderFacade {
             toCreateOrder.setPaidAmount(Math.max(0, paidTotalAmount[0]));
             toCreateOrder.setItemTotalAmount(Math.max(0, itemTotalAmount[0]));
             // 设置各种状态
-            toCreateOrder.setPayStatus(SwitchStatusEnum.INACTIVE.getCode());
-            toCreateOrder.setEnableStatus(SwitchStatusEnum.ACTIVE.getCode());
-            toCreateOrder.setReceiveStatus(SwitchStatusEnum.INACTIVE.getCode());
-            toCreateOrder.setReverseStatus(SwitchStatusEnum.INACTIVE.getCode());
+            toCreateOrder.setPayStatus(SwitchStatusEnum.INIT.getCode());
+            toCreateOrder.setEnableStatus(SwitchStatusEnum.INIT.getCode());
+            toCreateOrder.setReceiveStatus(SwitchStatusEnum.INIT.getCode());
+            toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setStatus(DataStatusEnum.NORMAL.getCode());
 
             // TODO: 2019/3/20 transaction manage
@@ -155,5 +156,23 @@ public class OrderFacadeImpl implements OrderFacade {
         if (item.getQuantity() > existItem.getInventory()) {
             throw new ServiceException("item.low.stocks");
         }
+    }
+
+    /**
+     * 订单更新
+     *
+     * @param request 更新参数
+     * @return 是否操作成功
+     */
+    @Override
+    public Response<Boolean> updateOrder(OrderUpdateRequest request) {
+        return execute(request, param -> {
+            Order existOrder = this.orderReadService.findById(request.getOrderId());
+            AssertUtil.isExist(existOrder, "order");
+
+            Order toUpdateOrder = this.orderConverter.request2Model(request);
+            // TODO: 2019/3/21 to impl 
+            return Boolean.FALSE;
+        });
     }
 }

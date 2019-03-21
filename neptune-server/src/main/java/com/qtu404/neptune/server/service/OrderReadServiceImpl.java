@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.service;
 
+import com.qtu404.neptune.domain.model.Order;
 import com.qtu404.neptune.domain.service.OrderReadService;
 import com.qtu404.neptune.server.dao.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,10 @@ public class OrderReadServiceImpl implements OrderReadService {
     @Autowired
     public OrderReadServiceImpl(OrderDao orderDao) {
         this.orderDao = orderDao;
+    }
+
+    @Override
+    public Order findById(Long orderId) {
+        return this.orderDao.fetch(orderId);
     }
 }

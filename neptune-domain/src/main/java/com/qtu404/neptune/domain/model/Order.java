@@ -32,7 +32,7 @@ public class Order extends BaseModel implements Serializable {
     @ApiModelProperty("店铺id")
     private Long shopId;
 
-    @ApiModelProperty("是否可见")
+    @ApiModelProperty("是否接单")
     private Integer enableStatus;
 
     @ApiModelProperty("支付状态")
@@ -50,7 +50,7 @@ public class Order extends BaseModel implements Serializable {
     @ApiModelProperty("发货时间")
     private Date shippingAt;
 
-    @ApiModelProperty("确认收货时间")
+    @ApiModelProperty("确认时间")
     private Date confirmAt;
 
     @ApiModelProperty("实际支付金额")

@@ -63,14 +63,12 @@ public class ShopFacadeImpl implements ShopFacade {
 
     private final TagReadService tagReadService;
 
-    private final TagWriteService tagWriteService;
-
     private final TagBindingReadService tagBindingReadService;
 
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagWriteService tagWriteService, TagBindingReadService tagBindingReadService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -82,7 +80,6 @@ public class ShopFacadeImpl implements ShopFacade {
         this.userWriteService = userWriteService;
         this.tagReadService = tagReadService;
         this.tagBindingWriteService = tagBindingWriteService;
-        this.tagWriteService = tagWriteService;
         this.tagBindingReadService = tagBindingReadService;
     }
 

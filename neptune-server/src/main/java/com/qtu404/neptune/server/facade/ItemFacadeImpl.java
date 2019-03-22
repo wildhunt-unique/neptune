@@ -1,6 +1,7 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.Maps;
 import com.qtu404.neptune.api.facade.ItemFacade;
 import com.qtu404.neptune.api.request.item.ItemAdjustRequest;
 import com.qtu404.neptune.api.request.item.ItemCreateRequest;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.mail.FetchProfile;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -69,6 +71,9 @@ public class ItemFacadeImpl implements ItemFacade {
             AssertUtil.isExist(shop, "shop");
             toCreateItem.setShopName(shop.getName());
 
+            Map<String, Object> extra = Maps.newHashMap();
+            extra.put("extra", "xxx");
+            toCreateItem.setExtra(extra);
             toCreateItem.setInventory(ConstantValues.MIN_INVENTORY);
             toCreateItem.setStatus(DataStatusEnum.FREEZE.getCode());
             return this.itemWriteService.createItem(toCreateItem) ? toCreateItem.getId() : null;

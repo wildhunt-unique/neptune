@@ -144,9 +144,7 @@ public class OrderFacadeImpl implements OrderFacade {
 
             // TODO: 2019/3/20 transaction manage
             this.orderWriteService.createOrder(toCreateOrder);
-            toCreateOrderLineList.forEach(orderLine -> {
-                orderLine.setOrderId(toCreateOrder.getId());
-            });
+            toCreateOrderLineList.forEach(orderLine -> orderLine.setOrderId(toCreateOrder.getId()));
             this.orderLineWriteService.batchCreate(toCreateOrderLineList);
 
             return toCreateOrder.getId();

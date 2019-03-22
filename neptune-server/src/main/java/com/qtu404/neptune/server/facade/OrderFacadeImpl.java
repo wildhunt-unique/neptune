@@ -3,14 +3,19 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
 import com.qtu404.neptune.api.facade.OrderFacade;
+import com.qtu404.neptune.api.request.OrderDetailRequest;
 import com.qtu404.neptune.api.request.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.ItemOrderLineCreateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
+import com.qtu404.neptune.api.response.order.OrderDetailResponse;
+import com.qtu404.neptune.api.response.order.OrderLineThinResponse;
+import com.qtu404.neptune.api.response.order.OrderThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.common.enums.SwitchStatusEnum;
 import com.qtu404.neptune.domain.model.*;
 import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.OrderConverter;
+import com.qtu404.neptune.server.converter.OrderLineConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
@@ -48,8 +53,12 @@ public class OrderFacadeImpl implements OrderFacade {
 
     private final ItemReadService itemReadService;
 
+    private final OrderLineReadService orderLineReadService;
+
+    private final OrderLineConverter orderLineConverter;
+
     @Autowired
-    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineWriteService orderLineWriteService) {
+    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineWriteService orderLineWriteService, OrderLineReadService orderLineReadService, OrderLineConverter orderLineConverter) {
         this.orderReadService = orderReadService;
         this.orderWriteService = orderWriteService;
         this.orderConverter = orderConverter;
@@ -57,6 +66,8 @@ public class OrderFacadeImpl implements OrderFacade {
         this.shopReadService = shopReadService;
         this.itemReadService = itemReadService;
         this.orderLineWriteService = orderLineWriteService;
+        this.orderLineReadService = orderLineReadService;
+        this.orderLineConverter = orderLineConverter;
     }
 
     /**
@@ -93,7 +104,6 @@ public class OrderFacadeImpl implements OrderFacade {
                 // 商品信息检查
                 Item existItem = existIdToItem.get(item.getItemId());
                 this.itemOrderLineCheck(existItem, item, shop);
-
                 // 订单行model构建
                 OrderLine toCreateOrderLine = new OrderLine();
                 toCreateOrderLine.setOutId(request.getOutId());
@@ -156,8 +166,31 @@ public class OrderFacadeImpl implements OrderFacade {
             AssertUtil.isExist(existOrder, "order");
 
             Order toUpdateOrder = this.orderConverter.request2Model(request);
-            // TODO: 2019/3/21 to impl 
-            return Boolean.FALSE;
+            // TODO: 2019/3/21 to check status
+            return this.orderWriteService.update(toUpdateOrder);
+        });
+    }
+
+    /**
+     * 订单详情
+     *
+     * @param request 请求参数
+     * @return 详情信息
+     */
+    @Override
+    public Response<OrderDetailResponse> getOrderDetail(OrderDetailRequest request) {
+        return execute(request, param -> {
+            Order order = this.orderReadService.findById(request.getOrderId());
+            AssertUtil.isExist(order, "order");
+            List<OrderLine> orderLineList = this.orderLineReadService.findByOrderId(order.getId());
+
+            OrderThinResponse orderThinResponse = this.orderConverter.model2ThinResponse(order);
+            List<OrderLineThinResponse> orderLineThinResponseList = orderLineList.stream().map(this.orderLineConverter::model2ThinResponse).collect(Collectors.toList());
+
+            return OrderDetailResponse.builder()
+                    .orderLineThinResponseList(orderLineThinResponseList)
+                    .orderThinResponse(orderThinResponse)
+                    .build();
         });
     }
 

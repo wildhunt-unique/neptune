@@ -9,4 +9,6 @@ import com.qtu404.neptune.domain.model.Order;
 public interface
 OrderWriteService {
     Boolean createOrder(Order toCreate);
+
+    Boolean update(Order toUpdateOrder);
 }

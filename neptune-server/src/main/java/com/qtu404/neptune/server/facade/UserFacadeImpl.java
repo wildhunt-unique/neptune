@@ -195,6 +195,7 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public Response<Boolean> updateStatus(UserStatusUpdateRequest request) {
         return execute(request, param -> {
+            // TODO: 2019/3/21 query before update
             User toUpdate = this.userConverter.request2model(request);
             DataStatusEnum.validate(toUpdate.getStatus());
             return this.userWriteService.update(toUpdate);

@@ -23,4 +23,9 @@ public class OrderWriteServiceImpl implements OrderWriteService {
     public Boolean createOrder(Order toCreate) {
         return this.orderDao.save(toCreate);
     }
+
+    @Override
+    public Boolean update(Order toUpdateOrder) {
+        return orderDao.update(toUpdateOrder);
+    }
 }

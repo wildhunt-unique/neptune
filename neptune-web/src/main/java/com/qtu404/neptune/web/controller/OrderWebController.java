@@ -2,7 +2,9 @@ package com.qtu404.neptune.web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
+import com.qtu404.neptune.api.request.OrderDetailRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
+import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.util.UserUtils;
 import io.swagger.annotations.Api;
@@ -31,5 +33,9 @@ public class OrderWebController {
         Long userId = UserUtils.getId(session);
         request.setBuyerId(userId);
         return this.orderFacade.createOrder(request);
+    }
+
+    public Response<OrderDetailResponse> getOrderDetail(OrderDetailRequest request){
+        return this.orderFacade.getOrderDetail(request);
     }
 }

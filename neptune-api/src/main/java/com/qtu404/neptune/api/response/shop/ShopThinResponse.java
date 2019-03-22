@@ -17,7 +17,7 @@ public class ShopThinResponse implements Serializable {
     private static final long serialVersionUID = -1865970656120413433L;
 
     @ApiModelProperty("店铺Id")
-    private String shopId;
+    private Long shopId;
 
     @ApiModelProperty("卖家id")
     private Long userId;

@@ -32,6 +32,7 @@
         #{item.outerId},#{item.userId},#{item.userName},#{item.name},#{item.type},#{item.mobile},#{item.email},#{item.imageUrl},#{item.address},#{item.tags},#{item.status},#{item.extraJson},now(),now()
     </sql>
     <sql id="criteria">
+        <if test="id != null">AND id = #{id}</if>
         <if test="outerId != null">AND outer_id = #{outerId}</if>
         <if test="userId != null">AND user_id = #{userId}</if>
         <if test="userName != null">AND user_name LIKE CONCAT(#{userName},'%')</if>

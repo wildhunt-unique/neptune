@@ -1,11 +1,13 @@
 package com.qtu404.neptune.util.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,18 +15,15 @@ import java.util.Map;
  * @date 2019/2/25 下午1:18
  */
 // TODO: 2019/3/22 没改完，先别发
-public abstract class BaseModel {
+public abstract class BaseModel implements Serializable {
+    private static final long serialVersionUID = 8913872946684638933L;
+
     /**
      * id
      */
     @Getter
     @Setter
     private Long id;
-
-    /**
-     * 额外信息
-     */
-    private String extraJson;
 
     /**
      * 创建时间
@@ -50,12 +49,31 @@ public abstract class BaseModel {
     /**
      * 额外信息的map存储
      */
+    @Getter
     private Map<String, Object> extra;
 
+    /**
+     * 额外信息
+     */
+    @JsonIgnore
+    @Getter
+    private String extraJson;
+
+    public void setExtra(Map<String, Object> extra) {
+        this.extra = extra;
+        if (extra == null || extra.isEmpty()) {
+            this.extraJson = null;
+        } else {
+            this.extraJson = MyJSON.toJSON(extra);
+        }
+    }
+
     public void setExtraJson(String extraJson) {
-//        this.extraJson = extraJson;
+        this.extraJson = extraJson;
         if (!StringUtils.isEmpty(extraJson)) {
             extra = MyJSON.jsonStringToMap(extraJson);
+        } else {
+            extra = new HashMap<>();
         }
     }
 }

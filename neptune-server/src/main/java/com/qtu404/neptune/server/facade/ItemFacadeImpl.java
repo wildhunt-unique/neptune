@@ -71,9 +71,6 @@ public class ItemFacadeImpl implements ItemFacade {
             AssertUtil.isExist(shop, "shop");
             toCreateItem.setShopName(shop.getName());
 
-            Map<String, Object> extra = Maps.newHashMap();
-            extra.put("extra", "xxx");
-            toCreateItem.setExtra(extra);
             toCreateItem.setInventory(ConstantValues.MIN_INVENTORY);
             toCreateItem.setStatus(DataStatusEnum.FREEZE.getCode());
             return this.itemWriteService.createItem(toCreateItem) ? toCreateItem.getId() : null;

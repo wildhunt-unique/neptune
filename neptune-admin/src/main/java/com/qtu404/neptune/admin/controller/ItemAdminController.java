@@ -43,7 +43,7 @@ public class ItemAdminController {
         return this.itemFacade.adjust(request);
     }
 
-    @ApiModelProperty("商品分页")
+    @ApiOperation("商品分页")
     @GetMapping("paging")
     public Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request){
         return this.itemFacade.paging(request);

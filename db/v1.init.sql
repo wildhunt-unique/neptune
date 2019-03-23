@@ -10,7 +10,7 @@ CREATE TABLE `item` (
   `video_url` varchar(512) DEFAULT NULL COMMENT '视频地址',
   `status` smallint(6) NOT NULL COMMENT '商品状态：1(上架),-1(下架),-2(冻结),-3(删除)',
   `type` smallint(6) DEFAULT NULL COMMENT '商品类型',
-  `attributes_json` varchar(4096) DEFAULT NULL COMMENT 'sku销售属性集合',
+  `attribute_json` varchar(4096) DEFAULT NULL COMMENT 'sku销售属性集合',
   `extra_json` text COMMENT '其它内容',
   `created_at` datetime NOT NULL COMMENT '创建时间',
   `updated_at` datetime NOT NULL COMMENT '最后更新时间',
@@ -19,7 +19,7 @@ CREATE TABLE `item` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_parana_item_category_id` (`category_id`) USING BTREE,
   KEY `idx_parana_item_shop_id` (`shop_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11000001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11000015 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,

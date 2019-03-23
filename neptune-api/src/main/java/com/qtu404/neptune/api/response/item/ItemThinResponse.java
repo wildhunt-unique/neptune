@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -38,10 +39,10 @@ public class ItemThinResponse implements Serializable {
     private String mainImage;
 
     @ApiModelProperty("商品属性")
-    private String attributesJson;
+    private Map<String,Object> attribute;
 
     @ApiModelProperty("额外信息")
-    private String extraJson;
+    private Map<String, Object> extra;
 
     @ApiModelProperty("价格")
     private Double price;

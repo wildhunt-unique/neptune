@@ -114,13 +114,10 @@ public class ShopFacadeImpl implements ShopFacade {
             toCreate.setStatus(DataStatusEnum.FREEZE.getCode());
             toCreate.setType(ShopTypeEnum.SHOP.getCode());
 
-            // TODO: 2019/3/7  transaction manager
-            this.userWriteService.update(seller);
-            this.shopWriteService.createShop(toCreate);
-
+            List<TagBinding> toCreateTagBinding = null;
             // 绑定标签
             if (!CollectionUtils.isEmpty(request.getTagIds())) {
-                List<TagBinding> toCreateTagBinding = this.tagReadService.findByIds(request.getTagIds()).stream()
+                toCreateTagBinding = this.tagReadService.findByIds(request.getTagIds()).stream()
                         .filter(tag -> tag.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
                         .map(tag -> {
                             TagBinding toCreateTag = new TagBinding();
@@ -130,8 +127,8 @@ public class ShopFacadeImpl implements ShopFacade {
                             toCreateTag.setStatus(DataStatusEnum.NORMAL.getCode());
                             return toCreateTag;
                         }).collect(Collectors.toList());
-                this.tagBindingWriteService.batchCreate(toCreateTagBinding);
             }
+            this.shopWriteService.createShop(seller,toCreate,toCreateTagBinding);
             return toCreate.getId();
         });
     }

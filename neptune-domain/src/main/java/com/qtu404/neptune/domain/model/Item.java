@@ -18,6 +18,8 @@ import java.util.Map;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 下午4:40
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class Item extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1674066086270980203L;
 
@@ -25,56 +27,42 @@ public class Item extends BaseModel implements Serializable {
      * 类目id
      */
     @ApiModelProperty("类目id")
-    @Getter
-    @Setter
     private Long categoryId;
 
     /**
      * 商品编码
      */
     @ApiModelProperty("商品编码")
-    @Getter
-    @Setter
     private String itemCode;
 
     /**
      * 店铺id
      */
     @ApiModelProperty("店铺id")
-    @Getter
-    @Setter
     private Long shopId;
 
     /**
      * 店铺名
      */
     @ApiModelProperty("店铺名")
-    @Getter
-    @Setter
     private String shopName;
 
     /**
      * 商品名
      */
     @ApiModelProperty("商品名")
-    @Getter
-    @Setter
     private String name;
 
     /**
      * 商品广告
      */
     @ApiModelProperty("商品广告")
-    @Getter
-    @Setter
     private String advertise;
 
     /**
      * 主图
      */
     @ApiModelProperty("主图")
-    @Getter
-    @Setter
     private String mainImage;
 
     /**
@@ -89,8 +77,6 @@ public class Item extends BaseModel implements Serializable {
      * 商品类型
      */
     @ApiModelProperty("商品类型")
-    @Getter
-    @Setter
     private Integer type;
 
     /**
@@ -98,13 +84,11 @@ public class Item extends BaseModel implements Serializable {
      */
     @ApiModelProperty("商品属性")
     @JsonIgnore
-    @Getter
     private String attributeJson;
 
     /**
      * 商品属性，不存数据库
      */
-    @Getter
     private Map<String, Object> attribute;
 
     public void setAttributeJson(String attributeJson) {
@@ -128,14 +112,10 @@ public class Item extends BaseModel implements Serializable {
     /**
      * 价格
      */
-    @Getter
-    @Setter
     private Double price;
 
     /**
      * 库存
      */
-    @Getter
-    @Setter
     private Long inventory;
 }

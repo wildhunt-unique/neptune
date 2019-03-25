@@ -31,9 +31,6 @@ public class ItemOrderLineCreateRequest extends AbstractRequest implements Seria
     @ApiModelProperty("实际支付金额")
     private Integer paidAmount;
 
-    @ApiModelProperty("商品销售属性")
-    private String itemAttr;
-
     @Override
     public void checkParam() {
         super.checkParam();

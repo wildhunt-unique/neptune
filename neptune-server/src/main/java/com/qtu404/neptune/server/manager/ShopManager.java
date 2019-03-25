@@ -1,0 +1,43 @@
+package com.qtu404.neptune.server.manager;
+
+import com.qtu404.neptune.domain.model.Shop;
+import com.qtu404.neptune.domain.model.TagBinding;
+import com.qtu404.neptune.domain.model.User;
+import com.qtu404.neptune.server.dao.ShopDao;
+import com.qtu404.neptune.server.dao.TagBindingDao;
+import com.qtu404.neptune.server.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+
+/**
+ * @author DingXing wb-dx470808@alibaba-inc.com
+ * @date 2019/3/23 下午8:02
+ */
+@Component
+public class ShopManager {
+    private final UserDao userDao;
+
+    private final ShopDao shopDao;
+
+    private final TagBindingDao tagBindingDao;
+
+    @Autowired
+    public ShopManager(UserDao userDao, ShopDao shopDao, TagBindingDao tagBindingDao) {
+        this.userDao = userDao;
+        this.shopDao = shopDao;
+        this.tagBindingDao = tagBindingDao;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void createShop(User seller, Shop toCreate, List<TagBinding> toCreateTagBinding) {
+        userDao.update(seller);
+        shopDao.save(toCreate);
+        if (!CollectionUtils.isEmpty(toCreateTagBinding)) {
+            tagBindingDao.save(toCreateTagBinding);
+        }
+    }
+}

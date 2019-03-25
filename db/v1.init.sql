@@ -164,3 +164,56 @@ CREATE TABLE `order_line` (
   PRIMARY KEY (`id`),
   KEY `idx_order_line_order_id` (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8mb4 COMMENT='订单行';
+
+CREATE TABLE `comment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `type` smallint(6) NOT NULL COMMENT '评价类型，订单:1',
+  `target_id` int(11) DEFAULT NULL COMMENT '目标id，来源域控制',
+  `top_id` int(11) DEFAULT NULL COMMENT '根节点id',
+  `parent_id` int(11) DEFAULT NULL COMMENT '父节点',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `user_name` varchar(64) NOT NULL COMMENT '用户名',
+  `user_avatar` varchar(128) DEFAULT NULL COMMENT '用户头像',
+  `rate` smallint(6) DEFAULT NULL COMMENT '评分，非必要',
+  `context` varchar(1024) DEFAULT NULL COMMENT '买家评论',
+  `image_json` varchar(1024) DEFAULT NULL COMMENT '评论图片',
+  `status` smallint(3) NOT NULL COMMENT '状态',
+  `has_pursue` smallint(1) NOT NULL,
+  `extra_json` varchar(1024) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_type_target` (`type`,`target_id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COMMENT='评价表';
+
+CREATE TABLE `item_comment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `top_id` bigint(20) DEFAULT NULL COMMENT '根节点id',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父节点',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `user_name` varchar(64) NOT NULL COMMENT '用户名',
+  `user_avatar` varchar(128) DEFAULT NULL COMMENT '用户头像',
+  `user_type` smallint(6) NOT NULL COMMENT '用户类型',
+  `item_id` bigint(20) NOT NULL COMMENT '商品id',
+  `sku_order_id` bigint(20) NOT NULL COMMENT 'sku订单id',
+  `item_name` varchar(128) DEFAULT NULL COMMENT '商品名',
+  `sku_attr_json` varchar(512) DEFAULT NULL COMMENT 'sku销售属性',
+  `shop_id` bigint(20) NOT NULL COMMENT '店铺id',
+  `quality` smallint(20) NOT NULL COMMENT '购买数量',
+  `describe` smallint(3) DEFAULT NULL COMMENT '商品描述符合程度',
+  `service` smallint(3) DEFAULT NULL COMMENT '服务',
+  `express` smallint(3) DEFAULT NULL COMMENT '快递服务',
+  `context` varchar(1024) DEFAULT NULL COMMENT '买家评论',
+  `images_json` varchar(1024) DEFAULT NULL COMMENT '评论图片',
+  `status` smallint(3) NOT NULL COMMENT '状态',
+  `has_pursue` smallint(1) NOT NULL,
+  `extra_json` text,
+  `tags` bigint(32) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_item_id` (`item_id`),
+  KEY `idx_shop_id` (`shop_id`)
+) ENGINE=InnoDB  AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COMMENT='商品评论';

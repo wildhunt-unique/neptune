@@ -14,7 +14,6 @@ import java.util.Map;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/25 下午1:18
  */
-// TODO: 2019/3/22 没改完，先别发
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = 8913872946684638933L;
 

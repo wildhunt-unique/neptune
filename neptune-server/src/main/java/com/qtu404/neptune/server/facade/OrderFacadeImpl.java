@@ -142,11 +142,7 @@ public class OrderFacadeImpl implements OrderFacade {
             toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setStatus(DataStatusEnum.NORMAL.getCode());
 
-            // TODO: 2019/3/20 transaction manage
-            this.orderWriteService.createOrder(toCreateOrder);
-            toCreateOrderLineList.forEach(orderLine -> orderLine.setOrderId(toCreateOrder.getId()));
-            this.orderLineWriteService.batchCreate(toCreateOrderLineList);
-
+            this.orderWriteService.createOrder(toCreateOrder,toCreateOrderLineList);
             return toCreateOrder.getId();
         });
     }

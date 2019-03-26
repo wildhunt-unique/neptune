@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.service;
 
+import com.qtu404.neptune.domain.model.Comment;
 import com.qtu404.neptune.domain.service.CommentWriteService;
 import com.qtu404.neptune.server.dao.CommentDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,10 @@ public class CommentWriteServiceImpl implements CommentWriteService {
     @Autowired
     public CommentWriteServiceImpl(CommentDao commentDao) {
         this.commentDao = commentDao;
+    }
+
+    @Override
+    public Boolean createComment(Comment toCreateComment) {
+        return commentDao.save(toCreateComment);
     }
 }

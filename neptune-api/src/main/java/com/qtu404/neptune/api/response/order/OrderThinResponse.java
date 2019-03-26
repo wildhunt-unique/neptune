@@ -3,6 +3,8 @@ package com.qtu404.neptune.api.response.order;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -63,4 +65,7 @@ public class OrderThinResponse implements Serializable {
 
     @ApiModelProperty("卖家留言")
     private String shopNotes;
+
+    @ApiModelProperty("创建时间")
+    private Date createdAt;
 }

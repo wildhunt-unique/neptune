@@ -5,6 +5,7 @@
         <id column="id" property="id"/>
         <result column="type" property="type"/>
         <result column="target_id" property="targetId"/>
+        <result column="shop_id" property="shopId"/>
         <result column="top_id" property="topId"/>
         <result column="parent_id" property="parentId"/>
         <result column="user_id" property="userId"/>
@@ -23,12 +24,13 @@
     <sql id="cols_all">id,
         <include refid="cols_exclude_id"/>
     </sql>
-    <sql id="cols_exclude_id">type,target_id,top_id,parent_id,user_id,user_name,user_avatar,rate,context,image_json,status,has_pursue,extra_json,created_at,updated_at</sql>
-    <sql id="vals">#{type},#{targetId},#{topId},#{parentId},#{userId},#{userName},#{userAvatar},#{rate},#{context},#{imageJson},#{status},#{hasPursue},#{extraJson},now(),now()</sql>
-    <sql id="listVals">#{item.type},#{item.targetId},#{item.topId},#{item.parentId},#{item.userId},#{item.userName},#{item.userAvatar},#{item.rate},#{item.context},#{item.imageJson},#{item.status},#{item.hasPursue},#{item.extraJson},now(),now()</sql>
+    <sql id="cols_exclude_id">type,target_id,shop_id,top_id,parent_id,user_id,user_name,user_avatar,rate,context,image_json,status,has_pursue,extra_json,created_at,updated_at</sql>
+    <sql id="vals">#{type},#{targetId},#{shopId},#{topId},#{parentId},#{userId},#{userName},#{userAvatar},#{rate},#{context},#{imageJson},#{status},#{hasPursue},#{extraJson},now(),now()</sql>
+    <sql id="listVals">#{item.type},#{item.targetId},#{item.shopId},#{item.topId},#{item.parentId},#{item.userId},#{item.userName},#{item.userAvatar},#{item.rate},#{item.context},#{item.imageJson},#{item.status},#{item.hasPursue},#{item.extraJson},now(),now()</sql>
     <sql id="criteria">
         <if test="type != null">AND type = #{type}</if>
         <if test="targetId != null">AND target_id = #{targetId}</if>
+        <if test="shopId != null">AND shop_id = #{shopId}</if>
         <if test="topId != null">AND top_id = #{topId}</if>
         <if test="parentId != null">AND parent_id = #{parentId}</if>
         <if test="userId != null">AND user_id = #{userId}</if>
@@ -78,6 +80,7 @@
         <set>
             <if test="type != null">type = #{type},</if>
             <if test="targetId != null">target_id = #{targetId},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
             <if test="topId != null">top_id = #{topId},</if>
             <if test="parentId != null">parent_id = #{parentId},</if>
             <if test="userId != null">user_id = #{userId},</if>

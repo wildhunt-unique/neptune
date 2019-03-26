@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qtu404.neptune.util.model.BaseModel;
 import com.qtu404.neptune.util.model.MyJSON;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.util.Map;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/26 上午10:27
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class Comment extends BaseModel implements Serializable {
     private static final long serialVersionUID = -3411124045053240221L;
 
@@ -22,6 +26,9 @@ public class Comment extends BaseModel implements Serializable {
 
     @ApiModelProperty("目标id")
     private Long targetId;
+
+    @ApiModelProperty("店铺id")
+    private Long shopId;
 
     @ApiModelProperty("根节点")
     private Long topId;
@@ -49,7 +56,7 @@ public class Comment extends BaseModel implements Serializable {
     private String imageJson;
 
     @ApiModelProperty("评价图片")
-    private Map<String,Object> images;
+    private Map<String, Object> images;
 
     public void setImageJson(String imageJson) {
         this.imageJson = imageJson;

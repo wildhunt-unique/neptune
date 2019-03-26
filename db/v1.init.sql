@@ -169,6 +169,7 @@ CREATE TABLE `comment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `type` smallint(6) NOT NULL COMMENT '评价类型，订单:1',
   `target_id` int(11) DEFAULT NULL COMMENT '目标id，来源域控制',
+  `shop_id` int(11) DEFAULT NULL COMMENT '店铺id',
   `top_id` int(11) DEFAULT NULL COMMENT '根节点id',
   `parent_id` int(11) DEFAULT NULL COMMENT '父节点',
   `user_id` int(11) NOT NULL COMMENT '用户id',
@@ -184,8 +185,9 @@ CREATE TABLE `comment` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_type_target` (`type`,`target_id`),
-  KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COMMENT='评价表';
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_shop_id` (`shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COMMENT='评价表';
 
 CREATE TABLE `item_comment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',

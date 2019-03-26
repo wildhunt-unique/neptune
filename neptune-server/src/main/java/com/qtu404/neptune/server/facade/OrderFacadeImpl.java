@@ -117,8 +117,8 @@ public class OrderFacadeImpl implements OrderFacade {
                 toCreateOrderLine.setShopId(shop.getId());
                 toCreateOrderLine.setShopName(shop.getName());
                 // 商品信息
-                toCreateOrderLine.setItemAttr(item.getItemAttr());
                 toCreateOrderLine.setItemId(existItem.getId());
+                toCreateOrderLine.setItemAttribute(item.getItemAttribute());
                 toCreateOrderLine.setItemName(existItem.getName());
                 // 支付信息
                 toCreateOrderLine.setPaidAmount(item.getPaidAmount());

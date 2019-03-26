@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,6 +31,9 @@ public class ItemOrderLineCreateRequest extends AbstractRequest implements Seria
 
     @ApiModelProperty("实际支付金额")
     private Integer paidAmount;
+
+    @ApiModelProperty("商品销售属性")
+    private Map<String, Object> itemAttribute;
 
     @Override
     public void checkParam() {

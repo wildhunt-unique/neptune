@@ -18,7 +18,7 @@ public class MapperBuild {
                 .password("anywhere")
                 .path("/Users/admin/Desktop/")
                 .build();
-        builder.build("order_line","OrderLine");
+        builder.build("comment","Comment");
 
     }
 }

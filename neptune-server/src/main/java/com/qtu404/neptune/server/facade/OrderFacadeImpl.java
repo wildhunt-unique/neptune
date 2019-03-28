@@ -3,8 +3,8 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
 import com.qtu404.neptune.api.facade.OrderFacade;
-import com.qtu404.neptune.api.request.OrderDetailRequest;
-import com.qtu404.neptune.api.request.OrderUpdateRequest;
+import com.qtu404.neptune.api.request.order.OrderDetailRequest;
+import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.ItemOrderLineCreateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -142,7 +143,7 @@ public class OrderFacadeImpl implements OrderFacade {
             toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setStatus(DataStatusEnum.NORMAL.getCode());
 
-            this.orderWriteService.createOrder(toCreateOrder,toCreateOrderLineList);
+            this.orderWriteService.createOrder(toCreateOrder, toCreateOrderLineList);
             return toCreateOrder.getId();
         });
     }
@@ -160,6 +161,12 @@ public class OrderFacadeImpl implements OrderFacade {
             AssertUtil.isExist(existOrder, "order");
 
             Order toUpdateOrder = this.orderConverter.request2Model(request);
+            if (ObjectUtils.nullSafeEquals(toUpdateOrder.getPayStatus(), SwitchStatusEnum.ACTIVE)) {
+                if (ObjectUtils.nullSafeEquals(existOrder.getPayStatus(), SwitchStatusEnum.ACTIVE)) {
+                    throw new ServiceException("payment.has.been.completed");
+                }
+                toUpdateOrder.setPayAt(new Date());
+            }
             // TODO: 2019/3/21 to check status
             return this.orderWriteService.update(toUpdateOrder);
         });

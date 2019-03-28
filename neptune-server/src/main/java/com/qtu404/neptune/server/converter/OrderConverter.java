@@ -1,6 +1,6 @@
 package com.qtu404.neptune.server.converter;
 
-import com.qtu404.neptune.api.request.OrderUpdateRequest;
+import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
 import com.qtu404.neptune.domain.model.Order;

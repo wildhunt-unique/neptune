@@ -1,7 +1,7 @@
 package com.qtu404.neptune.api.facade;
 
-import com.qtu404.neptune.api.request.OrderDetailRequest;
-import com.qtu404.neptune.api.request.OrderUpdateRequest;
+import com.qtu404.neptune.api.request.order.OrderDetailRequest;
+import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.util.model.Response;

@@ -15,6 +15,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Order extends BaseModel implements Serializable {
+    // TODO: 2019/3/28 定义各个状态字段所对应的业务含义
     private static final long serialVersionUID = 7826712058680293421L;
 
     @ApiModelProperty("外部编码")

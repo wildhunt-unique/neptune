@@ -1,4 +1,4 @@
-package com.qtu404.neptune.api.request;
+package com.qtu404.neptune.api.request.order;
 
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.SwitchStatusEnum;

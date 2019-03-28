@@ -1,12 +1,8 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.google.common.collect.Maps;
 import com.qtu404.neptune.api.facade.ItemFacade;
-import com.qtu404.neptune.api.request.item.ItemAdjustRequest;
-import com.qtu404.neptune.api.request.item.ItemCreateRequest;
-import com.qtu404.neptune.api.request.item.ItemPagingRequest;
-import com.qtu404.neptune.api.request.item.ItemUpdateRequest;
+import com.qtu404.neptune.api.request.item.*;
 import com.qtu404.neptune.api.response.item.ItemThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
@@ -24,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.mail.FetchProfile;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -148,6 +143,21 @@ public class ItemFacadeImpl implements ItemFacade {
                             .map(itemConverter::model2ThinResponse)
                             .collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 查看商品信息
+     *
+     * @param request 商品id
+     * @return 商品信息
+     */
+    @Override
+    public Response<ItemThinResponse> getItemById(ItemGetRequest request) {
+        return execute(request, param -> {
+            Item existItem = this.itemReadService.fetchById(request.getItemId());
+            AssertUtil.isExist(existItem, "item");
+            return this.itemConverter.model2ThinResponse(existItem);
         });
     }
 }

@@ -2,7 +2,7 @@ package com.qtu404.neptune.web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
-import com.qtu404.neptune.api.request.OrderDetailRequest;
+import com.qtu404.neptune.api.request.order.OrderDetailRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.util.model.Response;

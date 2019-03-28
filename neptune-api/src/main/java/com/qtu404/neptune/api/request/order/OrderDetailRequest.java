@@ -1,4 +1,4 @@
-package com.qtu404.neptune.api.request;
+package com.qtu404.neptune.api.request.order;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;

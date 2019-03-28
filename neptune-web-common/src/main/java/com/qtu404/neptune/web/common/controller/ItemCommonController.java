@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/28 上午10:32
  */
-@Api(value = "评价-通用接口", tags = "评价-通用接口")
+@Api(value = "商品-通用接口", tags = "商品-通用接口")
 @RestController
 @RequestMapping("api/common/item/")
 public class ItemCommonController {

@@ -1,7 +1,6 @@
 package com.qtu404.neptune.api.request.comment;
 
 import com.qtu404.neptune.util.model.AbstractPagingRequest;
-import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/26 下午4:32
  */
-@ApiModel("请求参数")
+@ApiModel("评价分页")
 @Data
 @Builder
 @NoArgsConstructor

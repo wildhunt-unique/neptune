@@ -2,7 +2,6 @@ package com.qtu404.neptune.web.common.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopFacade;
-import com.qtu404.neptune.api.request.shop.ShopCategoryCreateRequest;
 import com.qtu404.neptune.api.request.shop.ShopCategoryQueryRequest;
 import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
 import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;

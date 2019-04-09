@@ -3,10 +3,7 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
 import com.qtu404.neptune.api.facade.OrderFacade;
-import com.qtu404.neptune.api.request.order.OrderDetailRequest;
-import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
-import com.qtu404.neptune.api.request.order.ItemOrderLineCreateRequest;
-import com.qtu404.neptune.api.request.order.OrderCreateRequest;
+import com.qtu404.neptune.api.request.order.*;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.api.response.order.OrderLineThinResponse;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
@@ -17,6 +14,7 @@ import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.OrderConverter;
 import com.qtu404.neptune.server.converter.OrderLineConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
+import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.ServiceException;
 import lombok.extern.slf4j.Slf4j;
@@ -192,6 +190,26 @@ public class OrderFacadeImpl implements OrderFacade {
                     .orderLineThinResponseList(orderLineThinResponseList)
                     .orderThinResponse(orderThinResponse)
                     .build();
+        });
+    }
+
+    /**
+     * 订单分页
+     *
+     * @param request 分页参数
+     * @return 分页信息
+     */
+    @Override
+    public Response<Paging<OrderThinResponse>> paging(OrderPagingRequest request) {
+        return execute(request, param -> {
+            Map<String, Object> condition = request.toMap();
+            Paging<Order> orderPaging = this.orderReadService.paging(condition);
+            return new Paging<>(
+                    orderPaging.getTotal(),
+                    orderPaging.getData().stream()
+                            .map(this.orderConverter::model2ThinResponse)
+                            .collect(Collectors.toList())
+            );
         });
     }
 

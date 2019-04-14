@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.manager;
 
+import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.domain.model.TagBinding;
 import com.qtu404.neptune.domain.model.User;
@@ -34,10 +35,11 @@ public class ShopManager {
 
     @Transactional(rollbackFor = Exception.class)
     public void createShop(User seller, Shop toCreate, List<TagBinding> toCreateTagBinding) {
-        userDao.update(seller);
         shopDao.save(toCreate);
         if (!CollectionUtils.isEmpty(toCreateTagBinding)) {
             tagBindingDao.save(toCreateTagBinding);
         }
+        seller.getExtra().put(ConstantValues.SHOP_ID_KEY, toCreate.getId());
+        userDao.update(seller);
     }
 }

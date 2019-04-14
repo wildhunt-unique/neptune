@@ -26,4 +26,5 @@ public class ConstantValues {
 
     // 最大留言长度
     public static final Integer MAX_NOTE_LENGTH = 127;
+    public static String SHOP_ID_KEY = "shopId";
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -33,5 +34,5 @@ public class UserInfoResponse implements Serializable {
     private String mobile;
 
     @ApiModelProperty("额外信息")
-    private String extraJson;
+    private Map<String, Object> extra;
 }

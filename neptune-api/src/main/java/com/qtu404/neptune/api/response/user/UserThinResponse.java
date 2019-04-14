@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -73,4 +74,9 @@ public class UserThinResponse implements Serializable {
     @ApiModelProperty("真实姓名")
     private String name;
 
+    /**
+     * 额外信息
+     */
+    @ApiModelProperty("额外信息")
+    private Map<String, Object> extra;
 }

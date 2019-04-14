@@ -9,10 +9,7 @@ import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -34,7 +31,7 @@ public class UserAdminController {
 
     @ApiOperation("用户禁用/启用")
     @PutMapping("update/status")
-    public Response<Boolean> userStatus(UserStatusUpdateRequest request){
+    public Response<Boolean> userStatus(@RequestBody UserStatusUpdateRequest request){
         return this.userFacade.updateStatus(request);
     }
 }

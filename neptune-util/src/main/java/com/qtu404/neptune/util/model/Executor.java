@@ -13,6 +13,7 @@ import java.util.function.Function;
 public abstract class Executor {
     public static <P, R> Response<R> execute(P param, Function<P, R> function) {
         try {
+            log.info("Request:{}.Value:{}", param.getClass().getSimpleName(), param.toString());
             checkParam(param);
             return Response.success(function.apply(param));
         } catch (Throwable e) {

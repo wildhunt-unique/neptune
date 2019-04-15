@@ -11,9 +11,7 @@ import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.util.UserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -30,19 +28,19 @@ public class CommentCommonController {
 
     @ApiOperation("创建评价")
     @PostMapping("create")
-    public Response<Long> createComment(CommentCreateRequest request, HttpSession session) {
+    public Response<Long> createComment(@RequestBody CommentCreateRequest request, HttpSession session) {
         request.setUserId(UserUtils.getId(session));
         return this.commentFacade.createComment(request);
     }
 
     @ApiOperation("查看评价信息")
-    @PostMapping("get")
+    @GetMapping("get")
     public Response<CommentThinResponse> getCommentById(CommentGetRequest request) {
         return this.commentFacade.getCommentById(request);
     }
 
     @ApiOperation("评价信息分页")
-    @PostMapping("paging")
+    @GetMapping("paging")
     public Response<Paging<CommentThinResponse>> commentPaging(CommentPagingRequest request) {
         return this.commentFacade.paging(request);
     }

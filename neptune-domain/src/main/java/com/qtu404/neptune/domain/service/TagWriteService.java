@@ -13,4 +13,6 @@ public interface TagWriteService {
     Boolean create(Tag toCreateTag);
 
     Boolean update(Tag toUpdateTag);
+
+    Boolean delete(Long tagId);
 }

@@ -3,6 +3,7 @@ package com.qtu404.neptune.server.service;
 import com.qtu404.neptune.domain.model.Tag;
 import com.qtu404.neptune.domain.service.TagWriteService;
 import com.qtu404.neptune.server.dao.TagDao;
+import com.qtu404.neptune.server.manager.TagManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TagWriteServiceImpl implements TagWriteService {
     private final TagDao tagDao;
+    private final TagManager tagManager;
 
     @Autowired
-    public TagWriteServiceImpl(TagDao tagDao) {
+    public TagWriteServiceImpl(TagDao tagDao, TagManager tagManager) {
         this.tagDao = tagDao;
+        this.tagManager = tagManager;
     }
 
     @Override
@@ -27,5 +30,10 @@ public class TagWriteServiceImpl implements TagWriteService {
     @Override
     public Boolean update(Tag toUpdateTag) {
         return this.tagDao.update(toUpdateTag);
+    }
+
+    @Override
+    public Boolean delete(Long tagId) {
+        return this.tagManager.deleteTag(tagId);
     }
 }

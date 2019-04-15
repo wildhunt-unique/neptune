@@ -3,6 +3,7 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.qtu404.neptune.api.facade.ShopTagFacade;
 import com.qtu404.neptune.api.request.tag.TagCreateRequest;
+import com.qtu404.neptune.api.request.tag.TagDeleteRequest;
 import com.qtu404.neptune.api.request.tag.TagThinListRequest;
 import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
@@ -92,5 +93,18 @@ public class TagFacadeImpl implements ShopTagFacade {
             // 进行更新
             return this.tagWriteService.update(toUpdateTag);
         });
+    }
+
+    /**
+     * 删除标签
+     * @param request 标签id
+     * @return 是否成功
+     */
+    @Override
+    public Response<Boolean> delete(TagDeleteRequest request) {
+         return execute(request, param -> {
+             this.tagWriteService.delete(request.getTagId());
+             return Boolean.TRUE;
+          });
     }
 }

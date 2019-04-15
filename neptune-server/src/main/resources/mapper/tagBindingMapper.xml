@@ -48,6 +48,11 @@
         <include refid="tb"/>
         WHERE id = #{id}
     </delete>
+    <delete id="batchRemoveByTagId" parameterType="java.lang.Long">
+        DELETE FROM
+        <include refid="tb"/>
+        WHERE tag_id = #{tagId}
+    </delete>
     <delete id="removes" parameterType="java.util.List">
         DELETE FROM
         <include refid="tb"/>

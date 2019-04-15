@@ -1,6 +1,7 @@
 package com.qtu404.neptune.api.facade;
 
 import com.qtu404.neptune.api.request.tag.TagCreateRequest;
+import com.qtu404.neptune.api.request.tag.TagDeleteRequest;
 import com.qtu404.neptune.api.request.tag.TagThinListRequest;
 import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
@@ -16,4 +17,6 @@ public interface ShopTagFacade {
     Response<TagThinListResponse> thinList(TagThinListRequest request);
 
     Response<Boolean> update(TagUpdateRequest request);
+
+    Response<Boolean> delete(TagDeleteRequest request);
 }

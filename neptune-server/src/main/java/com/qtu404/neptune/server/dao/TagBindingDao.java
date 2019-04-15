@@ -28,4 +28,7 @@ public class TagBindingDao extends MyBatisDAO<TagBinding> {
         return this.sqlSession.update(this.sqlId("batchSetStatus"), params);
     }
 
+    public Boolean batchRemoveByTagId(Long tagId) {
+        return this.sqlSession.delete(this.sqlId("batchRemoveByTagId"), tagId) == 1;
+    }
 }

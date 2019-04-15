@@ -3,15 +3,13 @@ package com.qtu404.neptune.admin.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopTagFacade;
 import com.qtu404.neptune.api.request.tag.TagCreateRequest;
+import com.qtu404.neptune.api.request.tag.TagDeleteRequest;
 import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.util.UserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -37,5 +35,11 @@ public class ShopTagAdminController {
     @ApiOperation("修改店铺标签")
     public Response<Boolean> update(TagUpdateRequest request){
         return this.shopTagFacade.update(request);
+    }
+
+    @PostMapping("delete")
+    @ApiOperation("删除标签，物理删除")
+    public Response<Boolean> delete(TagDeleteRequest request){
+        return this.shopTagFacade.delete(request);
     }
 }

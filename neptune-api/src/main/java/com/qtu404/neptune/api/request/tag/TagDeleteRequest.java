@@ -9,37 +9,24 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * @author DingXing wb-dx470808@alibaba-inc.com
- * @date 2019/3/8 下午2:01
+ * @author DingXing wildhunt_geralt@foxmail.com
+ * @date 2019/4/15
  */
-@ApiModel("店铺标签更新")
+@ApiModel("请求参数")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class TagUpdateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = -3573474658944838576L;
+public class TagDeleteRequest  extends AbstractRequest implements Serializable {
+    private static final long serialVersionUID = -4530118251116706187L;
 
     @ApiModelProperty(value = "标签id",required = true)
     private Long tagId;
 
-    /**
-     * 标签名
-     */
-    @ApiModelProperty("标签名")
-    private String name;
-
-
-    /**
-     * 内容
-     */
-    @ApiModelProperty("标签内容")
-    private Integer content;
-    
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(this.tagId,"tag.id");
+        ParamUtil.nonNull(tagId,"tag.id");
     }
 }

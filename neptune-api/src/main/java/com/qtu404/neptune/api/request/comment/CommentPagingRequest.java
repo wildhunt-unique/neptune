@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class CommentPagingRequest extends AbstractPagingRequest implements Serializable {
     private static final long serialVersionUID = -3484551968509283313L;
 
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id")
     private Long shopId;
 
     @ApiModelProperty("用户id")
@@ -32,7 +32,6 @@ public class CommentPagingRequest extends AbstractPagingRequest implements Seria
 
     @Override
     public void checkParam() {
-        ParamUtil.nonNull(shopId, "shop.id");
         super.checkParam();
     }
 }

@@ -61,6 +61,8 @@ public class UserFacadeImpl implements UserFacade {
                     .orElse(null);
             if (Objects.isNull(user)) {
                 throw new IllegalArgumentException("username.or.password.error");
+            } else if (user.getStatus().equals(DataStatusEnum.FREEZE.getCode())) {
+                throw new ServiceException("user.freeze");
             } else {
                 return user.getId();
             }

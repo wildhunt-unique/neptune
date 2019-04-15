@@ -26,20 +26,20 @@ public class ShopTagAdminController {
 
     @PutMapping("create")
     @ApiOperation("创建店铺标签")
-    public Response<Long> create(TagCreateRequest request, HttpSession session) {
+    public Response<Long> create(@RequestBody TagCreateRequest request, HttpSession session) {
         UserUtils.getId(session);// TODO: 2019/3/7 check user
         return this.shopTagFacade.create(request);
     }
 
     @PostMapping("update")
     @ApiOperation("修改店铺标签")
-    public Response<Boolean> update(TagUpdateRequest request){
+    public Response<Boolean> update(@RequestBody TagUpdateRequest request){
         return this.shopTagFacade.update(request);
     }
 
     @PostMapping("delete")
     @ApiOperation("删除标签，物理删除")
-    public Response<Boolean> delete(TagDeleteRequest request){
+    public Response<Boolean> delete(@RequestBody TagDeleteRequest request){
         return this.shopTagFacade.delete(request);
     }
 }

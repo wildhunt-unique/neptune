@@ -30,11 +30,14 @@ public class CommentThinResponse implements Serializable {
     @ApiModelProperty("店铺id")
     private Long shopId;
 
-    @ApiModelProperty("用户名")
+    @ApiModelProperty("买家用户名")
     private String userName;
 
-    @ApiModelProperty("用户头像")
+    @ApiModelProperty("买家头像")
     private String userAvatar;
+
+    @ApiModelProperty("买家id")
+    private Long userId;
 
     @ApiModelProperty("评分")
     private Integer rate;
@@ -42,6 +45,12 @@ public class CommentThinResponse implements Serializable {
     @ApiModelProperty("评价内容")
     private String context;
 
+    @ApiModelProperty("评价状态")
+    private Integer status;
+
     @ApiModelProperty("评价图片")
     private Map<String, Object> images;
+
+    @ApiModelProperty("额外信息")
+    private Map<String, Object> extra;
 }

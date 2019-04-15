@@ -1,6 +1,7 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.Maps;
 import com.qtu404.neptune.api.facade.CommentFacade;
 import com.qtu404.neptune.api.request.comment.CommentCreateRequest;
 import com.qtu404.neptune.api.request.comment.CommentGetRequest;
@@ -11,11 +12,9 @@ import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.enums.CommentTypeEnum;
 import com.qtu404.neptune.domain.model.Comment;
 import com.qtu404.neptune.domain.model.Order;
+import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.domain.model.User;
-import com.qtu404.neptune.domain.service.CommentReadService;
-import com.qtu404.neptune.domain.service.CommentWriteService;
-import com.qtu404.neptune.domain.service.OrderReadService;
-import com.qtu404.neptune.domain.service.UserReadService;
+import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.CommentConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
@@ -48,13 +47,16 @@ public class CommentFacadeImpl implements CommentFacade {
 
     private final UserReadService userReadService;
 
+    private final ShopReadService shopReadService;
+
     @Autowired
-    public CommentFacadeImpl(CommentReadService commentReadService, CommentWriteService commentWriteService, CommentConverter commentConverter, OrderReadService orderReadService, UserReadService userReadService) {
+    public CommentFacadeImpl(CommentReadService commentReadService, CommentWriteService commentWriteService, CommentConverter commentConverter, OrderReadService orderReadService, UserReadService userReadService, ShopReadService shopReadService) {
         this.commentReadService = commentReadService;
         this.commentWriteService = commentWriteService;
         this.commentConverter = commentConverter;
         this.orderReadService = orderReadService;
         this.userReadService = userReadService;
+        this.shopReadService = shopReadService;
     }
 
     /**
@@ -73,6 +75,8 @@ public class CommentFacadeImpl implements CommentFacade {
             User user = userReadService.fetchById(request.getUserId());
             AssertUtil.isExist(user, "user");
 
+            Shop shop = shopReadService.fetchById(order.getShopId());
+
             Comment toCreateComment = this.commentConverter.request2Model(request);
             // 设置comment属性
             toCreateComment.setTargetId(request.getOrderId());
@@ -86,7 +90,10 @@ public class CommentFacadeImpl implements CommentFacade {
             // 设置用户信息
             toCreateComment.setUserName(user.getNickname());
             toCreateComment.setUserAvatar(user.getAvatar());
-
+            Map<String, Object> extra = Maps.newHashMap();
+            extra.put("buyerPhone", user.getMobile());
+            extra.put("shopName", shop.getName());
+            toCreateComment.setExtra(extra);
             commentWriteService.createComment(toCreateComment);
             return toCreateComment.getId();
         });

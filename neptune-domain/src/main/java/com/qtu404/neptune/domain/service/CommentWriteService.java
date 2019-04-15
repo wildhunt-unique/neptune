@@ -8,4 +8,6 @@ import com.qtu404.neptune.domain.model.Comment;
  */
 public interface CommentWriteService {
     Boolean createComment(Comment toCreateComment);
+
+    Boolean update(Comment comment);
 }

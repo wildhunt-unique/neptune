@@ -23,4 +23,9 @@ public class CommentWriteServiceImpl implements CommentWriteService {
     public Boolean createComment(Comment toCreateComment) {
         return commentDao.save(toCreateComment);
     }
+
+    @Override
+    public Boolean update(Comment comment) {
+        return this.commentDao.update(comment);
+    }
 }

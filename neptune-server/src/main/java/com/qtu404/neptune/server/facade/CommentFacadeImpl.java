@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Maps;
 import com.qtu404.neptune.api.facade.CommentFacade;
 import com.qtu404.neptune.api.request.comment.CommentCreateRequest;
+import com.qtu404.neptune.api.request.comment.CommentEnableRequest;
 import com.qtu404.neptune.api.request.comment.CommentGetRequest;
 import com.qtu404.neptune.api.request.comment.CommentPagingRequest;
 import com.qtu404.neptune.api.response.comment.CommentThinResponse;
@@ -71,11 +72,10 @@ public class CommentFacadeImpl implements CommentFacade {
             // TODO: 2019/3/26 check order status
             Order order = orderReadService.findById(request.getOrderId());
             AssertUtil.isExist(order, "order");
-
             User user = userReadService.fetchById(request.getUserId());
             AssertUtil.isExist(user, "user");
-
             Shop shop = shopReadService.fetchById(order.getShopId());
+            AssertUtil.isExist(shop,"shop");
 
             Comment toCreateComment = this.commentConverter.request2Model(request);
             // 设置comment属性
@@ -136,6 +136,23 @@ public class CommentFacadeImpl implements CommentFacade {
                             .map(this.commentConverter::model2ThinResponse)
                             .collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 评价显示/隐藏
+     * @param request 参数
+     * @return 是否操作成功
+     */
+    @Override
+    public Response<Boolean> enableComment(CommentEnableRequest request) {
+        return execute(request, param -> {
+            Comment comment = this.commentReadService.findById(request.getCommentId());
+            AssertUtil.isExist(comment,"comment");
+            DataStatusEnum.validate(request.getStatus());
+            comment.setStatus(request.getStatus());
+            this.commentWriteService.update(comment);
+            return Boolean.TRUE;
         });
     }
 }

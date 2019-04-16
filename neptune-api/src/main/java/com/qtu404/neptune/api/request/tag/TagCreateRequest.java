@@ -19,8 +19,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class TagCreateRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = -3017011871767459875L;
-
+    private static final long serialVersionUID = -6657376906290722016L;
     /**
      * 标签名
      */
@@ -32,7 +31,7 @@ public class TagCreateRequest extends AbstractRequest implements Serializable {
      * 内容
      */
     @ApiModelProperty("标签内容")
-    private Integer content;
+    private String content;
 
     @Override
     public void checkParam() {

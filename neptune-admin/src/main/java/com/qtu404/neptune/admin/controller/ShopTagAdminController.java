@@ -33,13 +33,13 @@ public class ShopTagAdminController {
 
     @PostMapping("update")
     @ApiOperation("修改店铺标签")
-    public Response<Boolean> update(@RequestBody TagUpdateRequest request){
+    public Response<Boolean> update(@RequestBody TagUpdateRequest request) {
         return this.shopTagFacade.update(request);
     }
 
     @PostMapping("delete")
     @ApiOperation("删除标签，物理删除")
-    public Response<Boolean> delete(@RequestBody TagDeleteRequest request){
+    public Response<Boolean> delete(@RequestBody TagDeleteRequest request) {
         return this.shopTagFacade.delete(request);
     }
 }

@@ -22,7 +22,7 @@ public class CommentAdminController {
     @Reference
     private CommentFacade commentFacade;
 
-    @ApiOperation("评价显示/隐藏")
+    @ApiOperation("显示/隐藏")
     @PostMapping("enable")
     public Response<Boolean> enable(@RequestBody CommentEnableRequest request){
         return this.commentFacade.enableComment(request);

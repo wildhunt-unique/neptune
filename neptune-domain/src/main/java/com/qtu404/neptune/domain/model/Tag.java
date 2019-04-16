@@ -34,5 +34,5 @@ public class Tag extends BaseModel implements Serializable {
      * 内容
      */
     @ApiModelProperty("标签内容")
-    private Integer content;
+    private String content;
 }

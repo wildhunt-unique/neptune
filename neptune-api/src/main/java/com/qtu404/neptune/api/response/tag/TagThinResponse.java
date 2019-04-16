@@ -13,7 +13,7 @@ import java.io.Serializable;
 @ApiModel("标签简略信息")
 @Data
 public class TagThinResponse implements Serializable {
-    private static final long serialVersionUID = 1327123156374004034L;
+    private static final long serialVersionUID = 7333949739543739712L;
 
     /**
      * 标签id
@@ -37,5 +37,5 @@ public class TagThinResponse implements Serializable {
      * 内容
      */
     @ApiModelProperty("标签内容")
-    private Integer content;
+    private String content;
 }

@@ -13,6 +13,8 @@ import com.qtu404.neptune.util.model.Response;
 public interface UserFacade {
     Response<Long> login(UserLoginRequest request);
 
+    Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request);
+
     Response<Boolean> existPhone(ExistPhoneRequest request);
 
     Response<Boolean> existUsername(ExistUsernameRequest request);

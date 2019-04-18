@@ -94,7 +94,7 @@ public class ShopFacadeImpl implements ShopFacade {
         return execute(request, param -> {
             // 卖家校验
             User seller = this.userReadService.fetchById(request.getUserId());
-            if (Objects.isNull(seller)) throw new IllegalArgumentException("user.not.exist");
+            AssertUtil.isExist(seller,"user");
             if (!ObjectUtils.nullSafeEquals(seller.getStatus(), DataStatusEnum.NORMAL.getCode())) {
                 throw new IllegalArgumentException("user.status.error");
             }

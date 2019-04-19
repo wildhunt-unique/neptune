@@ -1,6 +1,8 @@
 package com.qtu404.neptune.server.facade;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.qtu404.neptune.api.request.user.*;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
@@ -11,17 +13,17 @@ import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.domain.service.UserWriteService;
 import com.qtu404.neptune.server.converter.UserConverter;
-import com.qtu404.neptune.util.model.AssertUtil;
-import com.qtu404.neptune.util.model.Paging;
-import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.util.model.ServiceException;
+import com.qtu404.neptune.util.model.*;
+import com.qtu404.neptune.util.redis.RedisManager;
 import com.qtu404.neptune.util.sms.SMSsender;
 import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.response.user.UserInfoResponse;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Slf4j
 @Component
 public class UserFacadeImpl implements UserFacade {
+    private final RedisManager redisManager;
+
     private final SMSsender smsSender;
 
     private final UserConverter userConverter;
@@ -45,11 +49,12 @@ public class UserFacadeImpl implements UserFacade {
     private final UserWriteService userWriteService;
 
     @Autowired
-    public UserFacadeImpl(SMSsender smsSender, UserConverter userConverter, UserReadService userReadService, UserWriteService userWriteService) {
+    public UserFacadeImpl(SMSsender smsSender, UserConverter userConverter, UserReadService userReadService, UserWriteService userWriteService, RedisManager redisUtil) {
         this.smsSender = smsSender;
         this.userConverter = userConverter;
         this.userReadService = userReadService;
         this.userWriteService = userWriteService;
+        this.redisManager = redisUtil;
     }
 
     @Override
@@ -64,8 +69,22 @@ public class UserFacadeImpl implements UserFacade {
             } else if (user.getStatus().equals(DataStatusEnum.FREEZE.getCode())) {
                 throw new ServiceException("user.freeze");
             } else {
+                String uuid = MyJSON.md5(user.getId().toString());
+                this.redisManager.set(ConstantValues.UUID_PREFIX + ":" + uuid, MyJSON.toJSON(user), 0);
                 return user.getId();
             }
+        });
+    }
+
+    @Override
+    public Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request) {
+        return execute(request, param -> {
+            String userJson = this.redisManager.get(ConstantValues.UUID_PREFIX + ":" + request.getKey(), 0);
+            User user = null;
+            if (!StringUtils.isBlank(userJson)) {
+                user = JSONObject.parseObject(userJson,User.class);
+            }
+            return this.userConverter.model2ThinResponse(user);
         });
     }
 

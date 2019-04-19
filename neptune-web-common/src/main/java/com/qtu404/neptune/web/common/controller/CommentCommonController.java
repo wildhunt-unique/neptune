@@ -8,12 +8,10 @@ import com.qtu404.neptune.api.request.comment.CommentPagingRequest;
 import com.qtu404.neptune.api.response.comment.CommentThinResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.web.common.util.UserUtils;
+import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -28,8 +26,8 @@ public class CommentCommonController {
 
     @ApiOperation("创建评价")
     @PostMapping("create")
-    public Response<Long> createComment(@RequestBody CommentCreateRequest request, HttpSession session) {
-        request.setUserId(UserUtils.getId(session));
+    public Response<Long> createComment(@RequestBody CommentCreateRequest request) {
+        request.setUserId(RequestContext.getUserId());
         return this.commentFacade.createComment(request);
     }
 

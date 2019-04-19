@@ -2,11 +2,9 @@ package com.qtu404.neptune.web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
-import com.qtu404.neptune.api.request.order.OrderDetailRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
-import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.web.common.util.UserUtils;
+import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +25,8 @@ public class OrderWebController {
     @ApiOperation("订单创建")
     @PostMapping("create")
     public Response<Long> createOrder(@RequestBody OrderCreateRequest request, HttpSession session) {
-        Long userId = UserUtils.getId(session);
+        Long userId = RequestContext.getUserId();
         request.setBuyerId(userId);
         return this.orderFacade.createOrder(request);
     }
-
 }

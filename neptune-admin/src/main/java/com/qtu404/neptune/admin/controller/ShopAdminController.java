@@ -5,12 +5,11 @@ import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.ShopCreateRequest;
 import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.web.common.util.UserUtils;
+import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 import static com.qtu404.neptune.util.model.Response.NOT_LOGIN;
@@ -34,8 +33,8 @@ public class ShopAdminController {
 
     @PostMapping("update")
     @ApiOperation("店铺修改")
-    public Response<Boolean> updateShopInfo(@RequestBody ShopUpdateRequest request, HttpSession httpSession) {
-        Long userId = UserUtils.getId(httpSession);
+    public Response<Boolean> updateShopInfo(@RequestBody ShopUpdateRequest request) {
+        Long userId = RequestContext.getUserId();
         if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
         request.setUserId(userId);
         return this.shopFacade.updateShopInfo(request);

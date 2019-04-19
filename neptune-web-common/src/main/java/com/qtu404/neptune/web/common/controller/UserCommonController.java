@@ -1,16 +1,23 @@
 package com.qtu404.neptune.web.common.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.qtu404.neptune.api.request.user.*;
-import com.qtu404.neptune.common.constant.ConstantValues;
-import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.api.facade.UserFacade;
+import com.qtu404.neptune.api.request.user.*;
 import com.qtu404.neptune.api.response.user.UserInfoResponse;
+import com.qtu404.neptune.common.constant.ConstantValues;
+import com.qtu404.neptune.util.model.MyJSON;
+import com.qtu404.neptune.util.model.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
+
+import static com.qtu404.neptune.web.common.util.RequestContext.getUserId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -25,15 +32,15 @@ public class UserCommonController {
 
     @ApiOperation("登录")
     @PostMapping("login")
-    public Response<Boolean> login(@RequestBody UserLoginRequest request, HttpSession session) {
+    public Response<Boolean> login(@RequestBody UserLoginRequest request, HttpServletResponse response) {
         Response<Long> loginResponse = this.userFacade.login(request);
         if (loginResponse.isSuccess()) {
-            if (loginResponse.getResult() != null) {
-                session.setAttribute(ConstantValues.SESSION_CURRENT_USER_KEY, loginResponse.getResult());
-                return Response.success(Boolean.TRUE);
-            } else {
-                return Response.success(Boolean.FALSE);
-            }
+            String tokenValue = MyJSON.md5(loginResponse.getResult().toString());
+            Cookie token = new Cookie(ConstantValues.UUID_PREFIX, tokenValue);
+            token.setMaxAge(1000 * 60 * 24);
+            token.setPath("/");
+            response.addCookie(token);
+            return Response.success(Objects.nonNull(loginResponse.getResult()));
         } else {
             return Response.fail(loginResponse.getError());
         }
@@ -88,11 +95,10 @@ public class UserCommonController {
 
     @ApiOperation("得到用户信息")
     @GetMapping("current/user/info")
-    public Response<UserInfoResponse> getCurrentUserInfo(HttpSession session) {
-        if (session.getAttribute(ConstantValues.SESSION_CURRENT_USER_KEY) != null) {
-            Long currentUserId = Long.valueOf(session.getAttribute(ConstantValues.SESSION_CURRENT_USER_KEY).toString());
-            FindSingleUserInfoRequest request = new FindSingleUserInfoRequest(currentUserId);
-            return this.userFacade.findSingleUserInfoById(request);
+    public Response<UserInfoResponse> getCurrentUserInfo(HttpServletRequest servletRequest) {
+        Long userId = getUserId();
+        if (userId != null) {
+            return this.userFacade.findSingleUserInfoById(FindSingleUserInfoRequest.builder().userId(userId).build());
         } else {
             return Response.fail("not.login");
         }

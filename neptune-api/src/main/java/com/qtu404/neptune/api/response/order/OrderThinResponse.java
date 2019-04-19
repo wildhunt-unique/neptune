@@ -18,9 +18,6 @@ import java.util.Date;
 public class OrderThinResponse implements Serializable {
     private static final long serialVersionUID = -1534653513336032877L;
 
-    @ApiModelProperty("订单行id")
-    private Long orderLineId;
-
     @ApiModelProperty("订单id")
     private Long orderId;
 

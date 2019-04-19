@@ -26,5 +26,6 @@ public class ConstantValues {
 
     // 最大留言长度
     public static final Integer MAX_NOTE_LENGTH = 127;
+    public static final String UUID_PREFIX = "QTU404_UUID";
     public static String SHOP_ID_KEY = "shopId";
 }

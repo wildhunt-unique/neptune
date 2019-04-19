@@ -184,7 +184,9 @@ public class OrderFacadeImpl implements OrderFacade {
             List<OrderLine> orderLineList = this.orderLineReadService.findByOrderId(order.getId());
 
             OrderThinResponse orderThinResponse = this.orderConverter.model2ThinResponse(order);
-            List<OrderLineThinResponse> orderLineThinResponseList = orderLineList.stream().map(this.orderLineConverter::model2ThinResponse).collect(Collectors.toList());
+            List<OrderLineThinResponse> orderLineThinResponseList = orderLineList.stream()
+                    .map(this.orderLineConverter::model2ThinResponse)
+                    .collect(Collectors.toList());
 
             return OrderDetailResponse.builder()
                     .orderLineThinResponseList(orderLineThinResponseList)

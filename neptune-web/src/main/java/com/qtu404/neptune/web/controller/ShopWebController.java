@@ -6,10 +6,8 @@ import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.util.model.Response;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

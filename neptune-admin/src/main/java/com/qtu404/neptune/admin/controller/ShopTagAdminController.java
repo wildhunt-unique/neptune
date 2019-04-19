@@ -6,12 +6,10 @@ import com.qtu404.neptune.api.request.tag.TagCreateRequest;
 import com.qtu404.neptune.api.request.tag.TagDeleteRequest;
 import com.qtu404.neptune.api.request.tag.TagUpdateRequest;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.web.common.util.UserUtils;
+import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -26,8 +24,8 @@ public class ShopTagAdminController {
 
     @PutMapping("create")
     @ApiOperation("创建店铺标签")
-    public Response<Long> create(@RequestBody TagCreateRequest request, HttpSession session) {
-        UserUtils.getId(session);// TODO: 2019/3/7 check user
+    public Response<Long> create(@RequestBody TagCreateRequest request) {
+        RequestContext.getUserId();// TODO: 2019/3/7 check user
         return this.shopTagFacade.create(request);
     }
 

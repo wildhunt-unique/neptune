@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.request.user.*;
 import com.qtu404.neptune.api.response.user.UserInfoResponse;
-import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.util.model.MyJSON;
 import com.qtu404.neptune.util.model.Response;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
-import static com.qtu404.neptune.web.common.util.UserUtils.getUserId;
+import static com.qtu404.neptune.web.common.util.RequestContext.getUserId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com

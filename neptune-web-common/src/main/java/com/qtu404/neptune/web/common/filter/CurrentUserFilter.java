@@ -6,6 +6,7 @@ import com.qtu404.neptune.api.request.user.UserGetFromRedisRequest;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.util.RequestContext;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -13,9 +14,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Objects;
-
-import static com.qtu404.neptune.web.common.util.UserUtils.setUser;
+import static com.qtu404.neptune.web.common.util.RequestContext.setUuid;
 
 /**
  * @author DingXing wildhunt_geralt@foxmail.com
@@ -24,8 +23,6 @@ import static com.qtu404.neptune.web.common.util.UserUtils.setUser;
 @Component
 @WebFilter(urlPatterns = "/api/*",filterName = "currentUserFilter")
 public class CurrentUserFilter implements Filter {
-    @Reference
-    private UserFacade userFacade;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -44,17 +41,9 @@ public class CurrentUserFilter implements Filter {
                   break;
               }
           }
-          if (Objects.isNull(tokenValue)){
-              setUser(null);
-          }else {
-              Response<UserThinResponse> userThinResponse = this.userFacade.getFromRedis(UserGetFromRedisRequest.builder().key(tokenValue).build());
-              if (userThinResponse.isSuccess() && userThinResponse.getResult()!=null){
-                  setUser(userThinResponse.getResult());
-              }else {
-                  setUser(null);
-              }
-          }
+          setUuid(tokenValue);
       }
+      chain.doFilter(request,response);
     }
 
     @Override

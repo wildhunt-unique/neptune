@@ -40,10 +40,12 @@ public class CurrentUserFilter implements Filter {
             if (request instanceof HttpServletRequest) {
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
                 Cookie[] cookies = httpRequest.getCookies();
-                for (Cookie token : cookies) {
-                    if (token != null && token.getName() != null && token.getName().equals(ConstantValues.UUID_PREFIX)) {
-                        tokenValue = token.getValue();
-                        break;
+                if (cookies!=null){
+                    for (Cookie token : cookies) {
+                        if (token != null && token.getName() != null && token.getName().equals(ConstantValues.UUID_PREFIX)) {
+                            tokenValue = token.getValue();
+                            break;
+                        }
                     }
                 }
             }

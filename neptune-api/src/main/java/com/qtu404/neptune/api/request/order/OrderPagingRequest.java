@@ -16,6 +16,9 @@ import java.io.Serializable;
 public class OrderPagingRequest extends AbstractPagingRequest implements Serializable {
     private static final long serialVersionUID = 1792871564252216081L;
 
+    @ApiModelProperty("订单id")
+    private Long orderId;
+
     @ApiModelProperty(value = "店铺id")
     private Long shopId;
 

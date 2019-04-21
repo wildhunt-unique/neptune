@@ -205,6 +205,9 @@ public class OrderFacadeImpl implements OrderFacade {
     public Response<Paging<OrderThinResponse>> paging(OrderPagingRequest request) {
         return execute(request, param -> {
             Map<String, Object> condition = request.toMap();
+            if (Objects.nonNull(request.getOrderId())){
+                condition.put("id", request.getOrderId());
+            }
             Paging<Order> orderPaging = this.orderReadService.paging(condition);
             return new Paging<>(
                     orderPaging.getTotal(),

@@ -95,10 +95,11 @@ public class UserCommonController {
 
     @ApiOperation("得到用户信息")
     @GetMapping("current/user/info")
-    public Response<UserInfoResponse> getCurrentUserInfo(HttpServletRequest servletRequest) {
+    public Response<UserInfoResponse> getCurrentUserInfo(FindSingleUserInfoRequest request) {
         Long userId = getUserId();
         if (userId != null) {
-            return this.userFacade.findSingleUserInfoById(FindSingleUserInfoRequest.builder().userId(userId).build());
+            request.setUserId(userId);
+            return this.userFacade.findSingleUserInfoById(request);
         } else {
             return Response.fail("not.login");
         }
@@ -106,9 +107,16 @@ public class UserCommonController {
 
     @ApiOperation("注销")
     @GetMapping("logout")
-    public Response<Boolean> logout(HttpSession session) {
-        if (session.getAttribute(ConstantValues.SESSION_CURRENT_USER_KEY) != null) {
-            session.setAttribute(ConstantValues.SESSION_CURRENT_USER_KEY, null);
+    public Response<Boolean> logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (Objects.nonNull(cookies)) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName() != null && cookie.getName().equals(ConstantValues.UUID_PREFIX)) {
+                    cookie.setValue(null);
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
         }
         return Response.success(Boolean.TRUE);
     }

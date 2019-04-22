@@ -120,12 +120,11 @@ public class ShopFacadeImpl implements ShopFacade {
                 toCreateTagBinding = this.tagReadService.findByIds(request.getTagIds()).stream()
                         .filter(tag -> tag.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
                         .map(tag -> {
-                            TagBinding toCreateTag = new TagBinding();
-                            toCreateTag.setTagId(tag.getId());
-                            toCreateTag.setTargetId(toCreate.getId());
-                            toCreateTag.setType(TagTypeEnum.SHOP.getCode());
-                            toCreateTag.setStatus(DataStatusEnum.NORMAL.getCode());
-                            return toCreateTag;
+                            TagBinding toCreateBinding = new TagBinding();
+                            toCreateBinding.setTagId(tag.getId());
+                            toCreateBinding.setType(TagTypeEnum.SHOP.getCode());
+                            toCreateBinding.setStatus(DataStatusEnum.NORMAL.getCode());
+                            return toCreateBinding;
                         }).collect(Collectors.toList());
             }
             this.shopWriteService.createShop(seller,toCreate,toCreateTagBinding);

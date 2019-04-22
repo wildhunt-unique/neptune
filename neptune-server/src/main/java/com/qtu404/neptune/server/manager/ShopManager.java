@@ -40,6 +40,9 @@ public class ShopManager {
     public void createShop(User seller, Shop toCreate, List<TagBinding> toCreateTagBinding) {
         shopDao.save(toCreate);
         if (!CollectionUtils.isEmpty(toCreateTagBinding)) {
+            toCreateTagBinding.forEach(binding -> {
+                binding.setTargetId(toCreate.getId());
+            });
             tagBindingDao.save(toCreateTagBinding);
         }
         if (Objects.isNull((seller.getExtra()))) {
@@ -49,7 +52,6 @@ public class ShopManager {
         } else {
             seller.getExtra().put(ConstantValues.SHOP_ID_KEY, toCreate.getId());
         }
-
         userDao.update(seller);
     }
 }

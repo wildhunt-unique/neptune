@@ -2,11 +2,14 @@ package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.qtu404.neptune.api.facade.OrderFacade;
 import com.qtu404.neptune.api.request.order.*;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.api.response.order.OrderLineThinResponse;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
+import com.qtu404.neptune.common.constant.ConstantValues;
+import com.qtu404.neptune.common.constant.ExtraKey;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.common.enums.SwitchStatusEnum;
 import com.qtu404.neptune.domain.model.*;
@@ -119,6 +122,7 @@ public class OrderFacadeImpl implements OrderFacade {
                 toCreateOrderLine.setItemId(existItem.getId());
                 toCreateOrderLine.setItemAttribute(item.getItemAttribute());
                 toCreateOrderLine.setItemName(existItem.getName());
+                toCreateOrderLine.setItemImage(existItem.getMainImage());
                 // 支付信息
                 toCreateOrderLine.setPaidAmount(item.getPaidAmount());
                 toCreateOrderLine.setQuantity(item.getQuantity());
@@ -140,6 +144,10 @@ public class OrderFacadeImpl implements OrderFacade {
             toCreateOrder.setReceiveStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setStatus(DataStatusEnum.NORMAL.getCode());
+            // 将用户电话号码存入extra
+            Map<String, Object> extra = Maps.newHashMap();
+            extra.put(ExtraKey.ORDER_BUYER_MOBILE, buyer.getMobile());
+            toCreateOrder.setExtra(extra);
 
             this.orderWriteService.createOrder(toCreateOrder, toCreateOrderLineList);
             return toCreateOrder.getId();
@@ -205,14 +213,21 @@ public class OrderFacadeImpl implements OrderFacade {
     public Response<Paging<OrderThinResponse>> paging(OrderPagingRequest request) {
         return execute(request, param -> {
             Map<String, Object> condition = request.toMap();
-            if (Objects.nonNull(request.getOrderId())){
+            if (Objects.nonNull(request.getOrderId())) {
                 condition.put("id", request.getOrderId());
             }
             Paging<Order> orderPaging = this.orderReadService.paging(condition);
             return new Paging<>(
                     orderPaging.getTotal(),
                     orderPaging.getData().stream()
-                            .map(this.orderConverter::model2ThinResponse)
+                            .map(e -> {
+                                OrderThinResponse response = this.orderConverter.model2ThinResponse(e);
+                                if (Objects.nonNull(e.getExtra())) {
+                                    Object mobile = e.getExtra().get(ExtraKey.ORDER_BUYER_MOBILE);
+                                    response.setBuyerMobile(Objects.nonNull(mobile) ? mobile.toString() : ConstantValues.BLANK);
+                                }
+                                return response;
+                            })
                             .collect(Collectors.toList())
             );
         });

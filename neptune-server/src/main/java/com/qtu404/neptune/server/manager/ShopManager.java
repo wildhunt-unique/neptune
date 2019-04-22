@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.manager;
 
+import com.google.common.collect.Maps;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.domain.model.TagBinding;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -39,7 +42,14 @@ public class ShopManager {
         if (!CollectionUtils.isEmpty(toCreateTagBinding)) {
             tagBindingDao.save(toCreateTagBinding);
         }
-        seller.getExtra().put(ConstantValues.SHOP_ID_KEY, toCreate.getId());
+        if (Objects.isNull((seller.getExtra()))) {
+            Map<String, Object> extra = Maps.newHashMap();
+            extra.put(ConstantValues.SHOP_ID_KEY, toCreate.getId());
+            seller.setExtra(extra);
+        } else {
+            seller.getExtra().put(ConstantValues.SHOP_ID_KEY, toCreate.getId());
+        }
+
         userDao.update(seller);
     }
 }

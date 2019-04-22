@@ -49,8 +49,6 @@ public class ShopFacadeImpl implements ShopFacade {
 
     private final UserReadService userReadService;
 
-    private final UserWriteService userWriteService;
-
     private final ShopConverter shopConverter;
 
     private final ItemReadService itemReadService;
@@ -68,7 +66,7 @@ public class ShopFacadeImpl implements ShopFacade {
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, UserWriteService userWriteService, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter,TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -77,7 +75,6 @@ public class ShopFacadeImpl implements ShopFacade {
         this.shopCategoryReadService = shopCategoryReadService;
         this.shopCategoryConverter = shopCategoryConverter;
         this.itemConverter = itemConverter;
-        this.userWriteService = userWriteService;
         this.tagReadService = tagReadService;
         this.tagBindingWriteService = tagBindingWriteService;
         this.tagBindingReadService = tagBindingReadService;
@@ -146,13 +143,13 @@ public class ShopFacadeImpl implements ShopFacade {
             Shop existShop = this.shopReadService.fetchById(request.getShopId());
             ParamUtil.nonExist(existShop, "shop");
 
-            User user = this.userReadService.fetchById(request.getUserId());
-            ParamUtil.nonExist(user, "user");
+            User operator = this.userReadService.fetchById(request.getOperator());
+            ParamUtil.nonExist(operator, "user");
 
             // 不是店主
-            if (!user.getId().equals(existShop.getUserId())) {
+            if (!operator.getId().equals(existShop.getUserId())) {
                 // 也不是管理员
-                if (!user.getType().equals(UserTypeEnum.ADMIN.getCode())) {
+                if (!operator.getType().equals(UserTypeEnum.ADMIN.getCode())) {
                     throw new IllegalArgumentException("illegal.op");
                 }
             }

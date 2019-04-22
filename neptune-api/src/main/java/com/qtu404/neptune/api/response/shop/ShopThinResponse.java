@@ -1,11 +1,13 @@
 package com.qtu404.neptune.api.response.shop;
 
+import com.qtu404.neptune.api.response.tag.TagThinListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -39,4 +41,7 @@ public class ShopThinResponse implements Serializable {
 
     @ApiModelProperty("店铺状态 1:营业 -1:歇业 -2:冻结")
     private Integer status;
+
+    @ApiModelProperty("店铺标签")
+    private List<TagThinListResponse> shopTagList;
 }

@@ -29,7 +29,7 @@ public class ShopUpdateRequest extends AbstractRequest implements Serializable {
     private Long shopId;
 
     @ApiModelProperty(hidden = true)
-    private Long userId;
+    private Long operator;
 
     @ApiModelProperty("卖家名")
     private String userName;
@@ -59,7 +59,7 @@ public class ShopUpdateRequest extends AbstractRequest implements Serializable {
     public void checkParam() {
         super.checkParam();
         ParamUtil.nonNull(this.shopId, "shop.id");
-        ParamUtil.nonNull(this.userId, "user.id");
+        ParamUtil.nonNull(this.operator, "user.id");
         if (Objects.nonNull(status)) {
             if (status != -2 && status != 1) {
                 throw new IllegalArgumentException("illegal.status");

@@ -36,7 +36,7 @@ public class ShopAdminController {
     public Response<Boolean> updateShopInfo(@RequestBody ShopUpdateRequest request) {
         Long userId = RequestContext.getUserId();
         if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
-        request.setUserId(userId);
+        request.setOperator(userId);
         return this.shopFacade.updateShopInfo(request);
     }
 }

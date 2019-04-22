@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/18 下午6:55
@@ -25,8 +27,7 @@ public class OrderWebController {
     @ApiOperation("订单创建")
     @PostMapping("create")
     public Response<Long> createOrder(@RequestBody OrderCreateRequest request, HttpSession session) {
-        Long userId = RequestContext.getUserId();
-        request.setBuyerId(userId);
-        return this.orderFacade.createOrder(request);
+        request.setBuyerId(RequestContext.getUserId());
+        return assertResponse(this.orderFacade.createOrder(request));
     }
 }

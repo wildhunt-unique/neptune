@@ -14,6 +14,8 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 下午5:33
@@ -28,24 +30,24 @@ public class ItemAdminController {
     @ApiOperation("创建商品")
     @PutMapping("create")
     public Response<Long> createItem(@RequestBody ItemCreateRequest request){
-        return this.itemFacade.createItem(request);
+        return assertResponse(this.itemFacade.createItem(request));
     }
 
     @ApiOperation("商品设置")
     @PostMapping("update")
     public Response<Boolean> update(@RequestBody ItemUpdateRequest request){
-        return this.itemFacade.update(request);
+        return assertResponse(this.itemFacade.update(request));
     }
 
     @ApiOperation("库存设置")
     @PostMapping("adjust")
     public Response<Boolean> adjust(@RequestBody ItemAdjustRequest request){
-        return this.itemFacade.adjust(request);
+        return assertResponse(this.itemFacade.adjust(request));
     }
 
     @ApiOperation("商品分页")
     @GetMapping("paging")
     public Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request){
-        return this.itemFacade.paging(request);
+        return assertResponse(this.itemFacade.paging(request));
     }
 }

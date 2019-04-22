@@ -1,6 +1,4 @@
-package com.qtu404.neptune.util.model;
-
-import java.io.Serializable;
+package com.qtu404.neptune.util.model.exception;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com

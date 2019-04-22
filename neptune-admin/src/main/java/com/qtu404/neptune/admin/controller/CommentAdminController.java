@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wildhunt_geralt@foxmail.com
  * @date 2019/4/15
@@ -25,6 +27,6 @@ public class CommentAdminController {
     @ApiOperation("显示/隐藏")
     @PostMapping("enable")
     public Response<Boolean> enable(@RequestBody CommentEnableRequest request){
-        return this.commentFacade.enableComment(request);
+        return assertResponse(this.commentFacade.enableComment(request));
     }
 }

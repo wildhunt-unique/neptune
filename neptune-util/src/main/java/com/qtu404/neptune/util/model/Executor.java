@@ -1,6 +1,7 @@
 package com.qtu404.neptune.util.model;
 
 import com.google.common.base.Throwables;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Function;

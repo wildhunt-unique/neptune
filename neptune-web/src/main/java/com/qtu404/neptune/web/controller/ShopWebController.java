@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/1 下午1:26
@@ -23,6 +25,6 @@ public class ShopWebController {
 
     @GetMapping("get/detail")
     public Response<ShopDetailResponse> getDetail(ShopDetailRequest request) {
-        return this.shopFacade.getShopDetail(request);
+        return assertResponse(this.shopFacade.getShopDetail(request));
     }
 }

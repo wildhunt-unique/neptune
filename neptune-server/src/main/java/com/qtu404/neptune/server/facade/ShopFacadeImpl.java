@@ -18,7 +18,7 @@ import com.qtu404.neptune.server.converter.ShopConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.util.model.ServiceException;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import com.qtu404.neptune.api.facade.ShopFacade;
 import lombok.extern.slf4j.Slf4j;

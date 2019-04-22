@@ -14,16 +14,15 @@ import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.domain.service.UserWriteService;
 import com.qtu404.neptune.server.converter.UserConverter;
 import com.qtu404.neptune.util.model.*;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 import com.qtu404.neptune.util.redis.RedisManager;
 import com.qtu404.neptune.util.sms.SMSsender;
 import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.response.user.UserInfoResponse;
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -146,7 +145,7 @@ public class UserFacadeImpl implements UserFacade {
 
             // 检查手机号唯一
             if (Objects.nonNull(user.getMobile())) {
-                Boolean mobileExist = AssertUtil.assertResponse(this.existPhone(ExistPhoneRequest.builder().mobile(user.getMobile()).build()));
+                Boolean mobileExist = AssertUtil.assertResponseResult(this.existPhone(ExistPhoneRequest.builder().mobile(user.getMobile()).build()));
                 if (mobileExist) {
                     throw new IllegalArgumentException("mobile.already.exist");
                 }
@@ -154,7 +153,7 @@ public class UserFacadeImpl implements UserFacade {
 
             // 检查用户名唯一
             if (Objects.nonNull(user.getUsername())) {
-                Boolean usernameExist = AssertUtil.assertResponse(this.existUsername(ExistUsernameRequest.builder().username(user.getUsername()).build()));
+                Boolean usernameExist = AssertUtil.assertResponseResult(this.existUsername(ExistUsernameRequest.builder().username(user.getUsername()).build()));
                 if (usernameExist) {
                     throw new IllegalArgumentException("username.already.exist");
                 }
@@ -162,7 +161,7 @@ public class UserFacadeImpl implements UserFacade {
 
             // 检查邮箱唯一
             if (Objects.nonNull(user.getEmail())) {
-                Boolean emailExist = AssertUtil.assertResponse(this.existEmail(ExistEmailRequest.builder().email(user.getEmail()).build()));
+                Boolean emailExist = AssertUtil.assertResponseResult(this.existEmail(ExistEmailRequest.builder().email(user.getEmail()).build()));
                 if (emailExist) {
                     throw new IllegalArgumentException("email.already.exist");
                 }

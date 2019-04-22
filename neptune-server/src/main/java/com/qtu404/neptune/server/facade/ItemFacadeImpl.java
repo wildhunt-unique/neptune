@@ -15,7 +15,7 @@ import com.qtu404.neptune.server.converter.ItemConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.util.model.ServiceException;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

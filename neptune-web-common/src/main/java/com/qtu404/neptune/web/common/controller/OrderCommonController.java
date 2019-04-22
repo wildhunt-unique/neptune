@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 @Api(value = "订单-通用接口", tags = "订单-通用接口")
 @RestController
 @RequestMapping("api/common/order/")
@@ -21,6 +23,6 @@ public class OrderCommonController {
     @ApiOperation("查看订单详情")
     @GetMapping("get/detail")
     public Response<OrderDetailResponse> getOrderDetail(OrderDetailRequest request) {
-        return this.orderFacade.getOrderDetail(request);
+        return assertResponse(this.orderFacade.getOrderDetail(request));
     }
 }

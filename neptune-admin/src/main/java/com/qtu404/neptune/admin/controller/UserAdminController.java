@@ -11,6 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/13 上午10:15
@@ -25,13 +27,13 @@ public class UserAdminController {
     @ApiOperation("用户分页")
     @GetMapping("paging")
     public Response<Paging<UserThinResponse>> userPaging(UserPagingRequest request){
-        return this.userFacade.paging(request);
+        return assertResponse(this.userFacade.paging(request));
     }
 
 
     @ApiOperation("用户禁用/启用")
     @PutMapping("update/status")
     public Response<Boolean> userStatus(@RequestBody UserStatusUpdateRequest request){
-        return this.userFacade.updateStatus(request);
+        return assertResponse(this.userFacade.updateStatus(request));
     }
 }

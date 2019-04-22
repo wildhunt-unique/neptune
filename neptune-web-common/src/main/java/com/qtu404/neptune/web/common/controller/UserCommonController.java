@@ -7,6 +7,7 @@ import com.qtu404.neptune.api.response.user.UserInfoResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.util.model.MyJSON;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.util.model.exception.RestException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
 import static com.qtu404.neptune.web.common.util.RequestContext.getUserId;
 
 /**
@@ -37,43 +39,43 @@ public class UserCommonController {
         if (loginResponse.isSuccess()) {
             String tokenValue = MyJSON.md5(loginResponse.getResult().toString());
             Cookie token = new Cookie(ConstantValues.UUID_PREFIX, tokenValue);
-            token.setMaxAge(1000 * 60 * 24);
+            token.setMaxAge(60 * 60 * 24 * 180);
             token.setPath("/");
             response.addCookie(token);
-            return Response.success(Objects.nonNull(loginResponse.getResult()));
+            return assertResponse(Response.success(Objects.nonNull(loginResponse.getResult())));
         } else {
-            return Response.fail(loginResponse.getError());
+            throw new RestException(loginResponse.getError());
         }
     }
 
     @ApiOperation("短信登录-发送短信验证码")
     @PostMapping("login/sms/send")
     public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request, HttpSession session) {
-        return Response.fail("error");
+        return assertResponse(Response.fail("error"));
     }
 
     @ApiOperation("短信登录-登录验证")
     @PostMapping("login/sms/verify")
     public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request, HttpSession session) {
-        return Response.fail("error");
+        return assertResponse(Response.fail("error"));
     }
 
     @ApiOperation("手机号是否已存在")
     @GetMapping("exist/mobile")
     public Response<Boolean> existMobile(ExistPhoneRequest request) {
-        return this.userFacade.existPhone(request);
+        return assertResponse(this.userFacade.existPhone(request));
     }
 
     @ApiOperation("昵称是否已存在")
     @GetMapping("exist/nickname")
     public Response<Boolean> existNickname(ExistUsernameRequest request) {
-        return this.userFacade.existUsername(request);
+        return assertResponse(this.userFacade.existUsername(request));
     }
 
     @ApiOperation("邮箱是否已存在")
     @GetMapping("exist/email")
     public Response<Boolean> existEmail(ExistEmailRequest request) {
-        return this.userFacade.existEmail(request);
+        return assertResponse(this.userFacade.existEmail(request));
     }
 
     @ApiOperation("注册时，发送手机验证码")
@@ -82,27 +84,25 @@ public class UserCommonController {
         String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
         request.setCode(code);
         session.setAttribute(request.getMobile(), code);
-        return this.userFacade.sendRegisterVerificationSMS(request);
+        return assertResponse(this.userFacade.sendRegisterVerificationSMS(request));
     }
 
     @ApiOperation("用户注册")
     @PostMapping("register")
     public Response<Long> register(@RequestBody UserRegistryRequest request, HttpSession session) {
+        // TODO: 2019/4/22 refactor by redis
         String code = (String) session.getAttribute(request.getMobile());
-        if (code == null || !code.equals(request.getCode())) return Response.fail("验证码错误");
-        return this.userFacade.register(request);
+        if (code == null || !code.equals(request.getCode())) {
+            throw new RestException("verify.code.error");
+        }
+        return assertResponse(this.userFacade.register(request));
     }
 
     @ApiOperation("得到用户信息")
     @GetMapping("current/user/info")
     public Response<UserInfoResponse> getCurrentUserInfo(FindSingleUserInfoRequest request) {
-        Long userId = getUserId();
-        if (userId != null) {
-            request.setUserId(userId);
-            return this.userFacade.findSingleUserInfoById(request);
-        } else {
-            return Response.fail("not.login");
-        }
+        request.setUserId(getUserId());
+        return assertResponse(this.userFacade.findSingleUserInfoById(request));
     }
 
     @ApiOperation("注销")
@@ -124,6 +124,6 @@ public class UserCommonController {
     @ApiOperation("修改信息")
     @PostMapping("modify")
     public Response<UserInfoResponse> modifyUserInfo(@RequestBody UserModifyInfoRequest request) {
-        return this.userFacade.modifyUserInfo(request);
+        return assertResponse(this.userFacade.modifyUserInfo(request));
     }
 }

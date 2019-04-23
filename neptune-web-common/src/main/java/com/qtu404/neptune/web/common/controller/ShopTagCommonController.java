@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/7 下午1:56
@@ -25,6 +27,6 @@ public class ShopTagCommonController {
     @GetMapping("list")
     @ApiOperation("获得店铺标签列表")
     public Response<TagThinListResponse> list(TagThinListRequest request){
-        return shopTagFacade.thinList(request);
+        return assertResponse(shopTagFacade.thinList(request));
     }
 }

@@ -6,6 +6,7 @@ import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.request.user.UserGetFromRedisRequest;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.util.model.exception.AuthorizationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -25,16 +26,14 @@ public class RequestContext {
 
     private static Map<String, UserThinResponse> uuidToUser = new ConcurrentHashMap<>();
 
-    public static Long getUserId() {
+    public static Long getUserId() throws AuthorizationException {
         String currentToken = uuid.get();
         if (StringUtils.isBlank(currentToken)) {
-            // TODO: 2019/4/19 throw exception
-            return null;
+            throw new AuthorizationException("not.login");
         }
         UserThinResponse user = setAndGetUser(currentToken);
         if (Objects.isNull(user)) {
-            // TODO: 2019/4/19 throw exception
-            return null;
+            throw new AuthorizationException("not.login");
         } else {
             return user.getUserId();
         }

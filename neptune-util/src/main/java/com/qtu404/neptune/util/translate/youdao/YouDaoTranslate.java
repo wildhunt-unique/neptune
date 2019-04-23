@@ -1,7 +1,7 @@
 package com.qtu404.neptune.util.translate.youdao;
 
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.util.model.ServiceException;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 import com.qtu404.neptune.util.translate.TranslateRequest;
 import com.qtu404.neptune.util.translate.TranslateTemplate;
 import lombok.extern.slf4j.Slf4j;

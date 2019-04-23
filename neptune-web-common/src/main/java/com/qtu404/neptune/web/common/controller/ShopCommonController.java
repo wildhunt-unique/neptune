@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/8 下午3:09
@@ -28,12 +30,12 @@ public class ShopCommonController {
     @GetMapping("paging")
     @ApiOperation("店铺分页查询")
     public Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request){
-        return this.shopFacade.shopPaging(request);
+        return assertResponse(this.shopFacade.shopPaging(request));
     }
 
     @GetMapping("category/list")
     @ApiOperation("店铺类目列表")
     public Response<ShopCategoryListResponse> shopCategoryList(ShopCategoryQueryRequest request){
-        return this.shopFacade.queryCategoryList(request);
+        return assertResponse(this.shopFacade.queryCategoryList(request));
     }
 }

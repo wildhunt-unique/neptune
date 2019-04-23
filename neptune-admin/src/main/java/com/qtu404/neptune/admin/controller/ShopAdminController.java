@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-import static com.qtu404.neptune.util.model.Response.NOT_LOGIN;
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+import static com.qtu404.neptune.util.model.Response.NO_AUTH;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -34,9 +35,7 @@ public class ShopAdminController {
     @PostMapping("update")
     @ApiOperation("店铺修改")
     public Response<Boolean> updateShopInfo(@RequestBody ShopUpdateRequest request) {
-        Long userId = RequestContext.getUserId();
-        if (Objects.isNull(userId)) return Response.fail("not.login", NOT_LOGIN);
-        request.setOperator(userId);
-        return this.shopFacade.updateShopInfo(request);
+        request.setOperator(RequestContext.getUserId());
+        return assertResponse(this.shopFacade.updateShopInfo(request));
     }
 }

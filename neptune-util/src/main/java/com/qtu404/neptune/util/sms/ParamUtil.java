@@ -1,6 +1,6 @@
 package com.qtu404.neptune.util.sms;
 
-import com.qtu404.neptune.util.model.ServiceException;
+import com.qtu404.neptune.util.model.exception.ServiceException;
 
 import java.util.Collection;
 

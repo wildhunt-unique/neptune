@@ -13,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/26 上午10:57
@@ -28,18 +30,18 @@ public class CommentCommonController {
     @PostMapping("create")
     public Response<Long> createComment(@RequestBody CommentCreateRequest request) {
         request.setUserId(RequestContext.getUserId());
-        return this.commentFacade.createComment(request);
+        return assertResponse(this.commentFacade.createComment(request));
     }
 
     @ApiOperation("查看评价信息")
     @GetMapping("get")
     public Response<CommentThinResponse> getCommentById(CommentGetRequest request) {
-        return this.commentFacade.getCommentById(request);
+        return assertResponse(this.commentFacade.getCommentById(request));
     }
 
     @ApiOperation("评价信息分页")
     @GetMapping("paging")
     public Response<Paging<CommentThinResponse>> commentPaging(CommentPagingRequest request) {
-        return this.commentFacade.paging(request);
+        return assertResponse(this.commentFacade.paging(request));
     }
 }

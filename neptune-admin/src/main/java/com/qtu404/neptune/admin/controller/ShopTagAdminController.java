@@ -11,6 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/7 下午1:49
@@ -26,18 +28,18 @@ public class ShopTagAdminController {
     @ApiOperation("创建店铺标签")
     public Response<Long> create(@RequestBody TagCreateRequest request) {
         RequestContext.getUserId();// TODO: 2019/3/7 check user
-        return this.shopTagFacade.create(request);
+        return assertResponse(this.shopTagFacade.create(request));
     }
 
     @PostMapping("update")
     @ApiOperation("修改店铺标签")
     public Response<Boolean> update(@RequestBody TagUpdateRequest request) {
-        return this.shopTagFacade.update(request);
+        return assertResponse(this.shopTagFacade.update(request));
     }
 
     @PostMapping("delete")
     @ApiOperation("删除标签，物理删除")
     public Response<Boolean> delete(@RequestBody TagDeleteRequest request) {
-        return this.shopTagFacade.delete(request);
+        return assertResponse(this.shopTagFacade.delete(request));
     }
 }

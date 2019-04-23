@@ -9,6 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/3/1 上午10:45
@@ -23,13 +25,13 @@ public class ShopCategoryAdminController {
     @ApiOperation("创建店铺类目")
     @PutMapping("create")
     public Response<Long> create(@RequestBody ShopCategoryCreateRequest request) {
-        return this.shopCategoryFacade.create(request);
+        return assertResponse(this.shopCategoryFacade.create(request));
     }
 
     @ApiOperation("修改店铺类目")
     @PostMapping("update")
     public Response<Boolean> update(@RequestBody ShopCategoryUpdateRequest request){
-        return this.shopCategoryFacade.update(request);
+        return assertResponse(this.shopCategoryFacade.update(request));
     }
 
 }

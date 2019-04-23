@@ -2,8 +2,6 @@ package com.qtu404.neptune.server.manager;
 
 import com.qtu404.neptune.server.dao.TagBindingDao;
 import com.qtu404.neptune.server.dao.TagDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

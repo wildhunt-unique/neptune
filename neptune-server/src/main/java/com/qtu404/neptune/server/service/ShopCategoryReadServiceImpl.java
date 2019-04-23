@@ -1,7 +1,6 @@
 package com.qtu404.neptune.server.service;
 
 import com.google.common.collect.Maps;
-import com.qtu404.neptune.domain.model.Shop;
 import com.qtu404.neptune.domain.model.ShopCategory;
 import com.qtu404.neptune.domain.service.ShopCategoryReadService;
 import com.qtu404.neptune.server.dao.ShopCategoryDao;

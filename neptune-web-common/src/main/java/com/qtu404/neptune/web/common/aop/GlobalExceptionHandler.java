@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
     static {
         try {
             InputStream input = GlobalExceptionHandler.class.getClassLoader().getResourceAsStream(("message/message_zh.properties"));
+            assert input != null;
             prop.load(new InputStreamReader(input, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();

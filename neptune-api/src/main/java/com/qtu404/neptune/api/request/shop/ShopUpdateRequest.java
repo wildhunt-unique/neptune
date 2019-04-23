@@ -5,12 +5,10 @@ import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com

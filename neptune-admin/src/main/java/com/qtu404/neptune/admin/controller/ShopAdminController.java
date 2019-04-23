@@ -10,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
-import static com.qtu404.neptune.util.model.Response.NO_AUTH;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com

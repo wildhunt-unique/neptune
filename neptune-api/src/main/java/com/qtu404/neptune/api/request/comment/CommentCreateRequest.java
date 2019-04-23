@@ -1,6 +1,5 @@
 package com.qtu404.neptune.api.request.comment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;

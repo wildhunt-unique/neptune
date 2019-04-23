@@ -4,7 +4,6 @@ import com.qtu404.neptune.util.model.AbstractRequest;
 import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.*;
 
 import java.io.Serializable;

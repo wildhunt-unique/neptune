@@ -1,7 +1,6 @@
 package com.qtu404.neptune.api.request.comment;
 
 import com.qtu404.neptune.util.model.AbstractPagingRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

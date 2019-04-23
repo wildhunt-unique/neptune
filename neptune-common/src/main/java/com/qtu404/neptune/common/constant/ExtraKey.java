@@ -1,7 +1,5 @@
 package com.qtu404.neptune.common.constant;
 
-import lombok.Getter;
-
 /**
  * @author DingXing wildhunt_geralt@foxmail.com
  * @date 2019/4/21

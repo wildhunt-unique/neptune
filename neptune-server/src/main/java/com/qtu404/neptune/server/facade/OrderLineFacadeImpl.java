@@ -16,13 +16,8 @@ import org.springframework.stereotype.Component;
 @Service(interfaceClass = OrderLineFacade.class)
 @Slf4j
 public class OrderLineFacadeImpl implements OrderLineFacade {
-    private final OrderLineReadService orderLineReadService;
-
-    private final OrderLineWriteService orderLineWriteService;
 
     @Autowired
-    public OrderLineFacadeImpl(OrderLineReadService orderLineReadService, OrderLineWriteService orderLineWriteService) {
-        this.orderLineReadService = orderLineReadService;
-        this.orderLineWriteService = orderLineWriteService;
+    public OrderLineFacadeImpl() {
     }
 }

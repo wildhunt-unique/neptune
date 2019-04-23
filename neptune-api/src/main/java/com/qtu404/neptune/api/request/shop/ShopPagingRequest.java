@@ -1,7 +1,6 @@
 package com.qtu404.neptune.api.request.shop;
 
 import com.qtu404.neptune.util.model.AbstractPagingRequest;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

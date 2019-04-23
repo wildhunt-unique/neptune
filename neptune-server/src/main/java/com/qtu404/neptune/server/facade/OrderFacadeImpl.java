@@ -45,8 +45,6 @@ public class OrderFacadeImpl implements OrderFacade {
 
     private final OrderWriteService orderWriteService;
 
-    private final OrderLineWriteService orderLineWriteService;
-
     private final UserReadService userReadService;
 
     private final ShopReadService shopReadService;
@@ -60,14 +58,13 @@ public class OrderFacadeImpl implements OrderFacade {
     private final OrderLineConverter orderLineConverter;
 
     @Autowired
-    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineWriteService orderLineWriteService, OrderLineReadService orderLineReadService, OrderLineConverter orderLineConverter) {
+    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineReadService orderLineReadService, OrderLineConverter orderLineConverter) {
         this.orderReadService = orderReadService;
         this.orderWriteService = orderWriteService;
         this.orderConverter = orderConverter;
         this.userReadService = userReadService;
         this.shopReadService = shopReadService;
         this.itemReadService = itemReadService;
-        this.orderLineWriteService = orderLineWriteService;
         this.orderLineReadService = orderLineReadService;
         this.orderLineConverter = orderLineConverter;
     }

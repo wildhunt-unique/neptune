@@ -7,9 +7,10 @@ import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
 
@@ -26,7 +27,7 @@ public class OrderWebController {
 
     @ApiOperation("订单创建")
     @PostMapping("create")
-    public Response<Long> createOrder(@RequestBody OrderCreateRequest request, HttpSession session) {
+    public Response<Long> createOrder(@RequestBody OrderCreateRequest request) {
         request.setBuyerId(RequestContext.getUserId());
         return assertResponse(this.orderFacade.createOrder(request));
     }

@@ -1,7 +1,6 @@
 package com.qtu404.neptune.server.dao;
 
 import com.qtu404.neptune.domain.model.User;
-import com.qtu404.neptune.server.dao.MyBatisDAO;
 import org.springframework.stereotype.Repository;
 
 /**

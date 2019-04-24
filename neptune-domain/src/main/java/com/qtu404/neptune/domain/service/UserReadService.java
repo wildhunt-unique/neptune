@@ -18,4 +18,6 @@ public interface UserReadService {
     User fetchById(Long userId);
 
     Paging<User> paging(Map<String, Object> condition);
+
+    User findSingleByCondition(Map<String, Object> condition);
 }

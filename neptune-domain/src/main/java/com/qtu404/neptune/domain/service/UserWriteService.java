@@ -9,5 +9,5 @@ import com.qtu404.neptune.domain.model.User;
 public interface UserWriteService {
     Boolean update(User user);
 
-    Boolean addUser(User user);
+    Boolean createUser(User user);
 }

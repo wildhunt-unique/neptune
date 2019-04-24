@@ -30,4 +30,5 @@ public class ConstantValues {
     public static final String BLANK = "";
     public static final String SHOP_ID_KEY = "SHOP_ID";
     public static final String REGISTER_SMS_PREFIX="REGISTER_SMS";
+    public static final String LOGIN_SMS_PREFIX = "LOGIN_SMS";
 }

@@ -57,6 +57,12 @@ public class UserFacadeImpl implements UserFacade {
         this.redisManager = redisUtil;
     }
 
+    /**
+     * 使用账号密码登陆
+     *
+     * @param request 账号密码
+     * @return 是否成功
+     */
     @Override
     public Response<Long> login(UserLoginRequest request) {
         return execute(request, param -> {
@@ -76,6 +82,12 @@ public class UserFacadeImpl implements UserFacade {
         });
     }
 
+    /**
+     * 根据token读取会话信息
+     *
+     * @param request token
+     * @return 用户信息
+     */
     @Override
     public Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request) {
         return execute(request, param -> {
@@ -88,28 +100,52 @@ public class UserFacadeImpl implements UserFacade {
         });
     }
 
+    /**
+     * 判断手机号是否已存在
+     *
+     * @param request 手机号
+     * @return 是否存在
+     */
     @Override
     public Response<Boolean> existPhone(ExistPhoneRequest request) {
         return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
+    /**
+     * 判断用户名是否已存在
+     *
+     * @param request 用户名
+     * @return 是否已存在
+     */
     @Override
     public Response<Boolean> existUsername(ExistUsernameRequest request) {
         return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
+    /**
+     * 判断邮箱是否已存在
+     *
+     * @param request 邮箱地址
+     * @return 是否已存在
+     */
     @Override
     public Response<Boolean> existEmail(ExistEmailRequest request) {
         return execute(request, param -> this.userReadService.count(request.toMap()) == 1);
     }
 
+    /**
+     * 发送注册验证码
+     *
+     * @param request 手机号
+     * @return 是否成功
+     */
     @Override
-    public Response<Boolean> sendRegisterVerificationSMS(SendRegisterVerificationSmsRequest request) {
+    public Response<Boolean> sendRegisterSms(UserSendRegisterSmsRequest request) {
         return execute(request, param -> {
             try {
                 String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
                 // TODO: 2019/4/24 set expire time
-                log.info("send.code:{}",code);
+                log.info("send.code:{}", code);
                 this.redisManager.set(RedisManager.Util.getKey(ConstantValues.REGISTER_SMS_PREFIX, request.getMobile()), code);
                 smsSender.sendSmsMessage(request.getMobile(), code);
             } catch (ClientException e) {
@@ -120,6 +156,12 @@ public class UserFacadeImpl implements UserFacade {
         });
     }
 
+    /**
+     * 通过用户id，得到用户信息
+     *
+     * @param request 用户id
+     * @return 用户信息
+     */
     @Override
     public Response<UserInfoResponse> findSingleUserInfoById(FindSingleUserInfoRequest request) {
         return execute(request, param -> {
@@ -132,6 +174,12 @@ public class UserFacadeImpl implements UserFacade {
         });
     }
 
+    /**
+     * 修改用户信息
+     *
+     * @param request 用户信息
+     * @return 是否成功
+     */
     @Override
     public Response<UserInfoResponse> modifyUserInfo(UserModifyInfoRequest request) {
         return execute(request, param -> {
@@ -143,6 +191,9 @@ public class UserFacadeImpl implements UserFacade {
         });
     }
 
+    /**
+     * 注册
+     */
     @Override
     public Response<Long> register(UserRegistryRequest request) {
         return execute(request, param -> {
@@ -193,7 +244,7 @@ public class UserFacadeImpl implements UserFacade {
 
             user.setStatus(DataStatusEnum.NORMAL.getCode());
             user.setType(UserTypeEnum.CUSTOMER.getCode());
-            if (this.userWriteService.addUser(user)) {
+            if (this.userWriteService.createUser(user)) {
                 return user.getId();
             } else {
                 throw new ServiceException("user.register.fail");
@@ -238,6 +289,68 @@ public class UserFacadeImpl implements UserFacade {
             User toUpdate = this.userConverter.request2model(request);
             DataStatusEnum.validate(toUpdate.getStatus());
             return this.userWriteService.update(toUpdate);
+        });
+    }
+
+    /**
+     * 短信登陆-发送验证码
+     *
+     * @param request 手机号
+     * @return 是否成功
+     */
+    @Override
+    public Response<Boolean> sendLoginSms(UserSendLoginSmsRequest request) {
+        return execute(request, param -> {
+            try {
+                String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+                // TODO: 2019/4/24 set expire time
+                log.info("send.login.sms.code:{}", code);
+                this.redisManager.set(RedisManager.Util.getKey(ConstantValues.LOGIN_SMS_PREFIX, request.getMobile()), code);
+                smsSender.sendSmsMessage(request.getMobile(), code);
+                return Boolean.TRUE;
+            } catch (ClientException e) {
+                log.error("fail.to.send.login.sms.by:{}.cause:{}", request, Throwables.getStackTraceAsString(e));
+                throw new ServiceException("sms.send.fail");
+            }
+        });
+    }
+
+    @Override
+    public Response<Long> smsLogin(UserSmsLoginRequest request) {
+        return execute(request, param -> {
+            // 检查验证码
+            String verifyCode = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.LOGIN_SMS_PREFIX, request.getMobile()));
+            if (Objects.isNull(verifyCode) || !verifyCode.equals(request.getCode())) {
+                throw new ServiceException("verify.code.error");
+            }
+            // 查找用户
+            User user = this.userReadService.findSingleByCondition(request.toMap());
+            if (Objects.nonNull(user)) {
+                // 用户存在
+                if (user.getStatus().equals(DataStatusEnum.FREEZE.getCode())) {
+                    throw new ServiceException("user.freeze");
+                }
+            } else {
+                // 用户不存在，则创建一个
+                user = new User();
+                user.setMobile(request.getMobile());
+                // 设置默认昵称
+                String mobile = user.getMobile();
+                if (mobile.length() >= 4) {
+                    user.setNickname("u" + mobile.substring(mobile.length() - 4));
+                }
+                // 设置默认头像
+                user.setAvatar(ConstantValues.DEFAULT_AVATAR);
+                user.setStatus(DataStatusEnum.NORMAL.getCode());
+                user.setType(UserTypeEnum.CUSTOMER.getCode());
+                this.userWriteService.createUser(user);
+                if (Objects.isNull(user.getId())) {
+                    throw new ServiceException("create.user.fail");
+                }
+            }
+            String uuid = MyJSON.md5(user.getId().toString());
+            this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(user));
+            return user.getId();
         });
     }
 }

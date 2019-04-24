@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class SendRegisterVerificationSmsRequest extends AbstractRequest implements Serializable {
+public class UserSendRegisterSmsRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = 1651194469071585519L;
 
     @ApiModelProperty(value = "发到哪个手机号", required = true)

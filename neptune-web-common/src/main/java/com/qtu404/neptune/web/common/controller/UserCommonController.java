@@ -49,14 +49,24 @@ public class UserCommonController {
 
     @ApiOperation("短信登录-发送短信验证码")
     @PostMapping("login/sms/send")
-    public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request) {
-        return assertResponse(Response.fail("error"));
+    public Response<Boolean> smsLoginSend(@RequestBody UserSendLoginSmsRequest request) {
+        return assertResponse(this.userFacade.sendLoginSms(request));
     }
 
     @ApiOperation("短信登录-登录验证")
     @PostMapping("login/sms/verify")
-    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request) {
-        return assertResponse(Response.fail("error"));
+    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginRequest request,HttpServletResponse response) {
+        Response<Long> loginResponse = this.userFacade.smsLogin(request);
+        if (loginResponse.isSuccess()) {
+            String tokenValue = MyJSON.md5(loginResponse.getResult().toString());
+            Cookie token = new Cookie(ConstantValues.UUID_PREFIX, tokenValue);
+            token.setPath("/");
+            token.setMaxAge(60 * 60 * 24 * 180);
+            response.addCookie(token);
+            return assertResponse(Response.success(Objects.nonNull(loginResponse.getResult())));
+        } else {
+            throw new RestException(loginResponse.getError());
+        }
     }
 
     @ApiOperation("手机号是否已存在")
@@ -79,8 +89,8 @@ public class UserCommonController {
 
     @ApiOperation("注册时，发送手机验证码")
     @PostMapping("send/register/verification/sms")
-    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody SendRegisterVerificationSmsRequest request) {
-        return assertResponse(this.userFacade.sendRegisterVerificationSMS(request));
+    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody UserSendRegisterSmsRequest request) {
+        return assertResponse(this.userFacade.sendRegisterSms(request));
     }
 
     @ApiOperation("用户注册")

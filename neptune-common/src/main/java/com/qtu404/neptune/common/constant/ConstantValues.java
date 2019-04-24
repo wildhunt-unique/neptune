@@ -29,4 +29,5 @@ public class ConstantValues {
     public static final String UUID_PREFIX = "QTU404_UUID";
     public static final String BLANK = "";
     public static final String SHOP_ID_KEY = "SHOP_ID";
+    public static final String REGISTER_SMS_PREFIX="REGISTER_SMS";
 }

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
+import com.google.common.base.Throwables;
 import com.qtu404.neptune.api.request.user.*;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
@@ -69,7 +70,7 @@ public class UserFacadeImpl implements UserFacade {
                 throw new ServiceException("user.freeze");
             } else {
                 String uuid = MyJSON.md5(user.getId().toString());
-                this.redisManager.set(ConstantValues.UUID_PREFIX + ":" + uuid, MyJSON.toJSON(user), 0);
+                this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(user));
                 return user.getId();
             }
         });
@@ -78,10 +79,10 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request) {
         return execute(request, param -> {
-            String userJson = this.redisManager.get(ConstantValues.UUID_PREFIX + ":" + request.getKey(), 0);
+            String userJson = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, request.getKey()));
             User user = null;
             if (!StringUtils.isBlank(userJson)) {
-                user = JSONObject.parseObject(userJson,User.class);
+                user = JSONObject.parseObject(userJson, User.class);
             }
             return this.userConverter.model2ThinResponse(user);
         });
@@ -106,10 +107,14 @@ public class UserFacadeImpl implements UserFacade {
     public Response<Boolean> sendRegisterVerificationSMS(SendRegisterVerificationSmsRequest request) {
         return execute(request, param -> {
             try {
-                smsSender.sendSmsMessage(request.getMobile(), request.getCode());
+                String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+                // TODO: 2019/4/24 set expire time
+                log.info("send.code:{}",code);
+                this.redisManager.set(RedisManager.Util.getKey(ConstantValues.REGISTER_SMS_PREFIX, request.getMobile()), code);
+                smsSender.sendSmsMessage(request.getMobile(), code);
             } catch (ClientException e) {
-                e.printStackTrace();
-                return Boolean.FALSE;
+                log.error("fail.to.send.register.sms.by:{}.cause:{}", request, Throwables.getStackTraceAsString(e));
+                throw new ServiceException("sms.send.fail");
             }
             return Boolean.TRUE;
         });
@@ -143,6 +148,12 @@ public class UserFacadeImpl implements UserFacade {
         return execute(request, param -> {
             User user = this.userConverter.request2model(request);
 
+            // 检查验证码
+            String verifyCode = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.REGISTER_SMS_PREFIX, request.getMobile()));
+            if (Objects.isNull(verifyCode) || !verifyCode.equals(request.getCode())) {
+                throw new ServiceException("verify.code.error");
+            }
+
             // 检查手机号唯一
             if (Objects.nonNull(user.getMobile())) {
                 Boolean mobileExist = AssertUtil.assertResponseResult(this.existPhone(ExistPhoneRequest.builder().mobile(user.getMobile()).build()));
@@ -164,6 +175,14 @@ public class UserFacadeImpl implements UserFacade {
                 Boolean emailExist = AssertUtil.assertResponseResult(this.existEmail(ExistEmailRequest.builder().email(user.getEmail()).build()));
                 if (emailExist) {
                     throw new IllegalArgumentException("email.already.exist");
+                }
+            }
+
+            // 设置默认昵称
+            if (Objects.isNull(user.getNickname()) && Objects.nonNull(user.getMobile())) {
+                String mobile = user.getMobile();
+                if (mobile.length() >= 4) {
+                    user.setNickname("u" + mobile.substring(mobile.length() - 4));
                 }
             }
 

@@ -46,6 +46,7 @@ public class UserRegistryRequest extends AbstractRequest implements Serializable
         // TODO: 2019/2/27 检查手机号码的格式
         super.checkParam();
         ParamUtil.nonNull(this.mobile, "mobile");
+        ParamUtil.nonNull(this.code, "verify.code");
         ParamUtil.nonNull(this.password, "password");
     }
 

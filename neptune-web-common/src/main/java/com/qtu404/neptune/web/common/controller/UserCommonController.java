@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
@@ -50,13 +49,13 @@ public class UserCommonController {
 
     @ApiOperation("短信登录-发送短信验证码")
     @PostMapping("login/sms/send")
-    public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request, HttpSession session) {
+    public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request) {
         return assertResponse(Response.fail("error"));
     }
 
     @ApiOperation("短信登录-登录验证")
     @PostMapping("login/sms/verify")
-    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request, HttpSession session) {
+    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request) {
         return assertResponse(Response.fail("error"));
     }
 
@@ -80,21 +79,13 @@ public class UserCommonController {
 
     @ApiOperation("注册时，发送手机验证码")
     @PostMapping("send/register/verification/sms")
-    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody SendRegisterVerificationSmsRequest request, HttpSession session) {
-        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
-        request.setCode(code);
-        session.setAttribute(request.getMobile(), code);
+    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody SendRegisterVerificationSmsRequest request) {
         return assertResponse(this.userFacade.sendRegisterVerificationSMS(request));
     }
 
     @ApiOperation("用户注册")
     @PostMapping("register")
-    public Response<Long> register(@RequestBody UserRegistryRequest request, HttpSession session) {
-        // TODO: 2019/4/22 refactor by redis
-        String code = (String) session.getAttribute(request.getMobile());
-        if (code == null || !code.equals(request.getCode())) {
-            throw new RestException("verify.code.error");
-        }
+    public Response<Long> register(@RequestBody UserRegistryRequest request) {
         return assertResponse(this.userFacade.register(request));
     }
 

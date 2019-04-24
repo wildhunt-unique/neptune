@@ -21,12 +21,8 @@ public class SendRegisterVerificationSmsRequest extends AbstractRequest implemen
     @ApiModelProperty(value = "发到哪个手机号", required = true)
     private String mobile;
 
-    @ApiModelProperty(hidden = true)
-    private String code;
-
     @Override
     public void checkParam() {
         ParamUtil.nonNull(this.mobile, "mobile.not.be.null");
-        ParamUtil.nonNull(this.code, "code.not.be.null");
     }
 }

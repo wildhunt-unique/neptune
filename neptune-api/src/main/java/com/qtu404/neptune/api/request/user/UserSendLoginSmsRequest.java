@@ -10,28 +10,23 @@ import java.io.Serializable;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
- * @date 2019/3/17 上午12:13
+ * @date 2019/3/17 上午12:05
  */
-@ApiModel("短信登录验证")
+@ApiModel("发送登录验证短信")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserSmsLoginVerifyRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = 7153615199078150067L;
+public class UserSendLoginSmsRequest extends AbstractRequest implements Serializable {
+    private static final long serialVersionUID = 4891199107857827683L;
 
-    @ApiModelProperty(value = "手机号", required = true)
+    @ApiModelProperty(value = "手机号",required = true)
     private String mobile;
-
-    @ApiModelProperty(value = "验证码", required = true)
-    private String code;
 
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(mobile, "mobile");
-        // TODO: 2019/3/17 check mobile
-        ParamUtil.nonNull(code, "verify.code");
+        ParamUtil.nonNull(mobile,"mobile");
     }
 }

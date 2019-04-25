@@ -25,7 +25,7 @@ public class UserWriteServiceImpl implements UserWriteService {
     }
 
     @Override
-    public Boolean addUser(User user) {
+    public Boolean createUser(User user) {
         return this.userDao.save(user);
     }
 }

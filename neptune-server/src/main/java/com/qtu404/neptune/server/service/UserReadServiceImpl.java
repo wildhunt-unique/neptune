@@ -45,4 +45,9 @@ public class UserReadServiceImpl implements UserReadService {
     public Paging<User> paging(Map<String, Object> condition) {
         return this.userDao.paging(condition);
     }
+
+    @Override
+    public User findSingleByCondition(Map<String,Object> condition){
+        return this.userDao.querySingleByCondition(condition);
+    }
 }

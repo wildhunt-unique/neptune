@@ -21,7 +21,7 @@ public interface UserFacade {
 
     Response<Boolean> existEmail(ExistEmailRequest request);
 
-    Response<Boolean> sendRegisterVerificationSMS(SendRegisterVerificationSmsRequest request);
+    Response<Boolean> sendRegisterSms(UserSendRegisterSmsRequest request);
 
     Response<UserInfoResponse> findSingleUserInfoById(FindSingleUserInfoRequest request);
 
@@ -32,4 +32,8 @@ public interface UserFacade {
     Response<Paging<UserThinResponse>> paging(UserPagingRequest request);
 
     Response<Boolean> updateStatus(UserStatusUpdateRequest request);
+
+    Response<Boolean> sendLoginSms(UserSendLoginSmsRequest request);
+
+    Response<Long> smsLogin(UserSmsLoginRequest request);
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
@@ -50,14 +49,24 @@ public class UserCommonController {
 
     @ApiOperation("短信登录-发送短信验证码")
     @PostMapping("login/sms/send")
-    public Response<Boolean> smsLoginSend(@RequestBody UserSmsLoginSendRequest request, HttpSession session) {
-        return assertResponse(Response.fail("error"));
+    public Response<Boolean> smsLoginSend(@RequestBody UserSendLoginSmsRequest request) {
+        return assertResponse(this.userFacade.sendLoginSms(request));
     }
 
     @ApiOperation("短信登录-登录验证")
     @PostMapping("login/sms/verify")
-    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginVerifyRequest request, HttpSession session) {
-        return assertResponse(Response.fail("error"));
+    public Response<Boolean> smsLoginVerify(@RequestBody UserSmsLoginRequest request,HttpServletResponse response) {
+        Response<Long> loginResponse = this.userFacade.smsLogin(request);
+        if (loginResponse.isSuccess()) {
+            String tokenValue = MyJSON.md5(loginResponse.getResult().toString());
+            Cookie token = new Cookie(ConstantValues.UUID_PREFIX, tokenValue);
+            token.setPath("/");
+            token.setMaxAge(60 * 60 * 24 * 180);
+            response.addCookie(token);
+            return assertResponse(Response.success(Objects.nonNull(loginResponse.getResult())));
+        } else {
+            throw new RestException(loginResponse.getError());
+        }
     }
 
     @ApiOperation("手机号是否已存在")
@@ -80,21 +89,13 @@ public class UserCommonController {
 
     @ApiOperation("注册时，发送手机验证码")
     @PostMapping("send/register/verification/sms")
-    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody SendRegisterVerificationSmsRequest request, HttpSession session) {
-        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
-        request.setCode(code);
-        session.setAttribute(request.getMobile(), code);
-        return assertResponse(this.userFacade.sendRegisterVerificationSMS(request));
+    public Response<Boolean> sendRegisterVerificationSMS(@RequestBody UserSendRegisterSmsRequest request) {
+        return assertResponse(this.userFacade.sendRegisterSms(request));
     }
 
     @ApiOperation("用户注册")
     @PostMapping("register")
-    public Response<Long> register(@RequestBody UserRegistryRequest request, HttpSession session) {
-        // TODO: 2019/4/22 refactor by redis
-        String code = (String) session.getAttribute(request.getMobile());
-        if (code == null || !code.equals(request.getCode())) {
-            throw new RestException("verify.code.error");
-        }
+    public Response<Long> register(@RequestBody UserRegistryRequest request) {
         return assertResponse(this.userFacade.register(request));
     }
 

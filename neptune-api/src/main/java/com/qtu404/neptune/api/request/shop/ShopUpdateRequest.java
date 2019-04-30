@@ -1,7 +1,7 @@
 package com.qtu404.neptune.api.request.shop;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
+import com.qtu404.neptune.util.model.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -62,6 +62,9 @@ public class ShopUpdateRequest extends AbstractRequest implements Serializable {
             if (status != -2 && status != 1) {
                 throw new IllegalArgumentException("illegal.status");
             }
+        }
+        if (Objects.nonNull(mobile)) {
+            ParamUtil.isPhoneNumber(mobile);
         }
     }
 }

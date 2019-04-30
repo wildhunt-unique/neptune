@@ -2,7 +2,7 @@ package com.qtu404.neptune.api.request.order;
 
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.util.model.AbstractRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
+import com.qtu404.neptune.util.model.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

@@ -1,13 +1,14 @@
 package com.qtu404.neptune.api.request.shop;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
+import com.qtu404.neptune.util.model.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -54,5 +55,8 @@ public class ShopCreateRequest extends AbstractRequest implements Serializable {
         super.checkParam();
         ParamUtil.nonNull(name, "shop.name");
         ParamUtil.nonNull(userId, "user.id");
+        if (Objects.nonNull(mobile)){
+            ParamUtil.isPhoneNumber(mobile);
+        }
     }
 }

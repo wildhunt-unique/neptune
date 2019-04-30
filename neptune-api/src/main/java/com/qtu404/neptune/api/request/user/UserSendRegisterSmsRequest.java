@@ -1,7 +1,7 @@
 package com.qtu404.neptune.api.request.user;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
+import com.qtu404.neptune.util.model.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -24,5 +24,6 @@ public class UserSendRegisterSmsRequest extends AbstractRequest implements Seria
     @Override
     public void checkParam() {
         ParamUtil.nonNull(this.mobile, "mobile.not.be.null");
+        ParamUtil.isPhoneNumber(mobile);
     }
 }

@@ -40,6 +40,7 @@ public abstract class AssertUtil {
         } else if (code.equals(Response.SERVICE_ERROR)) {
             throw new ServiceException(response.getError());
         } else if (code.equals(Response.NO_AUTH)) {
+
             throw new AuthorizationException(response.getError());
         } else {
             throw new ServiceException(response.getError());

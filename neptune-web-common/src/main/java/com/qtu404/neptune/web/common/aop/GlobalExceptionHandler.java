@@ -1,5 +1,6 @@
 package com.qtu404.neptune.web.common.aop;
 
+import com.google.common.base.Throwables;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.exception.AuthorizationException;
 import com.qtu404.neptune.util.model.exception.RestException;
@@ -55,6 +56,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = RestException.class)
     public Response restExceptionHandler(RestException e) {
+        log.error(Throwables.getStackTraceAsString(e));
         return this.translateError(
                 Response.fail(e.getMessage(), Response.ARGUMENT_ERROR)
         );
@@ -63,6 +65,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ServiceException.class)
     public Response serviceExceptionHandler(ServiceException e) {
+        log.error(Throwables.getStackTraceAsString(e));
         return this.translateError(
                 Response.fail(e.getMessage(), Response.SERVICE_ERROR)
         );
@@ -71,6 +74,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public Response otherExceptionHandler(Exception e) {
+        log.error(Throwables.getStackTraceAsString(e));
         return this.translateError(
                 Response.fail("error", Response.SERVICE_ERROR)
         );
@@ -79,6 +83,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = AuthorizationException.class)
     public Response authorizationExceptionHandler(AuthorizationException e) {
+        log.error(Throwables.getStackTraceAsString(e));
         return this.translateError(
                 Response.fail(e.getMessage(), Response.NO_AUTH)
         );
@@ -87,6 +92,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = IllegalArgumentException.class)
     public Response illegalArgumentExceptionHandler(IllegalArgumentException e) {
+        log.error(Throwables.getStackTraceAsString(e));
         return this.translateError(
                 Response.fail(e.getMessage(), Response.ARGUMENT_ERROR)
         );

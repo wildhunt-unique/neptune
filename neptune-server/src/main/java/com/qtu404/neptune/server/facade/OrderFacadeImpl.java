@@ -42,19 +42,12 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Service(interfaceClass = OrderFacade.class)
 public class OrderFacadeImpl implements OrderFacade {
     private final OrderReadService orderReadService;
-
     private final OrderWriteService orderWriteService;
-
     private final UserReadService userReadService;
-
     private final ShopReadService shopReadService;
-
     private final OrderConverter orderConverter;
-
     private final ItemReadService itemReadService;
-
     private final OrderLineReadService orderLineReadService;
-
     private final OrderLineConverter orderLineConverter;
 
     @Autowired

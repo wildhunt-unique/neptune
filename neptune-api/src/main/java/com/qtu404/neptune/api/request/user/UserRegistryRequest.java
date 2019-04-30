@@ -1,7 +1,7 @@
 package com.qtu404.neptune.api.request.user;
 
 import com.qtu404.neptune.util.model.AbstractRequest;
-import com.qtu404.neptune.util.sms.ParamUtil;
+import com.qtu404.neptune.util.model.ParamUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -43,9 +43,9 @@ public class UserRegistryRequest extends AbstractRequest implements Serializable
 
     @Override
     public void checkParam() {
-        // TODO: 2019/2/27 检查手机号码的格式
         super.checkParam();
         ParamUtil.nonNull(this.mobile, "mobile");
+        ParamUtil.isPhoneNumber(this.mobile);
         ParamUtil.nonNull(this.code, "verify.code");
         ParamUtil.nonNull(this.password, "password");
     }

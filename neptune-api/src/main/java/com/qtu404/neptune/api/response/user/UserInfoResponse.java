@@ -13,6 +13,7 @@ import java.util.Map;
  */
 @Data
 @ApiModel("用户信息")
+@Deprecated
 public class UserInfoResponse implements Serializable {
     private static final long serialVersionUID = 1993318882673254101L;
     @ApiModelProperty("id")

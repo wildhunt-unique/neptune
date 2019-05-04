@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.google.common.base.Throwables;
 import com.qtu404.neptune.api.request.user.*;
+import com.qtu404.neptune.api.response.user.UserMetaData;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
@@ -14,12 +15,12 @@ import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.domain.service.UserReadService;
 import com.qtu404.neptune.domain.service.UserWriteService;
 import com.qtu404.neptune.server.converter.UserConverter;
+import com.qtu404.neptune.server.converter.UserMetaDataConverter;
 import com.qtu404.neptune.util.model.*;
 import com.qtu404.neptune.util.model.exception.ServiceException;
 import com.qtu404.neptune.util.redis.RedisManager;
 import com.qtu404.neptune.util.sms.SMSsender;
 import com.qtu404.neptune.api.facade.UserFacade;
-import com.qtu404.neptune.api.response.user.UserInfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,7 +65,7 @@ public class UserFacadeImpl implements UserFacade {
      * @return 是否成功
      */
     @Override
-    public Response<Long> login(UserLoginRequest request) {
+    public Response<String> login(UserLoginRequest request) {
         return execute(request, param -> {
             request.checkParam();
             User user = this.userReadService.list(request.toMap()).stream()
@@ -76,8 +77,8 @@ public class UserFacadeImpl implements UserFacade {
                 throw new ServiceException("user.freeze");
             } else {
                 String uuid = MyJSON.md5(user.getId().toString());
-                this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(user));
-                return user.getId();
+                this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(UserMetaDataConverter.model2Response(user)));
+                return uuid;
             }
         });
     }
@@ -89,14 +90,14 @@ public class UserFacadeImpl implements UserFacade {
      * @return 用户信息
      */
     @Override
-    public Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request) {
+    public Response<UserMetaData> getFromRedis(UserGetFromRedisRequest request) {
         return execute(request, param -> {
-            String userJson = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, request.getKey()));
-            User user = null;
-            if (!StringUtils.isBlank(userJson)) {
-                user = JSONObject.parseObject(userJson, User.class);
+            String userMetaDataJson = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, request.getKey()));
+            UserMetaData userMetaData = null;
+            if (!StringUtils.isBlank(userMetaDataJson)) {
+                userMetaData = JSONObject.parseObject(userMetaDataJson, UserMetaData.class);
             }
-            return this.userConverter.model2ThinResponse(user);
+            return userMetaData;
         });
     }
 
@@ -163,13 +164,13 @@ public class UserFacadeImpl implements UserFacade {
      * @return 用户信息
      */
     @Override
-    public Response<UserInfoResponse> findSingleUserInfoById(FindSingleUserInfoRequest request) {
+    public Response<UserThinResponse> findSingleUserInfoById(FindSingleUserRequest request) {
         return execute(request, param -> {
             User existUser = this.userReadService.fetchById(request.getUserId());
             if (Objects.isNull(existUser)) {
                 throw new ServiceException("user.not.exist");
             } else {
-                return this.userConverter.model2Response(existUser);
+                return this.userConverter.model2ThinResponse(existUser);
             }
         });
     }
@@ -181,13 +182,13 @@ public class UserFacadeImpl implements UserFacade {
      * @return 是否成功
      */
     @Override
-    public Response<UserInfoResponse> modifyUserInfo(UserModifyInfoRequest request) {
+    public Response<UserThinResponse> modifyUserInfo(UserModifyRequest request) {
         return execute(request, param -> {
             User user = this.userReadService.fetchById(request.getId());
             user.setAvatar(request.getAvatar());
             user.setName(request.getName());
             this.userWriteService.update(user);
-            return userConverter.model2Response(user);
+            return userConverter.model2ThinResponse(user);
         });
     }
 
@@ -349,7 +350,7 @@ public class UserFacadeImpl implements UserFacade {
                 }
             }
             String uuid = MyJSON.md5(user.getId().toString());
-            this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(user));
+            this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(UserMetaDataConverter.model2Response(user)));
             return user.getId();
         });
     }

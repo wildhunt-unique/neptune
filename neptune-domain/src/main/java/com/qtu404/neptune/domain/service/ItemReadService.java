@@ -19,4 +19,6 @@ public interface ItemReadService {
     Paging<Item> paging(Map<String, Object> criteria);
 
     List<Item> findByIds(List<Long> ids);
+
+    List<Item> findByCategoryIds(List<Long> categoryIds);
 }

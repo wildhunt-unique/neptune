@@ -1,7 +1,12 @@
 package com.qtu404.neptune.server.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.qtu404.neptune.api.request.shop.*;
+import com.qtu404.neptune.api.response.item.ItemThinResponse;
 import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
@@ -66,7 +71,7 @@ public class ShopFacadeImpl implements ShopFacade {
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter,TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -91,7 +96,7 @@ public class ShopFacadeImpl implements ShopFacade {
         return execute(request, param -> {
             // 卖家校验
             User seller = this.userReadService.fetchById(request.getUserId());
-            AssertUtil.isExist(seller,"user");
+            AssertUtil.isExist(seller, "user");
             if (!ObjectUtils.nullSafeEquals(seller.getStatus(), DataStatusEnum.NORMAL.getCode())) {
                 throw new IllegalArgumentException("user.status.error");
             }
@@ -124,7 +129,7 @@ public class ShopFacadeImpl implements ShopFacade {
                             return toCreateBinding;
                         }).collect(Collectors.toList());
             }
-            this.shopWriteService.createShop(seller,toCreate,toCreateTagBinding);
+            this.shopWriteService.createShop(seller, toCreate, toCreateTagBinding);
             return toCreate.getId();
         });
     }
@@ -271,16 +276,24 @@ public class ShopFacadeImpl implements ShopFacade {
             Map<String, Object> condition = request.toMap();
             condition.put("id", request.getCategoryId());
             List<ShopCategory> categoryList = this.shopCategoryReadService.list(condition);
+            ArrayListMultimap<Long, Item> categoryIdToItemList = ArrayListMultimap.create();
+            if (request.getWithItemInfo()) {
+                List<Item> items = this.itemReadService.findByCategoryIds(categoryList.stream().map(ShopCategory::getId).collect(Collectors.toList()));
+                items.stream()
+                        .filter(Objects::nonNull)
+                        .filter(item -> item.getStatus().equals(DataStatusEnum.NORMAL.getCode()) || item.getStatus().equals(DataStatusEnum.LOCK.getCode()))
+                        .forEach(item -> categoryIdToItemList.put(item.getCategoryId(), item));
+            }
             return ShopCategoryListResponse.builder().categoryList(categoryList.stream()
-                    .filter(e -> e.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
-                    .map(e -> {
-                        ShopCategoryDetailResponse response = this.shopCategoryConverter.model2DetailResponse(e);
+                    .filter(category -> category.getStatus().equals(DataStatusEnum.NORMAL.getCode()))
+                    .map(category -> {
+                        ShopCategoryDetailResponse response = this.shopCategoryConverter.model2DetailResponse(category);
                         if (request.getWithItemInfo()) {
-                            response.setItemThinResponseList(this.itemReadService.findByCategoryId(e.getId()).stream()
-                                    .filter(item -> item.getStatus().equals(DataStatusEnum.NORMAL.getCode()) || item.getStatus().equals(DataStatusEnum.LOCK.getCode()))
-                                    .map(this.itemConverter::model2ThinResponse)
-                                    .collect(Collectors.toList())
-                            );
+                            List<Item> items = categoryIdToItemList.get(category.getId());
+                            List<ItemThinResponse> itemThinResponseList = Objects.isNull(items) ?
+                                    Lists.newArrayList() :
+                                    items.stream().map(itemConverter::model2ThinResponse).collect(Collectors.toList());
+                            response.setItemThinResponseList(itemThinResponseList);
                         }
                         return response;
                     })

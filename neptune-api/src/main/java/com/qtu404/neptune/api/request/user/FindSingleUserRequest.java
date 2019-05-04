@@ -9,24 +9,20 @@ import lombok.*;
 import java.io.Serializable;
 
 
-@ApiModel("改信息")
+@ApiModel("用户信息")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserModifyInfoRequest extends AbstractRequest implements Serializable {
-    private static final long serialVersionUID = -5500255935613531806L;
-    @ApiModelProperty(value = "要改哪个用户", required = true)
-    private Long id;
-    @ApiModelProperty("新名字")
-    private String name;
-    @ApiModelProperty("新头像")
-    private String avatar;
+public class FindSingleUserRequest extends AbstractRequest implements Serializable {
+    private static final long serialVersionUID = 9213294151679558866L;
+    @ApiModelProperty(value = "用户id",hidden = true)
+    private Long userId;
 
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(this.id, "id.not.be.null");
+        ParamUtil.nonNull(userId,"user.id");
     }
 }

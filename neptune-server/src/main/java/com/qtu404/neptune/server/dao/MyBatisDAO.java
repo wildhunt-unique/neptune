@@ -24,7 +24,6 @@ public abstract class MyBatisDAO<T> {
         }
     }
 
-
     private static final String SAVE = "save";
     private static final String SAVES = "saves";
 
@@ -100,6 +99,7 @@ public abstract class MyBatisDAO<T> {
     public Integer count() {
         return this.sqlSession.selectOne(sqlId(COUNT), null);
     }
+
 
     protected String sqlId(String id) {
         return namespaces + "." + id;

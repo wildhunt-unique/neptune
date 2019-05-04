@@ -6,8 +6,10 @@ import com.qtu404.neptune.api.request.comment.CommentCreateRequest;
 import com.qtu404.neptune.api.request.comment.CommentGetRequest;
 import com.qtu404.neptune.api.request.comment.CommentPagingRequest;
 import com.qtu404.neptune.api.response.comment.CommentThinResponse;
+import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.aop.Acl;
 import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,7 @@ public class CommentCommonController {
 
     @ApiOperation("创建评价")
     @PostMapping("create")
+    @Acl(level= AccessLevel.USER)
     public Response<Long> createComment(@RequestBody CommentCreateRequest request) {
         request.setUserId(RequestContext.getUserId());
         return assertResponse(this.commentFacade.createComment(request));
@@ -35,12 +38,14 @@ public class CommentCommonController {
 
     @ApiOperation("查看评价信息")
     @GetMapping("get")
+    @Acl()
     public Response<CommentThinResponse> getCommentById(CommentGetRequest request) {
         return assertResponse(this.commentFacade.getCommentById(request));
     }
 
     @ApiOperation("评价信息分页")
     @GetMapping("paging")
+    @Acl()
     public Response<Paging<CommentThinResponse>> commentPaging(CommentPagingRequest request) {
         return assertResponse(this.commentFacade.paging(request));
     }

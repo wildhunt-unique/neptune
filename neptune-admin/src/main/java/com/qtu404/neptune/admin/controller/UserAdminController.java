@@ -5,8 +5,10 @@ import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.request.user.UserPagingRequest;
 import com.qtu404.neptune.api.request.user.UserStatusUpdateRequest;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
+import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.aop.Acl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ public class UserAdminController {
 
     @ApiOperation("用户分页")
     @GetMapping("paging")
+    @Acl(level= AccessLevel.ADMIN)
     public Response<Paging<UserThinResponse>> userPaging(UserPagingRequest request){
         return assertResponse(this.userFacade.paging(request));
     }
@@ -33,6 +36,7 @@ public class UserAdminController {
 
     @ApiOperation("用户禁用/启用")
     @PutMapping("update/status")
+    @Acl(level= AccessLevel.ADMIN)
     public Response<Boolean> userStatus(@RequestBody UserStatusUpdateRequest request){
         return assertResponse(this.userFacade.updateStatus(request));
     }

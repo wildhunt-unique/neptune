@@ -10,22 +10,22 @@ import java.util.Date;
 
 @Component
 public class OSSHandler {
-    @Value("$qtu404.util.oss.accessKeyId")
+    @Value("${qtu404.util.oss.accessKeyId}")
     private String accessKeySecret;
 
-    @Value("$qtu404.util.oss.accessKeySecret")
+    @Value("${qtu404.util.oss.accessKeySecret}")
     private String accessKeyId;
 
-    @Value("$qtu404.util.oss.endpoint")
+    @Value("${qtu404.util.oss.endpoint}")
     private String endpoint = "http://oss-cn-qingdao.aliyuncs.com";
 
-    @Value("$qtu404.util.oss.bucketName")
+    @Value("${qtu404.util.oss.bucketName}")
     private String bucketName = "qtu-404";
 
-    @Value("$qtu404.util.oss.website")
+    @Value("${qtu404.util.oss.website}")
     private String website = "http://static.qtu404.com/";
 
-    @Value("$qtu404.util.oss.fileFolder")
+    @Value("${qtu404.util.oss.fileFolder}")
     private String fileFolder = "qh/qh-img/";
 
 

@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
+import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.aop.Acl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ public class ShopWebController {
 
     @ApiOperation("获得店铺详情")
     @GetMapping("get/detail")
+    @Acl(level= AccessLevel.BASE)
     public Response<ShopDetailResponse> getDetail(ShopDetailRequest request) {
         return assertResponse(this.shopFacade.getShopDetail(request));
     }

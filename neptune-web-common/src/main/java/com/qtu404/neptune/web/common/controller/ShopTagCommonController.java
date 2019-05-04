@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopTagFacade;
 import com.qtu404.neptune.api.request.tag.TagThinListRequest;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
+import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.aop.Acl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ public class ShopTagCommonController {
 
     @GetMapping("list")
     @ApiOperation("获得店铺标签列表")
+    @Acl(level= AccessLevel.ADMIN)
     public Response<TagThinListResponse> list(TagThinListRequest request){
         return assertResponse(shopTagFacade.thinList(request));
     }

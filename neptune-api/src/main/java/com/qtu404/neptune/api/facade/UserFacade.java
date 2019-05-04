@@ -1,7 +1,7 @@
 package com.qtu404.neptune.api.facade;
 
 import com.qtu404.neptune.api.request.user.*;
-import com.qtu404.neptune.api.response.user.UserInfoResponse;
+import com.qtu404.neptune.api.response.user.UserMetaData;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
@@ -11,9 +11,9 @@ import com.qtu404.neptune.util.model.Response;
  * @date 2019/2/25 下午1:15
  */
 public interface UserFacade {
-    Response<Long> login(UserLoginRequest request);
+    Response<String> login(UserLoginRequest request);
 
-    Response<UserThinResponse> getFromRedis(UserGetFromRedisRequest request);
+    Response<UserMetaData> getFromRedis(UserGetFromRedisRequest request);
 
     Response<Boolean> existPhone(ExistPhoneRequest request);
 
@@ -23,9 +23,9 @@ public interface UserFacade {
 
     Response<Boolean> sendRegisterSms(UserSendRegisterSmsRequest request);
 
-    Response<UserInfoResponse> findSingleUserInfoById(FindSingleUserInfoRequest request);
+    Response<UserThinResponse> findSingleUserInfoById(FindSingleUserRequest request);
 
-    Response<UserInfoResponse> modifyUserInfo(UserModifyInfoRequest request);
+    Response<UserThinResponse> modifyUserInfo(UserModifyRequest request);
 
     Response<Long> register(UserRegistryRequest request);
 

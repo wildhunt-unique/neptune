@@ -4,7 +4,6 @@ import com.qtu404.neptune.api.request.user.UserStatusUpdateRequest;
 import com.qtu404.neptune.api.response.user.UserThinResponse;
 import com.qtu404.neptune.domain.model.User;
 import com.qtu404.neptune.api.request.user.UserRegistryRequest;
-import com.qtu404.neptune.api.response.user.UserInfoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -15,10 +14,6 @@ import org.mapstruct.Mappings;
  */
 @Mapper(componentModel = "spring")
 public interface UserConverter {
-    @Mappings({
-            @Mapping(source = "user.name", target = "name"),
-    })
-    UserInfoResponse model2Response(User user);
 
     @Mappings({
             @Mapping(source = "request.password", target = "password"),

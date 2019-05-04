@@ -3,7 +3,9 @@ package com.qtu404.neptune.admin.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.CommentFacade;
 import com.qtu404.neptune.api.request.comment.CommentEnableRequest;
+import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
+import com.qtu404.neptune.web.common.aop.Acl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +26,10 @@ public class CommentAdminController {
     @Reference
     private CommentFacade commentFacade;
 
+    @Acl(level = AccessLevel.ADMIN)
     @ApiOperation("显示/隐藏")
     @PostMapping("enable")
-    public Response<Boolean> enable(@RequestBody CommentEnableRequest request){
+    public Response<Boolean> enable(@RequestBody CommentEnableRequest request) {
         return assertResponse(this.commentFacade.enableComment(request));
     }
 }

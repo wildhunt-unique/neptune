@@ -51,4 +51,13 @@ public class ItemReadServiceImpl implements ItemReadService {
             return this.itemDao.fetch(ids);
         }
     }
+
+    @Override
+    public List<Item> findByCategoryIds(List<Long> categoryIds) {
+        if (CollectionUtils.isEmpty(categoryIds)) {
+            return Lists.newArrayList();
+        } else {
+            return this.itemDao.findByCategoryIds(categoryIds);
+        }
+    }
 }

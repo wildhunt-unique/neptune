@@ -115,6 +115,16 @@
             #{id}
         </foreach>
     </select>
+    <select id="findByCategoryIds" parameterType="java.util.List" resultMap="FullMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+        WHERE category_id IN
+        <foreach item="categoryIds" collection="list" open="(" separator="," close=")">
+            #{categoryIds}
+        </foreach>
+    </select>
     <select id="listAll" resultMap="FullMap">
         SELECT
         <include refid="cols_all"/>

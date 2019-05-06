@@ -135,6 +135,12 @@ public class UserCommonController {
         token.setPath("/");
         token.setDomain(HOST);
         token.setMaxAge(60 * 60 * 24 * 180);
-        response.addCookie(token);
+
+        Cookie localhostToken = new Cookie(ConstantValues.UUID_PREFIX, tokenValue);
+        localhostToken.setPath("/");
+        localhostToken.setDomain("localhost");
+        localhostToken.setMaxAge(60 * 60 * 24 * 180);
+
+        response.addCookie(localhostToken);
     }
 }

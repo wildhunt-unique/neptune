@@ -25,7 +25,7 @@ public class ItemCreateRequest extends AbstractRequest implements Serializable {
     @ApiModelProperty(value = "类目id", required = true)
     private Long categoryId;
 
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id", hidden = true)
     private Long shopId;
 
     @ApiModelProperty(value = "商品名", required = true)

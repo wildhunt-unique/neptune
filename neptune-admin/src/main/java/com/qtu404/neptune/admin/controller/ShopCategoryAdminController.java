@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+import static com.qtu404.neptune.web.common.util.RequestContext.getShopId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -28,6 +29,7 @@ public class ShopCategoryAdminController {
     @PutMapping("create")
     @Acl(level = AccessLevel.SHOP)
     public Response<Long> create(@RequestBody ShopCategoryCreateRequest request) {
+        request.setShopId(getShopId());
         return assertResponse(this.shopCategoryFacade.create(request));
     }
 
@@ -37,5 +39,4 @@ public class ShopCategoryAdminController {
     public Response<Boolean> update(@RequestBody ShopCategoryUpdateRequest request){
         return assertResponse(this.shopCategoryFacade.update(request));
     }
-
 }

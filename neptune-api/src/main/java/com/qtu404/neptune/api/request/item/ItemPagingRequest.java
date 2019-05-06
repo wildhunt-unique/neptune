@@ -24,7 +24,7 @@ public class ItemPagingRequest extends AbstractPagingRequest implements Serializ
     /**
      * 店铺id
      */
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id", hidden = true)
     private Long shopId;
 
     /**

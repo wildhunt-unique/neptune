@@ -7,12 +7,13 @@ import com.qtu404.neptune.api.request.shop.ShopUpdateRequest;
 import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.aop.Acl;
-import com.qtu404.neptune.web.common.util.RequestContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+import static com.qtu404.neptune.web.common.util.RequestContext.getAccessLevel;
+import static com.qtu404.neptune.web.common.util.RequestContext.getShopId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -36,7 +37,9 @@ public class ShopAdminController {
     @ApiOperation("店铺修改")
     @Acl(level = AccessLevel.SHOP)
     public Response<Boolean> updateShopInfo(@RequestBody ShopUpdateRequest request) {
-        request.setOperator(RequestContext.getUserId());
+        if (getAccessLevel() == AccessLevel.SHOP) {
+            request.setShopId(getShopId());
+        }
         return assertResponse(this.shopFacade.updateShopInfo(request));
     }
 }

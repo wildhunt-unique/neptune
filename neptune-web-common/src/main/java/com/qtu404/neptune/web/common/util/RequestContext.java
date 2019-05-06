@@ -4,11 +4,12 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.UserFacade;
 import com.qtu404.neptune.api.request.user.UserGetFromRedisRequest;
 import com.qtu404.neptune.api.response.user.UserMetaData;
-import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.exception.AuthorizationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+
+import static com.qtu404.neptune.util.model.AssertUtil.sortResponse;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -24,49 +25,37 @@ public class RequestContext {
     private static ThreadLocal<UserMetaData> uuidToUser = new ThreadLocal<>();
 
     public static Long getUserId() {
-        UserMetaData user = setAndGetUser();
-        if (Objects.isNull(user)) {
-            throw new AuthorizationException("not.login");
-        } else {
-            return user.getUserId();
-        }
+        return assertUserExist(getCurrentUser()).getUserId();
     }
 
-    public static Integer getAccessLevel(){
-        UserMetaData user = setAndGetUser();
-        if (Objects.isNull(user)) {
-            throw new AuthorizationException("not.login");
-        } else {
-            return user.getLevel();
-        }
+    public static Integer getAccessLevel() {
+        return assertUserExist(getCurrentUser()).getLevel();
     }
 
-    public static Long getShopId(){
-        UserMetaData user = setAndGetUser();
-        if (Objects.isNull(user)) {
-            throw new AuthorizationException("not.login");
-        } else {
-            return user.getShopId();
-        }
+    public static Long getShopId() {
+        return assertUserExist(getCurrentUser()).getShopId();
     }
 
-    private static UserMetaData setAndGetUser() {
+    private static UserMetaData getCurrentUser() {
         UserMetaData user = uuidToUser.get();
-        if (Objects.nonNull(user)) {
-            return user;
-        } else {
-            String token = uuid.get();
-            if (Objects.isNull(token)){
-                return null;
-            }
-            Response<UserMetaData> response = userFacade.getFromRedis(UserGetFromRedisRequest.builder().key(uuid.get()).build());
-            if (response.isSuccess() && Objects.nonNull(response.getResult())) {
-                uuidToUser.set(response.getResult());
-                return response.getResult();
-            } else {
-                return null;
-            }
+        return Objects.nonNull(user) ?
+                user :
+                Objects.nonNull(uuid.get()) ?
+                        getAndSetUser() :
+                        null;
+    }
+
+    private static UserMetaData getAndSetUser() {
+        UserMetaData user = sortResponse(userFacade.getFromRedis(UserGetFromRedisRequest.builder().key(uuid.get()).build()));
+        uuidToUser.set(user);
+        return user;
+    }
+
+    private static UserMetaData assertUserExist(UserMetaData userMetaData) {
+        if (Objects.isNull(userMetaData)) {
+            throw new AuthorizationException("not.login");
         }
+        return userMetaData;
     }
 
     public static void setUuid(String tokenValue) {

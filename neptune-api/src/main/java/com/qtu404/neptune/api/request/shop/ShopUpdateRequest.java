@@ -23,11 +23,8 @@ import java.util.Objects;
 public class ShopUpdateRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -5344686480504023539L;
 
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id",required = true)
     private Long shopId;
-
-    @ApiModelProperty(hidden = true)
-    private Long operator;
 
     @ApiModelProperty("卖家名")
     private String userName;
@@ -57,7 +54,6 @@ public class ShopUpdateRequest extends AbstractRequest implements Serializable {
     public void checkParam() {
         super.checkParam();
         ParamUtil.nonNull(this.shopId, "shop.id");
-        ParamUtil.nonNull(this.operator, "user.id");
         if (Objects.nonNull(status)) {
             if (status != -2 && status != 1) {
                 throw new IllegalArgumentException("illegal.status");

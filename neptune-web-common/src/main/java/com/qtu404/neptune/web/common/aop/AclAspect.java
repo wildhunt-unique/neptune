@@ -36,8 +36,7 @@ public class AclAspect {
         Acl acl = method.getAnnotation(Acl.class);
         if (Objects.nonNull(acl)) {
             if (AccessLevel.BASE < acl.level()) {
-                Integer currentAclLevel = getAccessLevel();
-                if (currentAclLevel < acl.level()) {
+                if (getAccessLevel() < acl.level()) {
                     throw new RestException("illegal.op");
                 }
             }

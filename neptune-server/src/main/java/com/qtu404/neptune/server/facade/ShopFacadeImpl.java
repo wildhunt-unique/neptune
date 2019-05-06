@@ -144,20 +144,8 @@ public class ShopFacadeImpl implements ShopFacade {
     public Response<Boolean> updateShopInfo(ShopUpdateRequest request) {
         return execute(request, param -> {
             Shop toUpdate = this.shopConverter.updateRequest2Model(request);
-
             Shop existShop = this.shopReadService.fetchById(request.getShopId());
             ParamUtil.nonExist(existShop, "shop");
-
-            User operator = this.userReadService.fetchById(request.getOperator());
-            ParamUtil.nonExist(operator, "user");
-
-            // 不是店主
-            if (!operator.getId().equals(existShop.getUserId())) {
-                // 也不是管理员
-                if (!operator.getType().equals(UserTypeEnum.ADMIN.getCode())) {
-                    throw new IllegalArgumentException("illegal.op");
-                }
-            }
 
             if (!CollectionUtils.isEmpty(request.getTagIds())) {
                 this.tagBindingWriteService.batchSetStatusByTargetIdAndType(toUpdate.getId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.DELETE.getCode());

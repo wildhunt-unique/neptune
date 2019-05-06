@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class ShopCategoryCreateRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -1251480275325070604L;
 
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id", hidden = true)
     private Long shopId;
 
     @ApiModelProperty(value = "类目名", required = true)

@@ -42,3 +42,4 @@ public class ShopCategoryUpdateRequest extends AbstractRequest implements Serial
         ParamUtil.nonNull(shopCategoryId,"shop.category.id");
     }
 }
+

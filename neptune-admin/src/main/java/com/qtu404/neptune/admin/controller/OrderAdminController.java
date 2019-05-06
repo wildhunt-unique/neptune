@@ -14,6 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+import static com.qtu404.neptune.web.common.util.RequestContext.getAccessLevel;
+import static com.qtu404.neptune.web.common.util.RequestContext.getShopId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -37,6 +39,9 @@ public class OrderAdminController {
     @GetMapping("paging")
     @Acl(level = AccessLevel.SHOP)
     public Response<Paging<OrderThinResponse>> paging(OrderPagingRequest request) {
+        if (getAccessLevel() == AccessLevel.SHOP) {
+            request.setShopId(getShopId());
+        }
         return assertResponse(this.orderFacade.paging(request));
     }
 }

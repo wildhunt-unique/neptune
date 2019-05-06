@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
+import static com.qtu404.neptune.web.common.util.RequestContext.getShopId;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -32,6 +33,7 @@ public class ItemAdminController {
     @PutMapping("create")
     @Acl(level = AccessLevel.SHOP)
     public Response<Long> createItem(@RequestBody ItemCreateRequest request){
+        request.setShopId(getShopId());
         return assertResponse(this.itemFacade.createItem(request));
     }
 
@@ -53,6 +55,7 @@ public class ItemAdminController {
     @GetMapping("paging")
     @Acl(level = AccessLevel.SHOP)
     public Response<Paging<ItemThinResponse>> paging(ItemPagingRequest request){
+        request.setShopId(getShopId());
         return assertResponse(this.itemFacade.paging(request));
     }
 }

@@ -27,8 +27,6 @@ public class AclAspect {
     public void aclPointCut() {
     }
 
-    ;
-
     @Around("aclPointCut()")
     public Object before(ProceedingJoinPoint call) throws Throwable {
         MethodSignature signature = (MethodSignature) call.getSignature();

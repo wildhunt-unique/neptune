@@ -95,6 +95,8 @@ public class UserFacadeImpl implements UserFacade {
             String userMetaDataJson = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, request.getKey()));
             UserMetaData userMetaData = null;
             if (!StringUtils.isBlank(userMetaDataJson)) {
+
+
                 userMetaData = JSONObject.parseObject(userMetaDataJson, UserMetaData.class);
             }
             return userMetaData;

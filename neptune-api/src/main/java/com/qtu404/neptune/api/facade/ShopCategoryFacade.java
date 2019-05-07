@@ -1,7 +1,9 @@
 package com.qtu404.neptune.api.facade;
 
 import com.qtu404.neptune.api.request.shop.ShopCategoryCreateRequest;
+import com.qtu404.neptune.api.request.shop.ShopCategoryListRequest;
 import com.qtu404.neptune.api.request.shop.ShopCategoryUpdateRequest;
+import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.util.model.Response;
 
 /**

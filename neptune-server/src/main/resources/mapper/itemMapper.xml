@@ -33,7 +33,7 @@
         <if test="itemCode != null">AND item_code = #{itemCode}</if>
         <if test="shopId != null">AND shop_id = #{shopId}</if>
         <if test="shopName != null">AND shop_name = #{shopName}</if>
-        <if test="name != null">AND name = #{name}</if>
+        <if test="name != null">AND name LIKE CONCAT('%',#{name},'%')</if>
         <if test="advertise != null">AND advertise = #{advertise}</if>
         <if test="mainImage != null">AND main_image = #{mainImage}</if>
         <if test="videoUrl != null">AND video_url = #{videoUrl}</if>

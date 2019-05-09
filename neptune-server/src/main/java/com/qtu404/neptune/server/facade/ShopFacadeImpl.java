@@ -47,25 +47,15 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Service(interfaceClass = ShopFacade.class)
 public class ShopFacadeImpl implements ShopFacade {
     private final ShopReadService shopReadService;
-
     private final ShopWriteService shopWriteService;
-
     private final UserReadService userReadService;
-
     private final ShopConverter shopConverter;
-
     private final ItemReadService itemReadService;
-
     private final ShopCategoryReadService shopCategoryReadService;
-
     private final ShopCategoryConverter shopCategoryConverter;
-
     private final ItemConverter itemConverter;
-
     private final TagReadService tagReadService;
-
     private final TagBindingReadService tagBindingReadService;
-
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired

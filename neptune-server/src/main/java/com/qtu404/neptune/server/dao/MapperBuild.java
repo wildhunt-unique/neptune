@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 public class MapperBuild {
     public static void main(String[] args) {
         MapperBuilder builder = MapperBuilder.builder()
+                .host("120.24.186.116")
                 .db("neptune")
                 .username("root")
-                .password("anywhere")
-                .path("/Users/admin/Desktop/")
+                .password("geralt")
+                .path("/")
                 .build();
-        builder.build("comment","Comment");
+        builder.build("complaint","Complaint");
 
     }
 }

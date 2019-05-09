@@ -129,7 +129,7 @@ public class OrderFacadeImpl implements OrderFacade {
             toCreateOrder.setPaidAmount(Math.max(0, paidTotalAmount[0]));
             toCreateOrder.setItemTotalAmount(Math.max(0, itemTotalAmount[0]));
             // 设置各种状态
-            toCreateOrder.setPayStatus(SwitchStatusEnum.INIT.getCode());
+            toCreateOrder.setPayStatus(SwitchStatusEnum.INACTIVE.getCode());
             toCreateOrder.setEnableStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setReceiveStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());

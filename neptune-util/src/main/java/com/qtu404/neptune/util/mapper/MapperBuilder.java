@@ -15,6 +15,7 @@ public class MapperBuilder {
     private  String password = "123456";
     private  String db = "qh";
     private  String path = "/Users/admin/Desktop/";
+    private  String host = "localhost";
 
     /**
      * @param tableName 表名
@@ -22,7 +23,7 @@ public class MapperBuilder {
      */
     public  void build(String tableName, String clazzName) {
         try {
-            TableInfo tableInfo = new DBHelper(username, password, db)
+            TableInfo tableInfo = new DBHelper(username, password, db,host)
                     .getTableInfo(tableName);
             XMLHandler handler = new XMLHandler(tableInfo, clazzName, path);
             handler.createXML();

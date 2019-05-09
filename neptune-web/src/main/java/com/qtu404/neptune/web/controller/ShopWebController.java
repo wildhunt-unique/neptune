@@ -28,7 +28,6 @@ public class ShopWebController {
 
     @ApiOperation("获得店铺详情")
     @GetMapping("get/detail")
-    @Acl(level= AccessLevel.BASE)
     public Response<ShopDetailResponse> getDetail(ShopDetailRequest request) {
         return assertResponse(this.shopFacade.getShopDetail(request));
     }

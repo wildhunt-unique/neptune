@@ -54,7 +54,7 @@ public class ItemFacadeImpl implements ItemFacade {
      * 创建商品
      *
      * @param request 创建请求参数
-     * @return 是否操作成功
+     * @return 是否操作成功 -
      */
     @Override
     public Response<Long> createItem(ItemCreateRequest request) {

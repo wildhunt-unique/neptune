@@ -3,10 +3,10 @@ package com.qtu404.neptune.api.response.shop;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,4 +44,7 @@ public class ShopThinResponse implements Serializable {
 
     @ApiModelProperty("店铺标签")
     private List<TagThinListResponse> shopTagList;
+
+    @ApiModelProperty("创建时间")
+    private Date createdAt;
 }

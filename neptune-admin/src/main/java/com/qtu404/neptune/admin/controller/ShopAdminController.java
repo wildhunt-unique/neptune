@@ -39,6 +39,7 @@ public class ShopAdminController {
     @ApiOperation("获得当前登录店铺信息")
     @Acl(level = AccessLevel.SHOP)
     public Response<ShopThinResponse> getShop(ShopGetRequest request){
+        request.setShopId(getShopId());
         return assertResponse(this.shopFacade.getShopById(request));
     }
 

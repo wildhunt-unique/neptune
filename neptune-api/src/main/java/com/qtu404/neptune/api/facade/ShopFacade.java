@@ -21,4 +21,6 @@ public interface ShopFacade {
     Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request);
 
     Response<ShopCategoryListResponse> queryCategoryList(ShopCategoryQueryRequest request);
+
+    Response<ShopThinResponse> getShopById(ShopGetRequest request);
 }

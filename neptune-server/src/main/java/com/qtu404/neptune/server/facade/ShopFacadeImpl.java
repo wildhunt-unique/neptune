@@ -3,8 +3,7 @@ package com.qtu404.neptune.server.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.*;
 import com.qtu404.neptune.api.response.item.ItemThinResponse;
 import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
@@ -12,9 +11,9 @@ import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
+import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.enums.TagTypeEnum;
 import com.qtu404.neptune.domain.enums.UserTypeEnum;
-import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.model.*;
 import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.ItemConverter;
@@ -22,10 +21,9 @@ import com.qtu404.neptune.server.converter.ShopCategoryConverter;
 import com.qtu404.neptune.server.converter.ShopConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
+import com.qtu404.neptune.util.model.ParamUtil;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.exception.ServiceException;
-import com.qtu404.neptune.util.model.ParamUtil;
-import com.qtu404.neptune.api.facade.ShopFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -222,7 +220,6 @@ public class ShopFacadeImpl implements ShopFacade {
     public Response<Paging<ShopThinResponse>> shopPaging(ShopPagingRequest request) {
         return execute(request, param -> {
             Map<String, Object> params = request.toMap();
-
             if (Objects.nonNull(request.getTagId())) {
                 Set<Long> shopIds = this.tagBindingReadService
                         .findByTagIdAndTypeCheckStatus(request.getTagId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.NORMAL.getCode())
@@ -242,7 +239,7 @@ public class ShopFacadeImpl implements ShopFacade {
             }
 
             Paging<Shop> shopPaging = this.shopReadService.paging(params);
-            return new Paging<>(
+            return new Paging<ShopThinResponse>(
                     shopPaging.getTotal(),
                     shopPaging.getData().stream()
                             .map(this.shopConverter::model2ThinResponse)
@@ -287,6 +284,20 @@ public class ShopFacadeImpl implements ShopFacade {
                     })
                     .collect(Collectors.toList())
             ).build();
+        });
+    }
+
+    /**
+     * 通过id获得当前店铺信息
+     * @param request 店铺id
+     * @return 店铺信息
+     */
+    @Override
+    public Response<ShopThinResponse> getShopById(ShopGetRequest request) {
+        return execute(request, param -> {
+            Shop shop = this.shopReadService.fetchById(request.getShopId());
+            AssertUtil.isExist(shop, "shop");
+            return this.shopConverter.model2ThinResponse(shop);
         });
     }
 }

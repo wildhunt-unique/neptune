@@ -3,6 +3,7 @@ package com.qtu404.neptune.api.response.shop;
 import com.qtu404.neptune.api.response.tag.TagThinListResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.qtu404.neptune.api.response.shop;
 
-import com.qtu404.neptune.api.response.tag.TagThinListResponse;
+import com.qtu404.neptune.api.response.tag.TagThinResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 @ApiModel("店铺信息")
 @Data
 public class ShopThinResponse implements Serializable {
-    private static final long serialVersionUID = -1865970656120413433L;
+    private static final long serialVersionUID = -2776482936699434239L;
 
     @ApiModelProperty("店铺Id")
     private Long shopId;
@@ -42,8 +42,8 @@ public class ShopThinResponse implements Serializable {
     @ApiModelProperty("店铺状态 1:营业 -1:歇业 -2:冻结")
     private Integer status;
 
-    @ApiModelProperty("店铺标签")
-    private List<TagThinListResponse> shopTagList;
+    @ApiModelProperty("标签简略信息列表")
+    private List<TagThinResponse> tagThinResponse;
 
     @ApiModelProperty("创建时间")
     private Date createdAt;

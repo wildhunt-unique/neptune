@@ -19,6 +19,7 @@ import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.ItemConverter;
 import com.qtu404.neptune.server.converter.ShopCategoryConverter;
 import com.qtu404.neptune.server.converter.ShopConverter;
+import com.qtu404.neptune.server.converter.TagConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.ParamUtil;
@@ -57,9 +58,10 @@ public class ShopFacadeImpl implements ShopFacade {
     private final TagReadService tagReadService;
     private final TagBindingReadService tagBindingReadService;
     private final TagBindingWriteService tagBindingWriteService;
+    private final TagConverter tagConverter;
 
     @Autowired
-    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService) {
+    public ShopFacadeImpl(ShopReadService shopReadService, ShopWriteService shopWriteService, UserReadService userReadService, ShopConverter shopConverter, ItemReadService itemReadService, ShopCategoryReadService shopCategoryReadService, ShopCategoryConverter shopCategoryConverter, ItemConverter itemConverter, TagReadService tagReadService, TagBindingWriteService tagBindingWriteService, TagBindingReadService tagBindingReadService, TagConverter tagConverter) {
         this.shopReadService = shopReadService;
         this.shopWriteService = shopWriteService;
         this.userReadService = userReadService;
@@ -71,6 +73,7 @@ public class ShopFacadeImpl implements ShopFacade {
         this.tagReadService = tagReadService;
         this.tagBindingWriteService = tagBindingWriteService;
         this.tagBindingReadService = tagBindingReadService;
+        this.tagConverter = tagConverter;
     }
 
     /**
@@ -287,7 +290,12 @@ public class ShopFacadeImpl implements ShopFacade {
         return execute(request, param -> {
             Shop shop = this.shopReadService.fetchById(request.getShopId());
             AssertUtil.isExist(shop, "shop");
-            return this.shopConverter.model2ThinResponse(shop);
+            ShopThinResponse response =  this.shopConverter.model2ThinResponse(shop);
+            List<TagBinding> tagBindings = this.tagBindingReadService.findByTargetIdAndTypeCheckStatus(shop.getId(),TagTypeEnum.SHOP.getCode(),DataStatusEnum.NORMAL.getCode());
+            List<Long> tagIds = tagBindings.stream().map(TagBinding::getTagId).collect(Collectors.toList());
+            List<Tag> tags = this.tagReadService.findByIds(tagIds);
+            response.setTagThinResponse(tags.stream().map(this.tagConverter::model2ThinResponse).collect(Collectors.toList()));
+            return response ;
         });
     }
 }

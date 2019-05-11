@@ -42,6 +42,9 @@ public class ShopThinResponse implements Serializable {
     @ApiModelProperty("店铺状态 1:营业 -1:歇业 -2:冻结")
     private Integer status;
 
+    @ApiModelProperty("店铺邮箱")
+    private String email;
+
     @ApiModelProperty("标签简略信息列表")
     private List<TagThinResponse> tagThinResponse;
 

@@ -40,13 +40,9 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Component
 public class UserFacadeImpl implements UserFacade {
     private final RedisManager redisManager;
-
     private final SMSsender smsSender;
-
     private final UserConverter userConverter;
-
     private final UserReadService userReadService;
-
     private final UserWriteService userWriteService;
 
     @Autowired

@@ -32,11 +32,8 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Component
 public class ShopCategoryFacadeImpl implements ShopCategoryFacade {
     private final ShopCategoryWriteService shopCategoryWriteService;
-
     private final ShopCategoryReadService shopCategoryReadService;
-
     private final ShopReadService shopReadService;
-
     private final ShopCategoryConverter shopCategoryConverter;
 
     @Autowired

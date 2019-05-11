@@ -39,15 +39,10 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Slf4j
 public class CommentFacadeImpl implements CommentFacade {
     private final CommentReadService commentReadService;
-
     private final CommentWriteService commentWriteService;
-
     private final CommentConverter commentConverter;
-
     private final OrderReadService orderReadService;
-
     private final UserReadService userReadService;
-
     private final ShopReadService shopReadService;
 
     @Autowired

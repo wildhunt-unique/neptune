@@ -17,7 +17,6 @@ import java.util.List;
 @Component
 public class OrderManager {
     private final OrderDao orderDao;
-
     private final OrderLineDao orderLineDao;
 
     @Autowired

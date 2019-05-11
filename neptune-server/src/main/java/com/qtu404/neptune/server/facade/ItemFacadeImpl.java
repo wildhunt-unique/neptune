@@ -33,13 +33,9 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Component
 @Service(interfaceClass = ItemFacade.class)
 public class ItemFacadeImpl implements ItemFacade {
-
     private final ItemWriteService itemWriteService;
-
     private final ItemConverter itemConverter;
-
     private final ShopReadService shopReadService;
-
     private final ItemReadService itemReadService;
 
     @Autowired

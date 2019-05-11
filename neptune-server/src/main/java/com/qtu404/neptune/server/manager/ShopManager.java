@@ -24,9 +24,7 @@ import java.util.Objects;
 @Component
 public class ShopManager {
     private final UserDao userDao;
-
     private final ShopDao shopDao;
-
     private final TagBindingDao tagBindingDao;
 
     @Autowired

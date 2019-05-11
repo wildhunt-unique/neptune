@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TagManager {
     private final TagDao tagDao;
-
     private final TagBindingDao tagBindingDao;
 
     public TagManager(TagDao tagDao, TagBindingDao tagBindingDao) {

@@ -176,7 +176,8 @@ public class ShopFacadeImpl implements ShopFacade {
      * @return 店铺详情
      */
     @Override
-    public Response<ShopDetailResponse> getShopDetail(ShopDetailRequest request) {
+    public Response<ShopDetailResponse>
+    getShopDetail(ShopDetailRequest request) {
         return execute(request, param -> {
             Shop shop = this.shopReadService.fetchById(request.getShopId());
             AssertUtil.isExist(shop, "shop");

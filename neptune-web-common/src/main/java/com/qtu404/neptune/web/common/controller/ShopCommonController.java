@@ -2,8 +2,7 @@ package com.qtu404.neptune.web.common.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShopFacade;
-import com.qtu404.neptune.api.request.shop.ShopCategoryQueryRequest;
-import com.qtu404.neptune.api.request.shop.ShopPagingRequest;
+import com.qtu404.neptune.api.request.shop.*;
 import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
 import com.qtu404.neptune.common.constant.AccessLevel;
@@ -39,5 +38,11 @@ public class ShopCommonController {
     @ApiOperation("店铺类目列表")
     public Response<ShopCategoryListResponse> shopCategoryList(ShopCategoryQueryRequest request){
         return assertResponse(this.shopFacade.queryCategoryList(request));
+    }
+
+    @GetMapping("/get")
+    @ApiOperation("根据店铺id，获得店铺详情")
+    public Response<ShopThinResponse> getShopById(ShopCommonGetRequest request){
+        return assertResponse(this.shopFacade.getShopById(ShopGetRequest.builder().shopId(request.getShopId()).build()));
     }
 }

@@ -33,11 +33,8 @@ import static com.qtu404.neptune.util.model.Executor.execute;
 @Service(interfaceClass = ShopTagFacade.class)
 public class TagFacadeImpl implements ShopTagFacade {
     private final TagConverter tagConverter;
-
     private final TagReadService tagReadService;
-
     private final TagWriteService tagWriteService;
-
     private final TagBindingWriteService tagBindingWriteService;
 
     @Autowired

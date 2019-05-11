@@ -23,6 +23,9 @@ public class ComplaintPagingRequest extends AbstractPagingRequest implements Ser
     @ApiModelProperty("用户id")
     private Long userId;
 
+    @ApiModelProperty("投诉人手机号")
+    private String userMobile;
+
     @ApiModelProperty("店铺id")
     private Long shopId;
 

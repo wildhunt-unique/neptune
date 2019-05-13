@@ -8,3 +8,7 @@ server:
 
 qtu404:
   host: localhost
+  util:
+    oss:
+      accessKeyId: accessKeyId
+      accessKeySecret: accessKeySecret

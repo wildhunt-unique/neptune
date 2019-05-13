@@ -12,7 +12,9 @@ import java.util.function.Function;
  */
 @Slf4j
 public abstract class Executor {
-    public static <P, R> Response<R> execute(P param, Function<P, R> function) {
+    public static <P, R> Response<R>
+
+    execute(P param, Function<P, R> function) {
         try {
             log.info("Request:{}.Value:{}", param.getClass().getSimpleName(), param.toString());
             checkParam(param);

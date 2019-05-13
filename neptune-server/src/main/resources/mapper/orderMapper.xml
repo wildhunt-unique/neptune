@@ -116,8 +116,7 @@
             <if test="shopNotes != null">shop_notes = #{shopNotes},</if>
             <if test="tag != null">tag = #{tag},</if>
             <if test="extraJson != null">extra_json = #{extraJson},</if>
-            <if test="createdAt != null">created_at = #{createdAt},</if>
-            <if test="updatedAt != null">updated_at = #{updatedAt},</if>updated_at=now()
+            updated_at=now()
         </set>
         WHERE id=#{id}
     </update>

@@ -176,14 +176,10 @@ public class ShopFacadeImpl implements ShopFacade {
      * @return 店铺详情
      */
     @Override
-    public Response<ShopDetailResponse>
-    getShopDetail(ShopDetailRequest request) {
+    public Response<ShopDetailResponse> getShopDetail(ShopDetailRequest request) {
         return execute(request, param -> {
             Shop shop = this.shopReadService.fetchById(request.getShopId());
             AssertUtil.isExist(shop, "shop");
-            if (!shop.getStatus().equals(DataStatusEnum.NORMAL.getCode())) {
-                throw new ServiceException("shop.not.open");
-            }
 
             // TODO: 2019/3/13 batch query item by category ids 
             ShopDetailResponse response = this.shopConverter.model2DetailResponse(shop);

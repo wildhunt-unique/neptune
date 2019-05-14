@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -31,8 +32,8 @@ public class OrderLineThinResponse implements Serializable {
     @ApiModelProperty("商品主图")
     private String itemImage;
 
-    @ApiModelProperty("商品销售属性")
-    private String itemAttr;
+    @ApiModelProperty("商品销售属性，不会存数据库")
+    private Map<String, Object> itemAttribute;
 
     @ApiModelProperty("购买数量")
     private Integer quantity;

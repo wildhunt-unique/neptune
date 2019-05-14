@@ -72,7 +72,7 @@ public class OrderLine extends BaseModel implements Serializable {
         if (itemAttribute == null || itemAttribute.isEmpty()) {
             this.itemAttr = null;
         } else {
-            this.itemAttr = MyJSON.toJSON(itemAttr);
+            this.itemAttr = MyJSON.toJSON(itemAttribute);
         }
     }
 

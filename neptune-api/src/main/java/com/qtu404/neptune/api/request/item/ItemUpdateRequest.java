@@ -26,6 +26,9 @@ public class ItemUpdateRequest extends AbstractRequest implements Serializable {
     @ApiModelProperty(value = "商品id", required = true)
     private Long itemId;
 
+    @ApiModelProperty(value = "类目id")
+    private Long categoryId;
+
     @ApiModelProperty("商品名")
     private String name;
 

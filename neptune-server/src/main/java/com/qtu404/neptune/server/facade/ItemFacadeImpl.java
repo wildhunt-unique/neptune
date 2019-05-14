@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
@@ -82,7 +83,7 @@ public class ItemFacadeImpl implements ItemFacade {
             Item existItem = this.itemReadService.fetchById(toUpdateItem.getId());
             AssertUtil.isExist(existItem, "item");
 
-            if (toUpdateItem.getStatus().equals(DataStatusEnum.NORMAL.getCode())) {
+            if (Objects.nonNull(toUpdateItem.getStatus()) && toUpdateItem.getStatus().equals(DataStatusEnum.NORMAL.getCode())) {
                 if (existItem.getInventory() <= ConstantValues.MIN_INVENTORY) {
                     toUpdateItem.setStatus(DataStatusEnum.LOCK.getCode());
                 }

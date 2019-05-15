@@ -26,6 +26,7 @@
     <sql id="vals">#{shopId},#{name},#{remark},#{pid},#{logo},#{level},#{hasChildren},#{type},#{sortIndex},#{disclosed},#{status},#{extraJson},now(),now()</sql>
     <sql id="listVals">#{item.shopId},#{item.name},#{item.remark},#{item.pid},#{item.logo},#{item.level},#{item.hasChildren},#{item.type},#{item.sortIndex},#{item.disclosed},#{item.status},#{item.extraJson},now(),now()</sql>
     <sql id="criteria">
+        <if test="id != null">AND id = #{id}</if>
         <if test="shopId != null">AND shop_id = #{shopId}</if>
         <if test="name != null">AND name = #{name}</if>
         <if test="remark != null">AND remark = #{remark}</if>

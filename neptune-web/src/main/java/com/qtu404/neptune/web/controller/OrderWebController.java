@@ -3,6 +3,7 @@ package com.qtu404.neptune.web.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
+import com.qtu404.neptune.api.request.order.OrderPayRequest;
 import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.aop.Acl;
@@ -33,5 +34,13 @@ public class OrderWebController {
     public Response<Long> createOrder(@RequestBody OrderCreateRequest request) {
         request.setBuyerId(RequestContext.getUserId());
         return assertResponse(this.orderFacade.createOrder(request));
+    }
+
+    @ApiOperation("支付订单")
+    @PostMapping("pay")
+    @Acl(level= AccessLevel.USER)
+    public Response<Boolean> payOrder(@RequestBody OrderPayRequest request) {
+        request.setBuyerId(RequestContext.getUserId());
+        return assertResponse(this.orderFacade.payOrder(request));
     }
 }

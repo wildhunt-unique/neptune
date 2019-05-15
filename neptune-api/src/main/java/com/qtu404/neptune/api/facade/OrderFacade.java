@@ -1,11 +1,9 @@
 package com.qtu404.neptune.api.facade;
 
-import com.qtu404.neptune.api.request.order.OrderDetailRequest;
-import com.qtu404.neptune.api.request.order.OrderPagingRequest;
-import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
-import com.qtu404.neptune.api.request.order.OrderCreateRequest;
+import com.qtu404.neptune.api.request.order.*;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
+import com.qtu404.neptune.api.response.order.PaymentThinResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 
@@ -21,4 +19,8 @@ public interface OrderFacade {
     Response<OrderDetailResponse> getOrderDetail(OrderDetailRequest request);
 
     Response<Paging<OrderThinResponse>> paging(OrderPagingRequest request);
+
+    Response<Boolean> payOrder(OrderPayRequest request);
+
+    Response<Paging<PaymentThinResponse>>  paymentPaging(PaymentPagingRequest request);
 }

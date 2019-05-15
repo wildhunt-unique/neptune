@@ -8,6 +8,7 @@ import com.qtu404.neptune.api.request.order.*;
 import com.qtu404.neptune.api.response.order.OrderDetailResponse;
 import com.qtu404.neptune.api.response.order.OrderLineThinResponse;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
+import com.qtu404.neptune.api.response.order.PaymentThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.constant.ExtraKey;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
@@ -16,13 +17,16 @@ import com.qtu404.neptune.domain.model.*;
 import com.qtu404.neptune.domain.service.*;
 import com.qtu404.neptune.server.converter.OrderConverter;
 import com.qtu404.neptune.server.converter.OrderLineConverter;
+import com.qtu404.neptune.server.converter.PaymentConverter;
 import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.util.model.exception.ServiceException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
@@ -49,9 +53,11 @@ public class OrderFacadeImpl implements OrderFacade {
     private final ItemReadService itemReadService;
     private final OrderLineReadService orderLineReadService;
     private final OrderLineConverter orderLineConverter;
+    private final PaymentReadService paymentReadService;
+    private final PaymentConverter paymentConverter;
 
     @Autowired
-    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineReadService orderLineReadService, OrderLineConverter orderLineConverter) {
+    public OrderFacadeImpl(OrderReadService orderReadService, OrderWriteService orderWriteService, OrderConverter orderConverter, UserReadService userReadService, ShopReadService shopReadService, ItemReadService itemReadService, OrderLineReadService orderLineReadService, OrderLineConverter orderLineConverter, PaymentReadService paymentReadService, PaymentConverter paymentConverter) {
         this.orderReadService = orderReadService;
         this.orderWriteService = orderWriteService;
         this.orderConverter = orderConverter;
@@ -60,6 +66,8 @@ public class OrderFacadeImpl implements OrderFacade {
         this.itemReadService = itemReadService;
         this.orderLineReadService = orderLineReadService;
         this.orderLineConverter = orderLineConverter;
+        this.paymentReadService = paymentReadService;
+        this.paymentConverter = paymentConverter;
     }
 
     /**
@@ -220,6 +228,66 @@ public class OrderFacadeImpl implements OrderFacade {
                             })
                             .collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 支付订单
+     *
+     * @param request 支付订单请求
+     * @return 是否成功
+     */
+    @Override
+    public Response<Boolean> payOrder(OrderPayRequest request) {
+        return execute(request, param -> {
+            Order order = this.orderReadService.findById(request.getOrderId());
+            AssertUtil.isExist(order, "order");
+
+            if (!request.getBuyerId().equals(order.getBuyerId())) {
+                throw new ServiceException("not.buyer");
+            }
+            // 不能支付过，也不能是拒绝的
+            if (!order.getPayStatus().equals(SwitchStatusEnum.INACTIVE.getCode())
+                    || !order.getEnableStatus().equals(SwitchStatusEnum.ACTIVE.getCode())) {
+                throw new ServiceException("can.not.pay");
+            }
+            // 修改订单
+            order.setPaidAmount(request.getPaidAmount());
+            order.setPayAt(new Date());
+            order.setPayStatus(SwitchStatusEnum.ACTIVE.getCode());
+            // 创建支付单
+            Payment toCreatePayment = new Payment();
+            toCreatePayment.setBuyerId(order.getBuyerId());
+            if (!CollectionUtils.isEmpty(order.getExtra())) {
+                toCreatePayment.setBuyerMobile(String.valueOf(order.getExtra().get(ExtraKey.ORDER_BUYER_MOBILE)));
+            }
+            toCreatePayment.setBuyerName(order.getBuyerName());
+            toCreatePayment.setItemTotalAmount(order.getItemTotalAmount());
+            toCreatePayment.setOrderId(order.getBuyerId());
+            toCreatePayment.setOutId(order.getOutId());
+            toCreatePayment.setStatus(DataStatusEnum.NORMAL.getCode());
+            toCreatePayment.setShopId(order.getShopId());
+            toCreatePayment.setShopName(order.getShopName());
+
+            this.orderWriteService.payOrder(order, toCreatePayment);
+            return Boolean.TRUE;
+        });
+    }
+
+    /**
+     * 支付单分页
+     *
+     * @param request 支付订单请求
+     * @return 分页信息
+     */
+    @Override
+    public Response<Paging<PaymentThinResponse>> paymentPaging(PaymentPagingRequest request) {
+        return execute(request, param -> {
+             Paging<Payment> paymentPaging = this.paymentReadService.paging(request.toMap());
+             return new Paging<>(
+                     paymentPaging.getTotal(),
+                     paymentPaging.getData().stream().map(this.paymentConverter::model2ThinResponse).collect(Collectors.toList())
+             );
         });
     }
 

@@ -2,6 +2,7 @@ package com.qtu404.neptune.server.service;
 
 import com.qtu404.neptune.domain.model.Order;
 import com.qtu404.neptune.domain.model.OrderLine;
+import com.qtu404.neptune.domain.model.Payment;
 import com.qtu404.neptune.domain.service.OrderWriteService;
 import com.qtu404.neptune.server.dao.OrderDao;
 import com.qtu404.neptune.server.manager.OrderManager;
@@ -39,5 +40,10 @@ public class OrderWriteServiceImpl implements OrderWriteService {
     @Override
     public Boolean createOrder(Order toCreateOrder, List<OrderLine> toCreateOrderLineList) {
         return orderManager.createOrder(toCreateOrder, toCreateOrderLineList);
+    }
+
+    @Override
+    public Boolean payOrder(Order order, Payment toCreatePayment) {
+        return orderManager.payOrder(order, toCreatePayment);
     }
 }

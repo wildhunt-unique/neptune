@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
 import com.qtu404.neptune.api.request.order.OrderPagingRequest;
 import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
+import com.qtu404.neptune.api.request.order.PaymentPagingRequest;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
+import com.qtu404.neptune.api.response.order.PaymentThinResponse;
 import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
@@ -43,5 +45,15 @@ public class OrderAdminController {
             request.setShopId(getShopId());
         }
         return assertResponse(this.orderFacade.paging(request));
+    }
+
+    @ApiOperation("支付单分页")
+    @GetMapping("paging")
+    @Acl(level = AccessLevel.SHOP)
+    public Response<Paging<PaymentThinResponse>> paging(PaymentPagingRequest request) {
+        if (getAccessLevel() == AccessLevel.SHOP) {
+            request.setShopId(getShopId());
+        }
+        return assertResponse(this.orderFacade.paymentPaging(request));
     }
 }

@@ -19,7 +19,6 @@ public class MapperBuild {
                 .password("geralt")
                 .path("/")
                 .build();
-        builder.build("complaint","Complaint");
-
+        builder.build("payment","Payment");
     }
 }

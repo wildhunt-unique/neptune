@@ -78,7 +78,9 @@ public class ShopCategoryFacadeImpl implements ShopCategoryFacade {
     public Response<Boolean> update(ShopCategoryUpdateRequest request) {
         return execute(request, param -> {
             ShopCategory toUpdate = this.shopCategoryConverter.request2Model(request);
-            DataStatusEnum.validate(toUpdate.getStatus());
+            if (Objects.nonNull(request.getStatus())) {
+                DataStatusEnum.validate(request.getStatus());
+            }
             this.shopCategoryWriteService.update(toUpdate);
             return Boolean.TRUE;
         });

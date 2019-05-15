@@ -33,6 +33,9 @@ public class ShopCategoryUpdateRequest extends AbstractRequest implements Serial
     @ApiModelProperty("备注")
     private String remark;
 
+    @ApiModelProperty("图片")
+    private String logo;
+
     @ApiModelProperty("状态 1:正常 ")
     private Integer status;
 

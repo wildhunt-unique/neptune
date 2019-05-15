@@ -48,7 +48,7 @@ public class OrderAdminController {
     }
 
     @ApiOperation("支付单分页")
-    @GetMapping("paging")
+    @GetMapping("payment/paging")
     @Acl(level = AccessLevel.SHOP)
     public Response<Paging<PaymentThinResponse>> paging(PaymentPagingRequest request) {
         if (getAccessLevel() == AccessLevel.SHOP) {

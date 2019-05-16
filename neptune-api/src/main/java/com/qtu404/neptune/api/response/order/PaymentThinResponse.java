@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author DingXing wildhunt_geralt@foxmail.com
@@ -14,6 +15,9 @@ import java.io.Serializable;
 @Data
 public class PaymentThinResponse implements Serializable {
     private static final long serialVersionUID = 5737435228250539989L;
+
+    @ApiModelProperty("支付单号")
+    private Long paymentId;
 
     @ApiModelProperty("订单id")
     private Long orderId;
@@ -41,4 +45,7 @@ public class PaymentThinResponse implements Serializable {
 
     @ApiModelProperty("'商品总数'")
     private Integer itemTotalAmount;
+
+    @ApiModelProperty("支付时间")
+    private Date createdAt;
 }

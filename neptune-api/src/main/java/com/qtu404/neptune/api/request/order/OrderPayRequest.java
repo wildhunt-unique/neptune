@@ -24,7 +24,7 @@ public class OrderPayRequest extends AbstractRequest implements Serializable {
     @ApiModelProperty(value = "订单id",required = true)
     private Long orderId;
 
-    @ApiModelProperty(value = "买家id",required = true)
+    @ApiModelProperty(value = "买家id",hidden = true)
     private Long buyerId;
 
     @ApiModelProperty(value = "支付金额",required = true)

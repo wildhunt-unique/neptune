@@ -261,6 +261,7 @@ public class OrderFacadeImpl implements OrderFacade {
             if (!CollectionUtils.isEmpty(order.getExtra())) {
                 toCreatePayment.setBuyerMobile(String.valueOf(order.getExtra().get(ExtraKey.ORDER_BUYER_MOBILE)));
             }
+            toCreatePayment.setPaidAmount(request.getPaidAmount());
             toCreatePayment.setBuyerName(order.getBuyerName());
             toCreatePayment.setItemTotalAmount(order.getItemTotalAmount());
             toCreatePayment.setOrderId(order.getBuyerId());

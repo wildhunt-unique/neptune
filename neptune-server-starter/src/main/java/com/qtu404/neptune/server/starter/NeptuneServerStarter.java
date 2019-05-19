@@ -50,7 +50,7 @@ import java.util.concurrent.CountDownLatch;
 @Import(NeptuneServerAutoConfig.class)
 public class NeptuneServerStarter {
     public static void main(String[] args) throws InterruptedException {
-        SpringApplication.run(NeptuneServerStarter.class,args);
+        SpringApplication.run(NeptuneServerStarter.class, args);
         new CountDownLatch(1).await();
     }
 }

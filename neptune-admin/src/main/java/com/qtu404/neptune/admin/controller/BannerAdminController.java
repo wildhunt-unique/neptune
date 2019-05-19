@@ -48,14 +48,14 @@ public class BannerAdminController {
 
     @Acl(level = AccessLevel.ADMIN)
     @ApiOperation("广告图 更新")
-    @PostMapping("create")
+    @PostMapping("update")
     public Response<Boolean> enable(@RequestBody BannerUpdateRequest request) {
         return assertResponse(this.bannerFacade.updateBanner(request));
     }
 
     @Acl(level = AccessLevel.ADMIN)
     @ApiOperation("广告图 list")
-    @GetMapping("create")
+    @GetMapping("list")
     public Response<BannerListResponse> enable(BannerListRequest request) {
         return assertResponse(this.bannerFacade.listBanner(request));
     }

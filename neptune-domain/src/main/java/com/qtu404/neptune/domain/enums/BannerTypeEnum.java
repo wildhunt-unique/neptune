@@ -20,11 +20,12 @@ public enum BannerTypeEnum {
 
     public static void validate(Integer code) {
         if (Objects.isNull(code)) throw new IllegalArgumentException("illegal.banner.type");
-        for (CommentTypeEnum typeEnum : CommentTypeEnum.values()) {
+        for (BannerTypeEnum typeEnum : BannerTypeEnum.values()) {
             if (code.equals(typeEnum.getCode())) {
-                throw new IllegalArgumentException("illegal.banner.type");
+                return;
             }
         }
+        throw new IllegalArgumentException("illegal.banner.type");
     }
 
     private final int code;

@@ -37,6 +37,9 @@ public class BannerUpdateRequest extends AbstractRequest implements Serializable
     @ApiModelProperty("图片地址")
     private String imageUrl;
 
+    @ApiModelProperty("1:启用 -2:禁用")
+    private Integer status;
+
     @Override
     public void checkParam() {
         super.checkParam();

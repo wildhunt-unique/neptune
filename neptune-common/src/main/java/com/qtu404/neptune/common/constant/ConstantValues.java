@@ -12,7 +12,7 @@ public class ConstantValues {
     /**
      * 默认用户头像
      */
-    public static final String DEFAULT_AVATAR = "static.qtu404.com/nf4slide/assets/user.png";
+    public static final String DEFAULT_AVATAR = "http://static.qtu404.com/nf4slide/assets/user.png";
 
     /**
      * 最小库存

@@ -6,7 +6,7 @@
         <result column="name" property="name"/>
         <result column="type" property="type"/>
         <result column="content" property="content"/>
-        <result column="iamge_url" property="iamgeUrl"/>
+        <result column="image_url" property="imageUrl"/>
         <result column="extra_json" property="extraJson"/>
         <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
@@ -15,14 +15,14 @@
     <sql id="tb">banner</sql>
     <sql id="cols_all">id,<include refid="cols_exclude_id"/>
     </sql>
-    <sql id="cols_exclude_id">name,type,content,iamge_url,extra_json,status,created_at,updated_at</sql>
-    <sql id="vals">#{name},#{type},#{content},#{iamgeUrl},#{extraJson},#{status},now(),now()</sql>
-    <sql id="listVals">#{item.name},#{item.type},#{item.content},#{item.iamgeUrl},#{item.extraJson},#{item.status},now(),now()</sql>
+    <sql id="cols_exclude_id">name,type,content,image_url,extra_json,status,created_at,updated_at</sql>
+    <sql id="vals">#{name},#{type},#{content},#{imageUrl},#{extraJson},#{status},now(),now()</sql>
+    <sql id="listVals">#{item.name},#{item.type},#{item.content},#{item.imageUrl},#{item.extraJson},#{item.status},now(),now()</sql>
     <sql id="criteria">
         <if test="name != null">AND name = #{name}</if>
         <if test="type != null">AND type = #{type}</if>
         <if test="content != null">AND content = #{content}</if>
-        <if test="iamgeUrl != null">AND iamge_url = #{iamgeUrl}</if>
+        <if test="imageUrl != null">AND image_url = #{imageUrl}</if>
         <if test="extraJson != null">AND extra_json = #{extraJson}</if>
         <if test="status != null">AND status = #{status}</if>
         <if test="createdAt != null">AND created_at = #{createdAt}</if>
@@ -32,10 +32,10 @@
         <if test="offset != null">LIMIT #{offset},#{limit}</if>
     </sql>
     <insert id="save" keyProperty="id" parameterType="Banner" useGeneratedKeys="true">
-        INSERT INTO <include refid="tb"/>  (&lt;include refid="cols_exclude_id"/>) VALUES (&lt;include refid="vals"/>)</insert>
+        INSERT INTO <include refid="tb"/>  (<include refid="cols_exclude_id"/>) VALUES (<include refid="vals"/>)</insert>
     <insert id="saves" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
-        INSERT INTO <include refid="tb"/>  (&lt;include refid="cols_exclude_id"/>) VALUES<foreach collection="list" item="item" index="index" separator=",">
-        (&lt;include refid="listVals"/>)
+        INSERT INTO <include refid="tb"/>  (<include refid="cols_exclude_id"/>) VALUES<foreach collection="list" item="item" index="index" separator=",">
+        (<include refid="listVals"/>)
        </foreach></insert>
     <delete id="remove" parameterType="java.lang.Long">
         DELETE FROM
@@ -54,7 +54,7 @@
         <if test="name != null">name = #{name},</if>
         <if test="type != null">type = #{type},</if>
         <if test="content != null">content = #{content},</if>
-        <if test="iamgeUrl != null">iamge_url = #{iamgeUrl},</if>
+        <if test="imageUrl != null">image_url = #{imageUrl},</if>
         <if test="extraJson != null">extra_json = #{extraJson},</if>
         <if test="status != null">status = #{status},</if>
         <if test="createdAt != null">created_at = #{createdAt},</if>

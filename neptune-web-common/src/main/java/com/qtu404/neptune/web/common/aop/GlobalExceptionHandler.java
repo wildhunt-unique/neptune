@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
      *
      * @param response 结果信息
      */
-    private Response translateError(Response response) {
+    private Response  translateError(Response response) {
         if (Objects.nonNull(prop) && Objects.nonNull(response)) {
             // 去翻译文件里找
             String error = prop.getProperty(response.getError());

@@ -4,7 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
 import com.qtu404.neptune.api.request.order.OrderPagingRequest;
 import com.qtu404.neptune.api.request.order.OrderUpdateRequest;
-import com.qtu404.neptune.api.request.order.PaymentPagingRequest;
+import com.qtu404.neptune.api.request.order.PaymentPagingAdminRequest;
+import com.qtu404.neptune.api.request.order.PaymentPagingShopRequest;
 import com.qtu404.neptune.api.response.order.OrderThinResponse;
 import com.qtu404.neptune.api.response.order.PaymentThinResponse;
 import com.qtu404.neptune.common.constant.AccessLevel;
@@ -47,13 +48,27 @@ public class OrderAdminController {
         return assertResponse(this.orderFacade.paging(request));
     }
 
-    @ApiOperation("支付单分页")
+    @ApiOperation("支付单分页-店铺用户")
     @GetMapping("payment/paging")
     @Acl(level = AccessLevel.SHOP)
-    public Response<Paging<PaymentThinResponse>> paging(PaymentPagingRequest request) {
+    public Response<Paging<PaymentThinResponse>> paging(PaymentPagingShopRequest request) {
         if (getAccessLevel() == AccessLevel.SHOP) {
             request.setShopId(getShopId());
         }
         return assertResponse(this.orderFacade.paymentPaging(request));
+    }
+
+    @ApiOperation("支付单分页-平台管理员")
+    @GetMapping("payment/paging/admin")
+    @Acl(level = AccessLevel.ADMIN)
+    public Response<Paging<PaymentThinResponse>> paging(PaymentPagingAdminRequest request) {
+        return assertResponse(this.orderFacade.paymentPaging(
+                PaymentPagingShopRequest.builder()
+                        .buyerMobile(request.getBuyerMobile())
+                        .shopId(request.getShopId())
+                        .orderId(request.getOrderId())
+                        .buyerId(request.getBuyerId())
+                        .build()
+        ));
     }
 }

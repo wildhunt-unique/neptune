@@ -19,6 +19,6 @@ public class MapperBuild {
                 .password("geralt")
                 .path("/")
                 .build();
-        builder.build("payment","Payment");
+        builder.build("banner","Banner");
     }
 }

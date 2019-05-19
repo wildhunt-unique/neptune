@@ -19,10 +19,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentPagingRequest extends AbstractPagingRequest implements Serializable {
+public class PaymentPagingShopRequest extends AbstractPagingRequest implements Serializable {
     private static final long serialVersionUID = 1756007824247795525L;
 
-    @ApiModelProperty(value = "店铺id",hidden = true)
+    @ApiModelProperty(value = "店铺id")
     private Long shopId;
 
     @ApiModelProperty("订单id")
@@ -30,6 +30,9 @@ public class PaymentPagingRequest extends AbstractPagingRequest implements Seria
 
     @ApiModelProperty("'买家手机号'")
     private String buyerMobile;
+
+    @ApiModelProperty("'买家id'")
+    private Long buyerId;
 
     @Override
     public void checkParam() {

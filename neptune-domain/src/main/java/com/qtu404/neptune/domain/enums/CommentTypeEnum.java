@@ -15,7 +15,7 @@ public enum CommentTypeEnum {
     ORDER(1, "订单")
     ;
 
-    public Boolean verify(Integer code) {
+    public Boolean validate(Integer code) {
         if (Objects.isNull(code)) return Boolean.FALSE;
         for (CommentTypeEnum typeEnum : CommentTypeEnum.values()) {
             if (code.equals(typeEnum.getCode())) {

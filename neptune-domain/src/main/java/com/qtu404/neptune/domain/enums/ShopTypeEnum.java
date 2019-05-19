@@ -20,7 +20,7 @@ public enum ShopTypeEnum {
     private final int code;
     private final String desc;
 
-    public Boolean verify(Integer code) {
+    public Boolean validate(Integer code) {
         if (Objects.isNull(code)) return Boolean.FALSE;
         for (ShopTypeEnum typeEnum : ShopTypeEnum.values()) {
             if (code.equals(typeEnum.getCode())) {

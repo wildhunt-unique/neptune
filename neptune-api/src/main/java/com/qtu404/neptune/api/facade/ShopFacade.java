@@ -4,8 +4,11 @@ import com.qtu404.neptune.api.request.shop.*;
 import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
 import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.api.response.shop.ShopThinResponse;
+import com.qtu404.neptune.api.response.shop.ShopWithSearchItemResponse;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.Response;
+
+import java.util.List;
 
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
@@ -23,4 +26,6 @@ public interface ShopFacade {
     Response<ShopCategoryListResponse> queryCategoryList(ShopCategoryQueryRequest request);
 
     Response<ShopThinResponse> getShopById(ShopGetRequest request);
+
+    Response<List<ShopWithSearchItemResponse>> getShopWithSearchItem(ShopWithSearchItemRequest request);
 }

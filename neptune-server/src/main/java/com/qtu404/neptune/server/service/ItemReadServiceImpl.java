@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.service;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.qtu404.neptune.domain.model.Item;
@@ -59,5 +60,10 @@ public class ItemReadServiceImpl implements ItemReadService {
         } else {
             return this.itemDao.findByCategoryIds(categoryIds);
         }
+    }
+
+    @Override
+    public List<Item> findByItemName(String keyword) {
+        return this.itemDao.list(ImmutableMap.of("name", keyword));
     }
 }

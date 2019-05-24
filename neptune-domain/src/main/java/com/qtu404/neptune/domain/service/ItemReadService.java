@@ -21,4 +21,6 @@ public interface ItemReadService {
     List<Item> findByIds(List<Long> ids);
 
     List<Item> findByCategoryIds(List<Long> categoryIds);
+
+    List<Item> findByItemName(String keyword);
 }

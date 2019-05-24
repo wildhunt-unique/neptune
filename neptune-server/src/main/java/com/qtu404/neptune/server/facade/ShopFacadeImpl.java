@@ -6,10 +6,8 @@ import com.google.common.collect.Lists;
 import com.qtu404.neptune.api.facade.ShopFacade;
 import com.qtu404.neptune.api.request.shop.*;
 import com.qtu404.neptune.api.response.item.ItemThinResponse;
-import com.qtu404.neptune.api.response.shop.ShopCategoryDetailResponse;
-import com.qtu404.neptune.api.response.shop.ShopCategoryListResponse;
-import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
-import com.qtu404.neptune.api.response.shop.ShopThinResponse;
+import com.qtu404.neptune.api.response.shop.*;
+import com.qtu404.neptune.api.response.tag.TagThinResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.enums.ShopTypeEnum;
 import com.qtu404.neptune.domain.enums.TagTypeEnum;
@@ -24,7 +22,7 @@ import com.qtu404.neptune.util.model.AssertUtil;
 import com.qtu404.neptune.util.model.Paging;
 import com.qtu404.neptune.util.model.ParamUtil;
 import com.qtu404.neptune.util.model.Response;
-import com.qtu404.neptune.util.model.exception.ServiceException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -216,7 +214,6 @@ public class ShopFacadeImpl implements ShopFacade {
                         .stream()
                         .map(TagBinding::getTargetId)
                         .collect(Collectors.toSet());
-
                 if (CollectionUtils.isEmpty(shopIds)) {
                     return Paging.empty();
                 } else {
@@ -232,7 +229,14 @@ public class ShopFacadeImpl implements ShopFacade {
             return new Paging<ShopThinResponse>(
                     shopPaging.getTotal(),
                     shopPaging.getData().stream()
-                            .map(this.shopConverter::model2ThinResponse)
+                            .map(shop -> {
+                                ShopThinResponse response = this.shopConverter.model2ThinResponse(shop);
+                                // TODO optimize
+                               List<Tag> tagList = this.tagReadService.findByShopId(shop.getId());
+                                List<TagThinResponse> tagThinResponsesList = tagList.stream().map(this.tagConverter::model2ThinResponse).collect(Collectors.toList());
+                                response.setTagThinResponse(tagThinResponsesList);
+                                return  response;
+                            })
                             .collect(Collectors.toList())
             );
         });
@@ -279,6 +283,7 @@ public class ShopFacadeImpl implements ShopFacade {
 
     /**
      * 通过id获得当前店铺信息
+     *
      * @param request 店铺id
      * @return 店铺信息
      */
@@ -287,12 +292,32 @@ public class ShopFacadeImpl implements ShopFacade {
         return execute(request, param -> {
             Shop shop = this.shopReadService.fetchById(request.getShopId());
             AssertUtil.isExist(shop, "shop");
-            ShopThinResponse response =  this.shopConverter.model2ThinResponse(shop);
-            List<TagBinding> tagBindings = this.tagBindingReadService.findByTargetIdAndTypeCheckStatus(shop.getId(),TagTypeEnum.SHOP.getCode(),DataStatusEnum.NORMAL.getCode());
+            ShopThinResponse response = this.shopConverter.model2ThinResponse(shop);
+            List<TagBinding> tagBindings = this.tagBindingReadService.findByTargetIdAndTypeCheckStatus(shop.getId(), TagTypeEnum.SHOP.getCode(), DataStatusEnum.NORMAL.getCode());
             List<Long> tagIds = tagBindings.stream().map(TagBinding::getTagId).collect(Collectors.toList());
             List<Tag> tags = this.tagReadService.findByIds(tagIds);
             response.setTagThinResponse(tags.stream().map(this.tagConverter::model2ThinResponse).collect(Collectors.toList()));
-            return response ;
+            return response;
+        });
+    }
+
+    @Override
+    public Response<List<ShopWithSearchItemResponse>> getShopWithSearchItem(ShopWithSearchItemRequest request) {
+        return execute(request, param -> {
+            List<Item> itemList = this.itemReadService.findByItemName(request.getKeyword());
+            ArrayListMultimap<Long, Item> shopIdToItemList = ArrayListMultimap.create();
+            itemList.forEach(item -> {
+                if (item.getStatus().equals(DataStatusEnum.NORMAL.getCode())){
+                    shopIdToItemList.put(item.getShopId(), item);
+                }
+            });
+            List<Long> shopIdList = Lists.newArrayList(shopIdToItemList.keys());
+            return this.shopReadService.findByIds(shopIdList).stream().filter(shop -> shop.getStatus().equals(DataStatusEnum.NORMAL.getCode())).map(
+                    shop -> ShopWithSearchItemResponse.builder()
+                            .shopInfo(this.shopConverter.model2ThinResponse(shop))
+                            .itemList(shopIdToItemList.get(shop.getId()).stream().map(this.itemConverter::model2ThinResponse).collect(Collectors.toList()))
+                            .build()
+            ).collect(Collectors.toList());
         });
     }
 }

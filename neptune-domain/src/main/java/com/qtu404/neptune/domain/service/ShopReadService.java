@@ -17,4 +17,6 @@ public interface ShopReadService {
     List<Shop> list(Map<String, Object> toMap);
 
     Paging<Shop> paging(Map<String, Object> toMap);
+
+    List<Shop> findByIds(List<Long> shopIdList);
 }

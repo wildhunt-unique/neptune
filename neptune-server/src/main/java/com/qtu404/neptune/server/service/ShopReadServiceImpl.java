@@ -38,4 +38,9 @@ public class ShopReadServiceImpl implements ShopReadService {
     public Paging<Shop> paging(Map<String, Object> toMap) {
         return shopDao.paging(toMap);
     }
+
+    @Override
+    public List<Shop> findByIds(List<Long> shopIdList) {
+        return shopDao.fetch(shopIdList);
+    }
 }

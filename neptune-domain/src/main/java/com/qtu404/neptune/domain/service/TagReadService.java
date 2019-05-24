@@ -15,4 +15,6 @@ public interface TagReadService {
     List<Tag> findByType(Integer type);
 
     List<Tag> findByIds(List<Long> tagIds);
+
+    List<Tag> findByShopId(Long id);
 }

@@ -1,14 +1,12 @@
 package com.qtu404.neptune.web.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.BannerFacade;
 import com.qtu404.neptune.api.request.banner.BannerListRequest;
-import com.qtu404.neptune.api.request.shop.ShopDetailRequest;
 import com.qtu404.neptune.api.response.banner.BannerListResponse;
-import com.qtu404.neptune.api.response.shop.ShopDetailResponse;
 import com.qtu404.neptune.util.model.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

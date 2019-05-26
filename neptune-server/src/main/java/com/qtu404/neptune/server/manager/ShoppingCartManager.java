@@ -1,5 +1,6 @@
 package com.qtu404.neptune.server.manager;
 
+import com.google.common.collect.Lists;
 import com.qtu404.neptune.domain.model.ShoppingCart;
 import com.qtu404.neptune.server.dao.ShoppingCartDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ShoppingCartManager {
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean fullUpdate(Long userId, Set<Long> shopId, List<ShoppingCart> toCreateList) {
-//        shoppingCartDao.removeByUserIdAndShopId(userId, shopId);
+        shoppingCartDao.removeByUserIdAndShopId(userId, Lists.newArrayList(shopId));
         if (!CollectionUtils.isEmpty(toCreateList)) {
             shoppingCartDao.save(toCreateList);
         }

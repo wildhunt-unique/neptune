@@ -6,6 +6,7 @@ import com.qtu404.neptune.server.dao.ShoppingCartDao;
 import com.qtu404.neptune.server.manager.ShoppingCartManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,14 @@ public class ShoppingCartWriteServiceImpl implements ShoppingCartWriteService {
     }
 
     @Override
-    public Boolean fullUpdate(Long userId,Set<Long> shopId, List<ShoppingCart> toCreateList) {
-        return this.manager.fullUpdate(userId,shopId,toCreateList);
+    public Boolean fullUpdate(Long userId, Set<Long> shopId, List<ShoppingCart> toCreateList) {
+        return this.manager.fullUpdate(userId, shopId, toCreateList);
+    }
+
+    @Override
+    public Boolean shopRemove(Long userId, List<Long> shopIdList) {
+        return CollectionUtils.isEmpty(shopIdList) ?
+                Boolean.TRUE :
+                shoppingCartDao.removeByUserIdAndShopId(userId, shopIdList);
     }
 }

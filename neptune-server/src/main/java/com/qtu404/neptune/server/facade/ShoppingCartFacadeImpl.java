@@ -7,6 +7,7 @@ import com.google.common.collect.Multimap;
 import com.qtu404.neptune.api.facade.ShoppingCartFacade;
 import com.qtu404.neptune.api.request.order.ShoppingCartCreateOrUpdateRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartDetailRequest;
+import com.qtu404.neptune.api.request.order.ShoppingCartShopRemoveAllRequest;
 import com.qtu404.neptune.api.request.order.ShoppingFullUpdateRequest;
 import com.qtu404.neptune.api.response.order.ShoppingCartDetailResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
@@ -97,6 +98,13 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
     }
 
     @Override
+    public Response<Boolean> shopRemove(ShoppingCartShopRemoveAllRequest request) {
+        return execute(request, param -> {
+            return this.shoppingCarWriteService.shopRemove(request.getUserId(),request.getShopIdList());
+        });
+    }
+
+    @Override
     public Response<Boolean> createOrUpdate(ShoppingCartCreateOrUpdateRequest request) {
         return execute(request, param -> {
             ShoppingCart shoppingCart = this.shoppingCartReadService.findByUserIdAndItemId(request.getUserId(), request.getItemId());
@@ -133,6 +141,7 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
         toCreate.setItemName(item.getName());
         toCreate.setItemImage(item.getMainImage());
         toCreate.setPrice(item.getPrice());
+        toCreate.setStatus(DataStatusEnum.NORMAL.getCode());
         return toCreate;
     }
 

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShoppingCartFacade;
 import com.qtu404.neptune.api.request.order.ShoppingCartCreateOrUpdateRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartDetailRequest;
+import com.qtu404.neptune.api.request.order.ShoppingCartShopRemoveAllRequest;
 import com.qtu404.neptune.api.request.order.ShoppingFullUpdateRequest;
 import com.qtu404.neptune.api.response.order.ShoppingCartDetailResponse;
 import com.qtu404.neptune.common.constant.AccessLevel;
@@ -40,9 +41,9 @@ public class ShoppingCartWebController {
     @ApiOperation("按照店铺id，清空购物车")
     @GetMapping("shop/remove/all")
     @Acl(level = AccessLevel.USER)
-    public Response<List<ShoppingCartDetailResponse>> shopRemove(ShoppingCartDetailRequest request) {
+    public Response<Boolean> shopRemove(ShoppingCartShopRemoveAllRequest request) {
         request.setUserId(getUserId());
-        return assertResponse(this.shoppingCartFacade.getShoppingCartDetail(request));
+        return assertResponse(this.shoppingCartFacade.shopRemove(request));
     }
 
     @ApiOperation("全量更新购物信息")

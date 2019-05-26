@@ -17,4 +17,6 @@ public interface ShoppingCartWriteService {
     Boolean update(ShoppingCart toUpdate);
 
     Boolean fullUpdate(Long userId, Set<Long> shopId, List<ShoppingCart> toCreateList);
+
+    Boolean shopRemove(Long userId, List<Long> shopIdList);
 }

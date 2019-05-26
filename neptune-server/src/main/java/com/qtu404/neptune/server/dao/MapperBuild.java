@@ -2,10 +2,6 @@ package com.qtu404.neptune.server.dao;
 
 import com.qtu404.neptune.util.mapper.MapperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author DingXing wb-dx470808@alibaba-inc.com
  * @date 2019/2/28 上午9:51
@@ -19,6 +15,6 @@ public class MapperBuild {
                 .password("geralt")
                 .path("/")
                 .build();
-        builder.build("banner","Banner");
+        builder.build("shopping_cart","ShoppingCart");
     }
 }

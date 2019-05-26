@@ -99,9 +99,7 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
 
     @Override
     public Response<Boolean> shopRemove(ShoppingCartShopRemoveAllRequest request) {
-        return execute(request, param -> {
-            return this.shoppingCarWriteService.shopRemove(request.getUserId(),request.getShopIdList());
-        });
+        return execute(request, param -> this.shoppingCarWriteService.shopRemove(request.getUserId(),request.getShopIdList()));
     }
 
     @Override

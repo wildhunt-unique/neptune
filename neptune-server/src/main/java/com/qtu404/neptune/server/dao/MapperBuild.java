@@ -15,6 +15,6 @@ public class MapperBuild {
                 .password("geralt")
                 .path("/")
                 .build();
-        builder.build("banner","Banner");
+        builder.build("shopping_cart","ShoppingCart");
     }
 }

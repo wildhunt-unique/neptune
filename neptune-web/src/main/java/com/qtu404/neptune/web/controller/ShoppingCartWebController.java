@@ -39,9 +39,9 @@ public class ShoppingCartWebController {
     }
 
     @ApiOperation("按照店铺id，清空购物车")
-    @GetMapping("shop/remove/all")
+    @PostMapping("shop/remove/all")
     @Acl(level = AccessLevel.USER)
-    public Response<Boolean> shopRemove(ShoppingCartShopRemoveAllRequest request) {
+    public Response<Boolean> shopRemove(@RequestBody ShoppingCartShopRemoveAllRequest request) {
         request.setUserId(getUserId());
         return assertResponse(this.shoppingCartFacade.shopRemove(request));
     }

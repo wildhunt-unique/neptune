@@ -25,7 +25,7 @@ public class ShoppingCartShopRemoveAllRequest extends AbstractRequest implements
     @ApiModelProperty(value = "用户id", hidden = true)
     private Long userId;
 
-    @ApiModelProperty(value = "店铺id", required = true)
+    @ApiModelProperty(value = "店铺id")
     private List<Long> shopIdList;
 
     @Override

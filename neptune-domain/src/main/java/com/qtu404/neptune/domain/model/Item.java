@@ -112,7 +112,7 @@ public class Item extends BaseModel implements Serializable {
     /**
      * 价格
      */
-    private Double price;
+    private Integer price;
 
     /**
      * 库存

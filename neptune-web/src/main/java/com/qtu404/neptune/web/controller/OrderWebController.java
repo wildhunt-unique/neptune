@@ -12,10 +12,7 @@ import com.qtu404.neptune.util.model.Response;
 import com.qtu404.neptune.web.common.aop.Acl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.qtu404.neptune.util.model.AssertUtil.assertResponse;
 import static com.qtu404.neptune.web.common.util.RequestContext.getUserId;
@@ -48,7 +45,7 @@ public class OrderWebController {
     }
 
     @ApiOperation("查询当前登录用户的订单")
-    @PostMapping("list")
+    @GetMapping("list")
     @Acl(level = AccessLevel.USER)
     public Response<Paging<OrderThinResponse>> list(OrderPagingRequest request) {
         request.setBuyerId(getUserId());

@@ -28,7 +28,6 @@ public class ShopTagCommonController {
 
     @GetMapping("list")
     @ApiOperation("获得店铺标签列表")
-    @Acl(level= AccessLevel.ADMIN)
     public Response<TagThinListResponse> list(TagThinListRequest request){
         return assertResponse(shopTagFacade.thinList(request));
     }

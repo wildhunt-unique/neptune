@@ -47,7 +47,7 @@ public class ShoppingCartWebController {
     }
 
     @ApiOperation("全量更新购物信息")
-    @GetMapping("full")
+    @PostMapping("full")
     @Acl(level = AccessLevel.USER)
     public Response<Boolean> fullUpdate(@RequestBody ShoppingFullUpdateRequest request) {
         request.setUserId(getUserId());

@@ -1,5 +1,6 @@
 package com.qtu404.neptune.api.response.shop;
 
+import com.qtu404.neptune.api.response.tag.TagThinResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,9 @@ public class ShopDetailResponse implements Serializable {
 
     @ApiModelProperty("店铺地址")
     private String address;
+
+    @ApiModelProperty("店铺标签")
+    private List<TagThinResponse> tagList;
 
     @ApiModelProperty("店铺类目列表")
     private List<ShopCategoryDetailResponse> shopCategoryDetailResponseList;

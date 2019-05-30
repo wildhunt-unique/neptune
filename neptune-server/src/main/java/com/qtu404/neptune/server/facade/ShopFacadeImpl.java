@@ -194,6 +194,9 @@ public class ShopFacadeImpl implements ShopFacade {
                     })
                     .collect(Collectors.toList())
             );
+            response.setTagList(this.tagReadService.findByShopId(response.getShopId()).stream()
+                    .map(this.tagConverter::model2ThinResponse).collect(Collectors.toList())
+            );
             return response;
         });
     }
@@ -232,10 +235,10 @@ public class ShopFacadeImpl implements ShopFacade {
                             .map(shop -> {
                                 ShopThinResponse response = this.shopConverter.model2ThinResponse(shop);
                                 // TODO optimize
-                               List<Tag> tagList = this.tagReadService.findByShopId(shop.getId());
+                                List<Tag> tagList = this.tagReadService.findByShopId(shop.getId());
                                 List<TagThinResponse> tagThinResponsesList = tagList.stream().map(this.tagConverter::model2ThinResponse).collect(Collectors.toList());
                                 response.setTagThinResponse(tagThinResponsesList);
-                                return  response;
+                                return response;
                             })
                             .collect(Collectors.toList())
             );
@@ -307,7 +310,7 @@ public class ShopFacadeImpl implements ShopFacade {
             List<Item> itemList = this.itemReadService.findByItemName(request.getKeyword());
             ArrayListMultimap<Long, Item> shopIdToItemList = ArrayListMultimap.create();
             itemList.forEach(item -> {
-                if (item.getStatus().equals(DataStatusEnum.NORMAL.getCode())){
+                if (item.getStatus().equals(DataStatusEnum.NORMAL.getCode())) {
                     shopIdToItemList.put(item.getShopId(), item);
                 }
             });

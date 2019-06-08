@@ -36,4 +36,6 @@ public interface UserFacade {
     Response<Boolean> sendLoginSms(UserSendLoginSmsRequest request);
 
     Response<Long> smsLogin(UserSmsLoginRequest request);
+
+    Response<Boolean> logout(UserLogoutRequest request);
 }

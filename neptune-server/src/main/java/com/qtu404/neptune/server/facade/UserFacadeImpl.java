@@ -91,8 +91,6 @@ public class UserFacadeImpl implements UserFacade {
             String userMetaDataJson = this.redisManager.get(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, request.getKey()));
             UserMetaData userMetaData = null;
             if (!StringUtils.isBlank(userMetaDataJson)) {
-
-
                 userMetaData = JSONObject.parseObject(userMetaDataJson, UserMetaData.class);
             }
             return userMetaData;
@@ -350,6 +348,16 @@ public class UserFacadeImpl implements UserFacade {
             String uuid = MyJSON.md5(user.getId().toString());
             this.redisManager.set(RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid), MyJSON.toJSON(UserMetaDataConverter.model2Response(user)));
             return user.getId();
+        });
+    }
+
+    @Override
+    public Response<Boolean> logout(UserLogoutRequest request) {
+        return execute(request, param -> {
+            String uuid = MyJSON.md5(request.getUserId().toString());
+            String key = RedisManager.Util.getKey(ConstantValues.UUID_PREFIX, uuid);
+            this.redisManager.remove(key);
+            return Boolean.TRUE;
         });
     }
 }

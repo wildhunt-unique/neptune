@@ -11,11 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class MyBatisDAO<T> {
-    private final String namespaces;
-
     @Autowired
     protected SqlSessionTemplate sqlSession;
-
+    private final String namespaces;
     public MyBatisDAO() {
         if (this.getClass().getGenericSuperclass() instanceof ParameterizedType) {
             this.namespaces = ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getSimpleName();
@@ -23,7 +21,6 @@ public abstract class MyBatisDAO<T> {
             this.namespaces = ((Class) ((ParameterizedType) this.getClass().getSuperclass().getGenericSuperclass()).getActualTypeArguments()[0]).getSimpleName();
         }
     }
-
     private static final String SAVE = "save";
     private static final String SAVES = "saves";
 
@@ -99,7 +96,6 @@ public abstract class MyBatisDAO<T> {
     public Integer count() {
         return this.sqlSession.selectOne(sqlId(COUNT), null);
     }
-
 
     protected String sqlId(String id) {
         return namespaces + "." + id;

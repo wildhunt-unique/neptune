@@ -110,6 +110,7 @@ public class UserCommonController {
     @GetMapping("logout")
     public Response<Boolean> logout(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
+        this.userFacade.logout(UserLogoutRequest.builder().userId(getUserId()).build());
         if (Objects.nonNull(cookies)) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName() != null && cookie.getName().equals(ConstantValues.UUID_PREFIX)) {

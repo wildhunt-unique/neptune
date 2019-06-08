@@ -53,6 +53,21 @@ public class RedisManager {
         }
     }
 
+    public String remove(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.select(0);
+            jedis.del(key);
+            return "1";
+        } catch (Exception e) {
+            log.error(Throwables.getStackTraceAsString(e));
+            return "0";
+        } finally {
+            returnResource(jedisPool, jedis);
+        }
+    }
+
     /**
      * 返还到连接池
      *
@@ -66,7 +81,7 @@ public class RedisManager {
     }
 
     public static class Util {
-        public static String getKey(String... params){
+        public static String getKey(String... params) {
             return Joiner.on(":").join(params);
         }
     }

@@ -144,7 +144,7 @@ public class OrderFacadeImpl implements OrderFacade {
             // 店铺图片存到extra
             extra.put(ExtraKey.ORDER_SHOP_IMAGE, shop.getImageUrl());
             // 描述信息
-            extra.put(ExtraKey.ORDER_DESCRIPTION, existIdToItem.values().stream().findFirst().orElse(new Item()).getName() + "等"+ itemTotalAmount[0] +"件商品");
+            extra.put(ExtraKey.ORDER_DESCRIPTION, existIdToItem.values().stream().findFirst().orElse(new Item()).getName() + "等" + itemTotalAmount[0] + "件商品");
             toCreateOrder.setExtra(extra);
 
             this.orderWriteService.createOrder(toCreateOrder, toCreateOrderLineList);
@@ -302,6 +302,33 @@ public class OrderFacadeImpl implements OrderFacade {
                     paymentPaging.getTotal(),
                     paymentPaging.getData().stream().map(this.paymentConverter::model2ThinResponse).collect(Collectors.toList())
             );
+        });
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param request 参数
+     * @return 是否操作成功
+     */
+    @Override
+    public Response<Boolean> cancel(OrderCancelRequest request) {
+        return execute(request, param -> {
+            Order order = this.orderReadService.findById(request.getOrderId());
+            AssertUtil.isExist(order, "order");
+
+            if (!order.getBuyerId().equals(request.getUserId())) {
+                throw new ServiceException("illegal.op");
+            }
+            if (order.getEnableStatus().equals(SwitchStatusEnum.ACTIVE.getCode())) {
+                throw new ServiceException("already.take.order");
+            }
+            if (order.getEnableStatus().equals(SwitchStatusEnum.INACTIVE.getCode())) {
+                throw new ServiceException("already.refuse.order");
+            }
+            order.setReverseStatus(SwitchStatusEnum.ACTIVE.getCode());
+            order.setEnableStatus(SwitchStatusEnum.INACTIVE.getCode());
+            return this.orderWriteService.update(order);
         });
     }
 

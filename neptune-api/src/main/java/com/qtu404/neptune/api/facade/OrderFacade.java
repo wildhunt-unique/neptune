@@ -23,4 +23,6 @@ public interface OrderFacade {
     Response<Boolean> payOrder(OrderPayRequest request);
 
     Response<Paging<PaymentThinResponse>>  paymentPaging(PaymentPagingShopRequest request);
+
+    Response<Boolean> cancel(OrderCancelRequest request);
 }

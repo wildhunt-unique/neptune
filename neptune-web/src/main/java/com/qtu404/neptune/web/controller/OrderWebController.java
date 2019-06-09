@@ -2,6 +2,7 @@ package com.qtu404.neptune.web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.OrderFacade;
+import com.qtu404.neptune.api.request.order.OrderCancelRequest;
 import com.qtu404.neptune.api.request.order.OrderCreateRequest;
 import com.qtu404.neptune.api.request.order.OrderPagingRequest;
 import com.qtu404.neptune.api.request.order.OrderPayRequest;
@@ -50,5 +51,13 @@ public class OrderWebController {
     public Response<Paging<OrderThinResponse>> list(OrderPagingRequest request) {
         request.setBuyerId(getUserId());
         return assertResponse(this.orderFacade.paging(request));
+    }
+
+    @ApiOperation("取消订单")
+    @PostMapping("cancel")
+    @Acl(level = AccessLevel.USER)
+    public Response<Boolean> cancel(OrderCancelRequest request) {
+        request.setUserId(getUserId());
+        return assertResponse(this.orderFacade.cancel(request));
     }
 }

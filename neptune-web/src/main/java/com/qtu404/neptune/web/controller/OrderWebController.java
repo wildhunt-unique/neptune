@@ -56,7 +56,7 @@ public class OrderWebController {
     @ApiOperation("取消订单")
     @PostMapping("cancel")
     @Acl(level = AccessLevel.USER)
-    public Response<Boolean> cancel(OrderCancelRequest request) {
+    public Response<Boolean> cancel(@RequestBody OrderCancelRequest request) {
         request.setUserId(getUserId());
         return assertResponse(this.orderFacade.cancel(request));
     }

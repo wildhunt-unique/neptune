@@ -30,7 +30,7 @@ public class ShoppingFullUpdateRequest extends AbstractRequest implements Serial
     private Long shopId;
 
     @ApiModelProperty(value = "购物车列表")
-    private List<ShoppingCartCreateOrUpdateRequest> shoppingCartList;
+    private List<ShoppingCartCreateRequest> shoppingCartList;
 
     @Override
     public void checkParam() {

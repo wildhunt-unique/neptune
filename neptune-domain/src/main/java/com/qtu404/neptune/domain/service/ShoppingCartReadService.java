@@ -12,5 +12,8 @@ import java.util.Map;
 public interface ShoppingCartReadService {
     List<ShoppingCart> list(Map<String, Object> toMap);
 
+    @Deprecated
     ShoppingCart findByUserIdAndItemId(Long userId, Long itemId);
+
+    ShoppingCart getById(Long shoppingCardId);
 }

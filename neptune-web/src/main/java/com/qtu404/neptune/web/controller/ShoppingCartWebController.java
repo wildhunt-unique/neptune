@@ -2,10 +2,12 @@ package com.qtu404.neptune.web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qtu404.neptune.api.facade.ShoppingCartFacade;
-import com.qtu404.neptune.api.request.order.ShoppingCartCreateOrUpdateRequest;
+import com.qtu404.neptune.api.request.order.ShoppingCartCreateRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartDetailRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartShopRemoveAllRequest;
 import com.qtu404.neptune.api.request.order.ShoppingFullUpdateRequest;
+import com.qtu404.neptune.api.request.shop.ShoppingCartRemoveRequest;
+import com.qtu404.neptune.api.request.shop.ShoppingCartUpdateRequest;
 import com.qtu404.neptune.api.response.order.ShoppingCartDetailResponse;
 import com.qtu404.neptune.common.constant.AccessLevel;
 import com.qtu404.neptune.util.model.Response;
@@ -54,11 +56,34 @@ public class ShoppingCartWebController {
         return assertResponse(this.shoppingCartFacade.fullUpdate(request));
     }
 
-    @ApiOperation("创建或者修改购物车商品")
+    @ApiOperation("创建或者修改购物车商品: 弃用！")
     @PostMapping("create/or/update")
     @Acl(level = AccessLevel.USER)
-    public Response<Boolean> createOrUpdate(@RequestBody ShoppingCartCreateOrUpdateRequest request) {
+    public Response<Boolean> createOrUpdate(@RequestBody ShoppingCartCreateRequest request) {
+        return this.create(request);
+    }
+
+    @ApiOperation("创建或物车商品")
+    @PostMapping("create")
+    @Acl(level = AccessLevel.USER)
+    public Response<Boolean> create(@RequestBody ShoppingCartCreateRequest request) {
         request.setUserId(getUserId());
         return assertResponse(this.shoppingCartFacade.createOrUpdate(request));
+    }
+
+    @ApiOperation("修改购物车行数量")
+    @PostMapping("update")
+    @Acl(level = AccessLevel.USER)
+    public Response<Boolean> create(@RequestBody ShoppingCartUpdateRequest request) {
+        request.setOperatorId(getUserId());
+        return assertResponse(this.shoppingCartFacade.update(request));
+    }
+
+    @ApiOperation("删除购物车行")
+    @PostMapping("remove")
+    @Acl(level = AccessLevel.USER)
+    public Response<Boolean> create(@RequestBody ShoppingCartRemoveRequest request) {
+        request.setOperatorId(getUserId());
+        return assertResponse(this.shoppingCartFacade.remove(request));
     }
 }

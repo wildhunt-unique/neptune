@@ -5,10 +5,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.qtu404.neptune.api.facade.ShoppingCartFacade;
-import com.qtu404.neptune.api.request.order.ShoppingCartCreateOrUpdateRequest;
+import com.qtu404.neptune.api.request.order.ShoppingCartCreateRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartDetailRequest;
 import com.qtu404.neptune.api.request.order.ShoppingCartShopRemoveAllRequest;
 import com.qtu404.neptune.api.request.order.ShoppingFullUpdateRequest;
+import com.qtu404.neptune.api.request.shop.ShoppingCartRemoveRequest;
+import com.qtu404.neptune.api.request.shop.ShoppingCartUpdateRequest;
 import com.qtu404.neptune.api.response.order.ShoppingCartDetailResponse;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
 import com.qtu404.neptune.domain.model.Item;
@@ -81,7 +83,7 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
     public Response<Boolean> fullUpdate(ShoppingFullUpdateRequest request) {
         return execute(request, param -> {
             List<Long> itemIdList = request.getShoppingCartList().stream()
-                    .map(ShoppingCartCreateOrUpdateRequest::getItemId)
+                    .map(ShoppingCartCreateRequest::getItemId)
                     .collect(Collectors.toList());
             Map<Long, Item> idToItem = this.itemReadService.findByIds(itemIdList).stream()
                     .collect(Collectors.toMap(Item::getId, item -> item));
@@ -103,33 +105,47 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
     }
 
     @Override
-    public Response<Boolean> createOrUpdate(ShoppingCartCreateOrUpdateRequest request) {
+    public Response<Boolean> createOrUpdate(ShoppingCartCreateRequest request) {
+        return execute(request, param -> this.create(request));
+    }
+
+    @Override
+    public Response<Boolean> update(ShoppingCartUpdateRequest request) {
         return execute(request, param -> {
-            ShoppingCart shoppingCart = this.shoppingCartReadService.findByUserIdAndItemId(request.getUserId(), request.getItemId());
-            return Objects.isNull(shoppingCart) ?
-                    this.create(request) :
-                    this.updateOrDelete(shoppingCart, request);
+            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCardId());
+            AssertUtil.isExist(shoppingCart, "shopping.cart");
+            if (!request.getOperatorId().equals(shoppingCart.getUserId())) {
+                throw new ServiceException("illegal.op");
+            }
+            if (request.getQuantity() <= 0) {
+                return this.shoppingCarWriteService.delete(request.getShoppingCardId());
+            } else {
+                ShoppingCart toUpdate = this.shoppingCartConverter.request2Model(request);
+                return this.shoppingCarWriteService.update(toUpdate);
+            }
         });
     }
 
-    private Boolean create(ShoppingCartCreateOrUpdateRequest request) {
+    @Override
+    public Response<Boolean> remove(ShoppingCartRemoveRequest request) {
+        return execute(request, param -> {
+            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCardId());
+            AssertUtil.isExist(shoppingCart, "shopping.cart");
+            if (!request.getOperatorId().equals(shoppingCart.getUserId())) {
+                throw new ServiceException("illegal.op");
+            }
+            return this.shoppingCarWriteService.delete(request.getShoppingCardId());
+        });
+    }
+
+    private Boolean create(ShoppingCartCreateRequest request) {
         ShoppingCart toCreate = this.getCreateModel(request);
         return Objects.isNull(toCreate) ?
                 Boolean.TRUE :
                 this.shoppingCarWriteService.create(toCreate);
     }
 
-    private Boolean updateOrDelete(ShoppingCart exist, ShoppingCartCreateOrUpdateRequest request) {
-        if (request.getQuantity() <= 0) {
-            return this.shoppingCarWriteService.delete(exist.getId());
-        } else {
-            ShoppingCart toUpdate = this.shoppingCartConverter.request2Model(request);
-            toUpdate.setId(exist.getId());
-            return this.shoppingCarWriteService.update(toUpdate);
-        }
-    }
-
-    private ShoppingCart getCreateModel(ShoppingCartCreateOrUpdateRequest request) {
+    private ShoppingCart getCreateModel(ShoppingCartCreateRequest request) {
         if (request.getQuantity() <= 0) {
             return null;
         }

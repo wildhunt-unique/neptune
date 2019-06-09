@@ -32,4 +32,9 @@ public class ShoppingCartReadServiceImpl implements ShoppingCartReadService {
     public ShoppingCart findByUserIdAndItemId(Long userId, Long itemId) {
         return this.shoppingCartDao.querySingleByCondition(ImmutableMap.of("user_id",userId,"itemId",itemId));
     }
+
+    @Override
+    public ShoppingCart getById(Long shoppingCardId) {
+        return this.shoppingCartDao.fetch(shoppingCardId);
+    }
 }

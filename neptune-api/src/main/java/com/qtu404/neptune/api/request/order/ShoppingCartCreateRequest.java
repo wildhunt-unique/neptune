@@ -9,6 +9,8 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Map;
 
+
+
 /**
  * @author DingXing wildhunt_geralt@foxmail.com
  * @date 2019/5/26
@@ -19,7 +21,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ShoppingCartCreateOrUpdateRequest extends AbstractRequest implements Serializable {
+public class ShoppingCartCreateRequest extends AbstractRequest implements Serializable {
     private static final long serialVersionUID = -5627148182974094918L;
 
     @ApiModelProperty(value = "用户id", hidden = true)

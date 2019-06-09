@@ -10,6 +10,7 @@ import com.qtu404.neptune.api.request.comment.CommentPagingRequest;
 import com.qtu404.neptune.api.response.comment.CommentThinResponse;
 import com.qtu404.neptune.common.constant.ConstantValues;
 import com.qtu404.neptune.common.enums.DataStatusEnum;
+import com.qtu404.neptune.common.enums.SwitchStatusEnum;
 import com.qtu404.neptune.domain.enums.CommentTypeEnum;
 import com.qtu404.neptune.domain.model.Comment;
 import com.qtu404.neptune.domain.model.Order;
@@ -42,17 +43,19 @@ public class CommentFacadeImpl implements CommentFacade {
     private final CommentWriteService commentWriteService;
     private final CommentConverter commentConverter;
     private final OrderReadService orderReadService;
+    private final OrderWriteService orderWriteService;
     private final UserReadService userReadService;
     private final ShopReadService shopReadService;
 
     @Autowired
-    public CommentFacadeImpl(CommentReadService commentReadService, CommentWriteService commentWriteService, CommentConverter commentConverter, OrderReadService orderReadService, UserReadService userReadService, ShopReadService shopReadService) {
+    public CommentFacadeImpl(CommentReadService commentReadService, CommentWriteService commentWriteService, CommentConverter commentConverter, OrderReadService orderReadService, UserReadService userReadService, ShopReadService shopReadService, OrderWriteService orderWriteService) {
         this.commentReadService = commentReadService;
         this.commentWriteService = commentWriteService;
         this.commentConverter = commentConverter;
         this.orderReadService = orderReadService;
         this.userReadService = userReadService;
         this.shopReadService = shopReadService;
+        this.orderWriteService = orderWriteService;
     }
 
     /**
@@ -90,6 +93,8 @@ public class CommentFacadeImpl implements CommentFacade {
             extra.put("shopName", shop.getName());
             toCreateComment.setExtra(extra);
             commentWriteService.createComment(toCreateComment);
+            order.setReceiveStatus(SwitchStatusEnum.ACTIVE.getCode());
+            orderWriteService.update(order);
             return toCreateComment.getId();
         });
     }

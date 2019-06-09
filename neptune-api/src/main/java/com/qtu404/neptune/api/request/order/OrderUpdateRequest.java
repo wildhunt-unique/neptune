@@ -33,6 +33,9 @@ public class OrderUpdateRequest extends AbstractRequest implements Serializable 
     @ApiModelProperty("是否接单 1:接单 -1:拒绝")
     private Integer enableStatus;
 
+    @ApiModelProperty("收货状态 -1:未处理 0:已完成")
+    private Integer receiveStatus;
+
     @ApiModelProperty("卖家留言")
     private String shopNotes;
 

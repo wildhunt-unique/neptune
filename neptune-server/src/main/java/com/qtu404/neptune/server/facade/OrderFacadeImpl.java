@@ -135,7 +135,7 @@ public class OrderFacadeImpl implements OrderFacade {
             // 设置各种状态
             toCreateOrder.setPayStatus(SwitchStatusEnum.INACTIVE.getCode());
             toCreateOrder.setEnableStatus(SwitchStatusEnum.INIT.getCode());
-            toCreateOrder.setReceiveStatus(SwitchStatusEnum.INIT.getCode());
+            toCreateOrder.setReceiveStatus(SwitchStatusEnum.INACTIVE.getCode());
             toCreateOrder.setReverseStatus(SwitchStatusEnum.INIT.getCode());
             toCreateOrder.setStatus(DataStatusEnum.NORMAL.getCode());
             // 将用户电话号码存入extra

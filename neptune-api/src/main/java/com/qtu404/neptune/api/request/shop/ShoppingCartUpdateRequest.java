@@ -25,7 +25,7 @@ public class ShoppingCartUpdateRequest extends AbstractRequest implements Serial
     private Integer quantity;
 
     @ApiModelProperty(value = "购物车行id", required = true)
-    private Long shoppingCardId;
+    private Long shoppingCartId;
 
     @ApiModelProperty(value = "用户id", hidden = true)
     private Long operatorId;
@@ -33,7 +33,7 @@ public class ShoppingCartUpdateRequest extends AbstractRequest implements Serial
     @Override
     public void checkParam() {
         super.checkParam();
-        ParamUtil.nonNull(shoppingCardId, "shopping.card.id");
+        ParamUtil.nonNull(shoppingCartId, "shopping.card.id");
         ParamUtil.nonNull(quantity, "quantity");
         if (quantity < 0) {
             throw new IllegalArgumentException("quantity.less.than.zero");

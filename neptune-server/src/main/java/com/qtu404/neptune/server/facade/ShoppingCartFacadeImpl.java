@@ -112,13 +112,13 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
     @Override
     public Response<Boolean> update(ShoppingCartUpdateRequest request) {
         return execute(request, param -> {
-            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCardId());
+            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCartId());
             AssertUtil.isExist(shoppingCart, "shopping.cart");
             if (!request.getOperatorId().equals(shoppingCart.getUserId())) {
                 throw new ServiceException("illegal.op");
             }
             if (request.getQuantity() <= 0) {
-                return this.shoppingCarWriteService.delete(request.getShoppingCardId());
+                return this.shoppingCarWriteService.delete(request.getShoppingCartId());
             } else {
                 ShoppingCart toUpdate = this.shoppingCartConverter.request2Model(request);
                 return this.shoppingCarWriteService.update(toUpdate);
@@ -129,12 +129,12 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
     @Override
     public Response<Boolean> remove(ShoppingCartRemoveRequest request) {
         return execute(request, param -> {
-            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCardId());
+            ShoppingCart shoppingCart = shoppingCartReadService.getById(request.getShoppingCartId());
             AssertUtil.isExist(shoppingCart, "shopping.cart");
             if (!request.getOperatorId().equals(shoppingCart.getUserId())) {
                 throw new ServiceException("illegal.op");
             }
-            return this.shoppingCarWriteService.delete(request.getShoppingCardId());
+            return this.shoppingCarWriteService.delete(request.getShoppingCartId());
         });
     }
 

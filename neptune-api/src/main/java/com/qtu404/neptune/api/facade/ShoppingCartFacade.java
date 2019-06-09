@@ -26,5 +26,5 @@ public interface ShoppingCartFacade {
 
     Response<Boolean> update(ShoppingCartUpdateRequest request);
 
-    Response<Boolean remove(ShoppingCartRemoveRequest request);
+    Response<Boolean> remove(ShoppingCartRemoveRequest request);
 }

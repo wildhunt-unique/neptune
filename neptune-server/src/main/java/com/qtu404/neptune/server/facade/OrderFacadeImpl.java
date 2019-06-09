@@ -194,6 +194,15 @@ public class OrderFacadeImpl implements OrderFacade {
                     .map(this.orderLineConverter::model2ThinResponse)
                     .collect(Collectors.toList());
 
+            if (Objects.nonNull(order.getExtra())) {
+                Object mobile = order.getExtra().get(ExtraKey.ORDER_BUYER_MOBILE);
+                Object shopImage = order.getExtra().get(ExtraKey.ORDER_SHOP_IMAGE);
+                Object description = order.getExtra().get(ExtraKey.ORDER_DESCRIPTION);
+                orderThinResponse.setShopImage(Objects.nonNull(shopImage) ? shopImage.toString() : ConstantValues.BLANK);
+                orderThinResponse.setBuyerMobile(Objects.nonNull(mobile) ? mobile.toString() : ConstantValues.BLANK);
+                orderThinResponse.setDescription(Objects.nonNull(description) ? description.toString() : ConstantValues.BLANK);
+            }
+
             return OrderDetailResponse.builder()
                     .orderLineThinResponseList(orderLineThinResponseList)
                     .orderThinResponse(orderThinResponse)

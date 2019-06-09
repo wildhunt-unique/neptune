@@ -40,6 +40,9 @@ public class OrderThinResponse implements Serializable {
     @ApiModelProperty("支付状态")
     private Integer payStatus;
 
+    @ApiModelProperty("收货状态")
+    private Integer receiveStatus;
+
     @ApiModelProperty("退款状态状态")
     private Integer reverseStatus;
 
@@ -66,4 +69,10 @@ public class OrderThinResponse implements Serializable {
 
     @ApiModelProperty("买家手机号")
     private String buyerMobile;
+
+    @ApiModelProperty("店铺图片")
+    private String shopImage;
+
+    @ApiModelProperty("订单描述")
+    private String description;
 }

@@ -28,10 +28,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.qtu404.neptune.util.model.Executor.execute;
@@ -144,6 +141,10 @@ public class OrderFacadeImpl implements OrderFacade {
             // 将用户电话号码存入extra
             Map<String, Object> extra = Maps.newHashMap();
             extra.put(ExtraKey.ORDER_BUYER_MOBILE, buyer.getMobile());
+            // 店铺图片存到extra
+            extra.put(ExtraKey.ORDER_SHOP_IMAGE, shop.getImageUrl());
+            // 描述信息
+            extra.put(ExtraKey.ORDER_DESCRIPTION, existIdToItem.values().stream().findFirst().orElse(new Item()).getName() + "等"+ itemTotalAmount[0] +"件商品");
             toCreateOrder.setExtra(extra);
 
             this.orderWriteService.createOrder(toCreateOrder, toCreateOrderLineList);
@@ -221,6 +222,10 @@ public class OrderFacadeImpl implements OrderFacade {
                                 OrderThinResponse response = this.orderConverter.model2ThinResponse(e);
                                 if (Objects.nonNull(e.getExtra())) {
                                     Object mobile = e.getExtra().get(ExtraKey.ORDER_BUYER_MOBILE);
+                                    Object shopImage = e.getExtra().get(ExtraKey.ORDER_SHOP_IMAGE);
+                                    Object description = e.getExtra().get(ExtraKey.ORDER_DESCRIPTION);
+                                    response.setShopImage(Objects.nonNull(shopImage) ? shopImage.toString() : ConstantValues.BLANK);
+                                    response.setDescription(Objects.nonNull(description) ? description.toString() : ConstantValues.BLANK);
                                     response.setBuyerMobile(Objects.nonNull(mobile) ? mobile.toString() : ConstantValues.BLANK);
                                 }
                                 return response;
@@ -283,11 +288,11 @@ public class OrderFacadeImpl implements OrderFacade {
     @Override
     public Response<Paging<PaymentThinResponse>> paymentPaging(PaymentPagingShopRequest request) {
         return execute(request, param -> {
-             Paging<Payment> paymentPaging = this.paymentReadService.paging(request.toMap());
-             return new Paging<>(
-                     paymentPaging.getTotal(),
-                     paymentPaging.getData().stream().map(this.paymentConverter::model2ThinResponse).collect(Collectors.toList())
-             );
+            Paging<Payment> paymentPaging = this.paymentReadService.paging(request.toMap());
+            return new Paging<>(
+                    paymentPaging.getTotal(),
+                    paymentPaging.getData().stream().map(this.paymentConverter::model2ThinResponse).collect(Collectors.toList())
+            );
         });
     }
 
